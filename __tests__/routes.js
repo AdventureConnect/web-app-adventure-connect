@@ -6,18 +6,14 @@ import LoginForm from "./LoginForm";
 
 jest.mock("axios");
 
-describe("LoginForm", () => {
-  it("redirects to /userProfiles and makes backend post request to /api/login", async () => {
-    // Mock the backend post request
-    const mockResponse = { data: { success: true } };
-    axios.post.mockResolvedValue(mockResponse);
+describe("api/login route", () => {
+  it("if username and password are correct, it redirects to /userProfiles", async () => {
+    const requestData = {
+      username: "testuser",
+      password: "testpassword",
+    };
 
-    // Render the LoginForm inside the MemoryRouter
-    const { getByLabelText, getByText, history } = render(
-      <MemoryRouter>
-        <Login />
-      </MemoryRouter>
-    );
+    axios.post("/api/login");
 
     // Simulate user interaction by filling the form and submitting it
 
@@ -34,9 +30,11 @@ describe("LoginForm", () => {
     await waitFor(() => {
       expect(history.location.pathname).toBe("/userProfiles");
       expect(axios.post).toHaveBeenCalledWith("/api/login", {
-        username: "testytesttest",
-        password: "password123",
+        username: "testuser",
+        password: "testpassword",
       });
     });
   });
+  it("if the username is correct, it redirects to the home page", async () => {});
+  it("if the username doesn't exist in the database, it redirects to the home page", async () => {});
 });
