@@ -18,6 +18,19 @@ router.post('/api/login', userController.verifyLogin, (req, res) => {
 //signup route:
 router.post('/api/signup', userController.createNewUser, (req, res) => {
   res.end();
-})
+});
+
+//update profile/settings route:
+router.put('/api/user', userController.updateUser, (req, res) => {
+  res.end();
+});
+
+//route to grab similar users to populate UserProfiles, based on zipcode and interest
+router.get('/api/getUsers', userController.getProfiles, (req, res) => {
+  const usersToDisplay = res.locals.matchingUsers;
+  res.json(usersToDisplay);
+});
+
+
 
 module.exports = router;
