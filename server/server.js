@@ -2,6 +2,13 @@ const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const apiRouter = require('./routes/api');
+
+const app = express();
+
+const allowedOrigins = ['http://localhost:8080', 'http://localhost:3000'];
 
 app.use(cors({
   origin: allowedOrigins,
@@ -10,9 +17,9 @@ app.use(cors({
   allowedHeaders: ['Content-Type'], 
 }));
 
-const app = express();
+app.use(bodyParser.json());
+app.use(cookieParser());
 
-const apiRouter = require("./routes/api");
 const { connectDB, Users } = require("../server/models/userModel.js");
 
 const PORT = 3000;
