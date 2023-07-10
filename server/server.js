@@ -1,5 +1,14 @@
 const path = require("path");
 const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+  allowedHeaders: ['Content-Type'], 
+}));
 
 const app = express();
 
@@ -24,6 +33,8 @@ app.use(express.static(path.resolve(__dirname, "../client")));
 /**
  * define route handlers
  */
+
+//I think once we have general routes done we will want to change this to just app.use(apiRouter?)
 app.use("/api", apiRouter);
 
 // catch-all route handler for any requests to an unknown route
