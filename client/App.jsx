@@ -5,7 +5,12 @@ import Signup from "./components/Signup.jsx";
 <<<<<<< HEAD
 import PasswordReset from './components/PasswordReset.jsx'
 import UserProfile from "./components/UserProfile.jsx";
-// import "./stylesheets/styles.css";
+import SettingsBar from "./components/Settings.jsx";
+import EditProfile from "./components/EditProfile.jsx";
+import AccountInterests from "./components/AccountInterests.jsx";
+import AccountMgmt from "./components/AccountMgmt.jsx";
+import ChangePassword from "./components/ChangePassword.jsx";
+import "./styles.css"
 =======
 import SettingsBar from "./components/Settings.jsx";
 import EditProfile from "./components/EditProfile.jsx";
