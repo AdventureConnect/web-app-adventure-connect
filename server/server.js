@@ -1,9 +1,25 @@
 const path = require("path");
 const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const apiRouter = require('./routes/api');
 
 const app = express();
 
-const apiRouter = require("./routes/api");
+const allowedOrigins = ['http://localhost:8080', 'http://localhost:3000'];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+  allowedHeaders: ['Content-Type'], 
+}));
+
+app.use(bodyParser.json());
+app.use(cookieParser());
+
 const { connectDB, Users } = require("../server/models/userModel.js");
 
 const PORT = 3000;
@@ -24,6 +40,8 @@ app.use(express.static(path.resolve(__dirname, "../client")));
 /**
  * define route handlers
  */
+
+//I think once we have general routes done we will want to change this to just app.use(apiRouter?)
 app.use("/api", apiRouter);
 
 // catch-all route handler for any requests to an unknown route
