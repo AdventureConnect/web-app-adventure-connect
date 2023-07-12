@@ -35,6 +35,7 @@ const createUser = async (info) => {
 const Signup = () => {
     const [ interestLabels, setInterestLabels ] = useState([]);
     const [ interests, setInterests ] = useState([]);
+    // const [ activities, setActivities ] = useState(activities);
     const [ name, setName ] = useState();
     const [ email, setEmail ] = useState();
     const [ password, setPassword ] = useState(); 
@@ -108,6 +109,7 @@ const Signup = () => {
                             const temp = interestLabels.slice();
                             const interestsTemp = interests.slice();
                             temp.push(<label key={opt.value.toLowerCase()}>{opt.value}</label>);
+                            interestsTemp.push(opt.value);
                             setInterestLabels(temp);
                             setInterests(interestsTemp);
                             console.log(interests);
