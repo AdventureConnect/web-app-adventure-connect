@@ -25,7 +25,8 @@ const App = () => {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route index element={<SettingsBar />} />
+          {/* <Route index element={<SettingsBar />} /> */}
+          <Route path="/" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
 <<<<<<< HEAD
           <Route path="/passwordreset" element={<PasswordReset />} />
