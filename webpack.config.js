@@ -15,6 +15,7 @@ module.exports = {
       publicPath: "/dist",
     },
     port: 8080,
+    historyApiFallback: true,
     proxy: {
       "/api": "http://localhost:3000",
     },
