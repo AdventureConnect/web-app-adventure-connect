@@ -15,7 +15,7 @@ router.post("/login", userController.verifyLogin, (req, res) => {
 
 //signup route:
 router.post("/signup", userController.createNewUser, (req, res) => {
-  res.status(200).send(res.locals);
+  res.sendStatus(200);
 });
 
 //update profile/settings route:
