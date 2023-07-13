@@ -6,11 +6,6 @@ router.get("/", (req, res) => {
   res.send("hello world");
 });
 
-router.post("/test", (req, res) => {
-  res.status(200).redirect("/account");
-  // res.status(200).send("passed the test");
-});
-
 //login router, verify user then redirect to user profiles page
 router.post("/login", userController.verifyLogin, (req, res) => {
   //end the response, with status and message set in verifyUser middleware
@@ -20,7 +15,7 @@ router.post("/login", userController.verifyLogin, (req, res) => {
 
 //signup route:
 router.post("/signup", userController.createNewUser, (req, res) => {
-  res.end();
+  res.status(200).send(res.locals);
 });
 
 //update profile/settings route:

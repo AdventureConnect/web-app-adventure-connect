@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, history } from "react";
 import Select from "react-select";
+import { Navigate } from "react-router-dom";
 
 const activities = [
   { label: "Backpacking", value: "Backpacking" },
@@ -13,23 +14,6 @@ const activities = [
   { label: "Trail Running", value: "Trail Running" },
 ];
 
-const createUser = async (info) => {
-  try {
-    fetch("http://localhost:8080/api/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(info),
-    });
-    return;
-  } catch (err) {
-    alert(`An error has occurred! ${err.message}`);
-    return err;
-  }
-};
-
 const Signup = () => {
   const [interestLabels, setInterestLabels] = useState([]);
   const [interests, setInterests] = useState([]);
@@ -38,6 +22,15 @@ const Signup = () => {
   const [password, setPassword] = useState();
   const [zipcode, setZipcode] = useState();
   const [bio, setBio] = useState();
+  const [redirect, setRedirect] = useState(false);
+
+  //for navigating to login after successful submission of create user
+
+  //create a conditional, to navigate to / if redirect is false
+  if (redirect === true) {
+    return <Navigate to="/" />;
+  }
+
   // const [ images, setImages ] = useState([]);
 
   // const handleImageFiles = e => {
@@ -46,6 +39,24 @@ const Signup = () => {
   //     setImages(temp);
   //     console.log(images);
   // }
+  const createUser = async (info) => {
+    try {
+      const response = await fetch("http://localhost:8080/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(info),
+      });
+
+      //if the createNewUser request is successful, then initiate redirect
+      if (response.ok) setRedirect(true);
+    } catch (err) {
+      alert(`An error has occurred! ${err.message}`);
+      return err;
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();

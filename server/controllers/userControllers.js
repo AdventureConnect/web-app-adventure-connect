@@ -2,8 +2,6 @@ const Users = require("../models/userModel");
 
 const userController = {};
 
-//put all the necessary user shit in here as middleware, then put them into routes in api.js, then put that all together in server.js
-
 //verifying user upon logging in, to be put in route for post to /api/login. if route is successful, redirect to show user page
 
 userController.verifyLogin = async (req, res, next) => {
@@ -42,28 +40,7 @@ userController.verifyLogin = async (req, res, next) => {
   return next();
 };
 
-// userController.test = (req, res, next) => {
-//   res.send('test')
-// }
-
-// fetch(endpoint, {
-//   method: 'POST',
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-//   body: JSON.stringify({
-//     properties
-//   })
-// })
-// .then(response => response.json())
-// .then(data => console.log(data))
-// .catch(error => console.log(error))
-
 userController.createNewUser = async (req, res, next) => {
-  console.log(Users);
-  //set all the values for no user from req.body
-  // console.log(JSON.stringify(req.body));
-  // const {username, firstName, lastName, email, interests, zipCode, password} = req.body
   console.log("before inserting new document to db");
 
   const newUser = new Users({
@@ -78,43 +55,20 @@ userController.createNewUser = async (req, res, next) => {
   try {
     //save the new user to the database
     const savedUser = await Users.create(newUser);
-    res.cookie("currentEmail", savedUser.email, {
+    const cookieHeaders = {
       httpOnly: false,
       overwrite: true,
-    });
-    res.cookie("currentInterests", JSON.stringify(savedUser.interests), {
-      httpOnly: false,
-      overwrite: true,
-    });
-    res.cookie("zipCode", JSON.stringify(savedUser.zipCode), {
-      httpOnly: false,
-      overwrite: true,
-    });
-    console.log(
-      JSON.stringify(savedUser.interests),
-      `\nthis is JSON interests`,
-      `\n`,
-      JSON.stringify(savedUser.zipCode),
-      `\n this is JSON zip code`,
-      savedUser.email,
-      `\n this is email`
-    );
+    };
+    res.cookie("currentEmail", savedUser.email, cookieHeaders);
+    res.cookie("currentInterests", savedUser.interests, cookieHeaders);
+    res.cookie("zipCode", savedUser.zipCode, cookieHeaders);
+
     console.log("saved the user to the db");
     return next();
   } catch (error) {
     console.log(error);
     next(error);
   }
-
-  // .then((data) => {
-  //   Users.insertOne({data})
-  //   console.log('User saved to the database');
-  //   return next();
-  // })
-  // .catch(error => {
-  //   console.log('Error saving user:', error);
-  //   return next({error: error.message})
-  // });
 };
 
 userController.updateUser = async (req, res, next) => {
