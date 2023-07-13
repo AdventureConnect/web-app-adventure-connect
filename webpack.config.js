@@ -5,16 +5,17 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 module.exports = {
   mode: "development",
   entry: "./client/index.js",
-  output: {
-    path: path.join(__dirname, "/dist"),
-    filename: "bundle.js",
-  },
+  // output: {
+  //   path: path.join(__dirname, "/dist"),
+  //   filename: "bundle.js",
+  // },
   devServer: {
-    static: {
-      directory: path.resolve(__dirname, "dist"),
-      publicPath: "/dist",
-    },
+    // static: {
+    //   directory: path.resolve(__dirname, "dist"),
+    //   publicPath: "/dist",
+    // },
     port: 8080,
+    historyApiFallback: true,
     proxy: {
       "/api": "http://localhost:3000",
     },
@@ -40,9 +41,9 @@ module.exports = {
         },
       },
       {
-        test: /scss$/,
+        test: /\.(scss|css)$/,
         exclude: /node_modules/,
-        use: ["style-loader", "css-loader", "sass-loader"],
+        use: ["style-loader", "css-loader"],
       },
     ],
   },

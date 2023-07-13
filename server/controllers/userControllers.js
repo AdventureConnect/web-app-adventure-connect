@@ -4,13 +4,13 @@ const userController = {};
 
 //put all the necessary user shit in here as middleware, then put them into routes in api.js, then put that all together in server.js
 
-//verifying user upon logging in, to be put in route for post to /api/login. if route is successful, redirect to show user page 
+//verifying user upon logging in, to be put in route for post to /api/login. if route is successful, redirect to show user page
 
 userController.verifyLogin = async (req, res, next) => {
   const { username, password } = req.body
 
   try {
-    //find a user that has a matching username and password 
+    //find a user that has a matching username and password
     const user = await Users.findOne({ username, password });
 
     if (user) {
@@ -32,38 +32,62 @@ userController.verifyLogin = async (req, res, next) => {
   return next();
   }
 
+  // userController.test = (req, res, next) => {
+  //   res.send('test')
+  // }
+
+  // fetch(endpoint, {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify({
+  //     properties
+  //   })
+  // })
+  // .then(response => response.json())
+  // .then(data => console.log(data))
+  // .catch(error => console.log(error))
 
   userController.createNewUser = async (req, res, next) => {
+    console.log(Users);
     //set all the values for no user from req.body
-    const username = req.body.username;
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
-    const email = req.body.email;
-    const interests = req.body.interests;
-    const zipCode = req.body.zipCode;
-    const password = req.body.password;
+    // console.log(JSON.stringify(req.body));
+    // const {username, firstName, lastName, email, interests, zipCode, password} = req.body
+    console.log('before inserting new document to db');
 
     const newUser = new Users({
-      username,
-      firstName,
-      lastName,
-      email,
-      password,
-      interests,
-      zipCode
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+      zipCode: req.body.zipCode,
+      interests: req.body.interests,
+      bio: req.body.bio,
     });
-    res.cookie('currentUsername', user.username, { httpOnly: false, overwrite: true });
-    res.cookie('currentInterests', JSON.stringify(user.interests), { httpOnly: false, overwrite: true });
-    res.cookie('zipCode', JSON.stringify(user.zip_code), { httpOnly: false, overwrite: true});
-  //save the new user to the database 
-  newUser.save()
-  .then(() => {
-    console.log('User saved to the database');
-  })
-  .catch(error => {
-    console.error('Error saving user:', error);
-  });
-    return next();
+    console.log('made the document')
+    try {
+      //save the new user to the database
+      const savedUser = await Users.create(newUser)
+      res.cookie('currentEmail', savedUser.email, { httpOnly: false, overwrite: true });
+      res.cookie('currentInterests', JSON.stringify(savedUser.interests), { httpOnly: false, overwrite: true });
+      res.cookie('zipCode', JSON.stringify(savedUser.zipCode), { httpOnly: false, overwrite: true});
+    console.log(JSON.stringify(savedUser.interests), `\nthis is JSON interests`, `\n`, JSON.stringify(savedUser.zipCode), `\n this is JSON zip code`, savedUser.email, `\n this is email`);
+    console.log('saved the user to the db');
+    return next()
+  } catch (error) {
+    console.log(error);
+    next(error)
+  }
+
+  // .then((data) => {
+  //   Users.insertOne({data})
+  //   console.log('User saved to the database');
+  //   return next();
+  // })
+  // .catch(error => {
+  //   console.log('Error saving user:', error);
+  //   return next({error: error.message})
+  // });
 }
 
 userController.updateUser = async (req, res, next) => {
@@ -87,7 +111,7 @@ userController.updateUser = async (req, res, next) => {
     }
   } catch (error) {
     console.error(error);
-    
+
   }
   return next();
 };
@@ -99,7 +123,7 @@ userController.getProfiles = async (req, res, next) => {
     //grab interests from the cookie, parse it from JSON format
     const interests = JSON.parse(req.cookies.currentInterests);
 
-   //find users with same zipcode and at least one interest in common 
+   //find users with same zipcode and at least one interest in common
     const users = await Users.find({
       zip_code: zipCode,
       interests: { $in: interests },
