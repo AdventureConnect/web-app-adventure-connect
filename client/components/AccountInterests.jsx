@@ -15,4 +15,4 @@ const AccountInterests = () => {
   )
 }
 
-export default AccountInterests
+export default AccountInterests;
