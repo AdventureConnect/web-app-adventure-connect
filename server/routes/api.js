@@ -8,15 +8,15 @@ router.get("/", (req, res) => {
 });
 
 //login router, verify user then redirect to user profiles page
-//fine that im setting status and sending message in the controller instead of last step? 
+//fine that im setting status and sending message in the controller instead of last step?
 router.post('/api/login', userController.verifyLogin, (req, res) => {
   //end the response, with status and message set in verifyUser middleware
   res.end();
-  //front code on login component should determine whether to redirect to userProfiles based on error or not 
+  //front code on login component should determine whether to redirect to userProfiles based on error or not
 });
 
 //signup route:
-router.post('/api/signup', userController.createNewUser, (req, res) => {
+router.post('/signup', userController.createNewUser, (req, res) => {
   res.end();
 });
 

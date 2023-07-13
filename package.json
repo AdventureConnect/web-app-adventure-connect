@@ -44,13 +44,10 @@
     "@babel/core": "^7.22.8",
     "@babel/preset-env": "^7.22.7",
     "@babel/preset-react": "^7.22.5",
-<<<<<<< HEAD
-=======
     "body-parser": "^1.20.2",
     "concurrently": "^8.2.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
->>>>>>> dev
     "express": "^4.18.2",
     "mongodb": "^5.7.0",
     "mongoose": "^7.3.2",
@@ -59,6 +56,7 @@
     "react-dom": "^18.2.0",
     "react-router": "^6.14.1",
     "react-router-dom": "^6.14.1",
+    "react-select": "^5.7.3",
     "zipcode-city-distance": "^1.0.6"
   }
 }
