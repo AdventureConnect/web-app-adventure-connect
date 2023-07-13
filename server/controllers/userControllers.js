@@ -5,39 +5,33 @@ const userController = {};
 //verifying user upon logging in, to be put in route for post to /api/login. if route is successful, redirect to show user page
 
 userController.verifyLogin = async (req, res, next) => {
-  const { username, password } = req.body;
-  console.log(req.body);
+  const { email, password } = req.body;
 
   try {
-    //find a user that has a matching username and password
-    const user = await Users.findOne({ username, password });
+    //find a user that has a matching email and password
+    const user = await Users.findOne({ email, password });
+
+    const cookieHeaders = {
+      httpOnly: false,
+      overwrite: true,
+    };
 
     if (user) {
       console.log("successful log in");
       //maybe just make a cookie for activities and zipcode? so don't have to query the database again later when finding similar users?
-      res.cookie("currentUsername", user.username, {
-        httpOnly: false,
-        overwrite: true,
-      });
-      res.cookie("currentInterests", JSON.stringify(user.interests), {
-        httpOnly: false,
-        overwrite: true,
-      });
-      res.cookie("zipCode", JSON.stringify(user.zip_code), {
-        httpOnly: false,
-        overwrite: true,
-      });
-      res.status(200).json({ message: "Login successful!" });
+      res.cookie("currentemail", user.email, cookieHeaders);
+      res.cookie("currentInterests", user.interests, cookieHeaders);
+      res.cookie("zipCode", user.zip_code, cookieHeaders);
       res.locals.loginStatus = true;
+      return next();
     } else {
       // If the user is not found, send an error response
-      res.status(401).json({ message: "Invalid credentials!" });
+      res.status(401).json({ message: "Invalid login credentials!" });
     }
   } catch (error) {
     // If an error occurs, send an error response
     return next(error);
   }
-  return next();
 };
 
 userController.createNewUser = async (req, res, next) => {
@@ -73,10 +67,10 @@ userController.createNewUser = async (req, res, next) => {
 
 userController.updateUser = async (req, res, next) => {
   try {
-    // grab username from the currentUser cookie
-    const username = req.cookies.currentUsername;
-    //find document by username and update it with the values from req.body
-    const updatedUser = await Users.findOneAndUpdate({ username }, req.body, {
+    // grab email from the currentUser cookie
+    const email = req.cookies.currentemail;
+    //find document by email and update it with the values from req.body
+    const updatedUser = await Users.findOneAndUpdate({ email }, req.body, {
       new: true,
     });
 
@@ -86,7 +80,7 @@ userController.updateUser = async (req, res, next) => {
       // Document found and updated successfully
     } else {
       console.log("User not found");
-      // No document with the specified username was found
+      // No document with the specified email was found
     }
   } catch (error) {
     console.error(error);

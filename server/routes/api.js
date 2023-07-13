@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
 //login router, verify user then redirect to user profiles page
 router.post("/login", userController.verifyLogin, (req, res) => {
   //end the response, with status and message set in verifyUser middleware
-  res.status(200).send("test");
+  res.sendStatus(200);
   //front code on login component should determine whether to redirect to userProfiles based on error or not
 });
 

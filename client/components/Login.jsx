@@ -3,10 +3,10 @@ import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [authenticated, setAuthenticated] = useState();
+  const [authenticated, setAuthenticated] = useState(false);
   const [loginError, setLoginError] = useState();
   const [currentUser, setCurrentUser] = useState();
-  const [username, setUserName] = useState();
+  const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
   if (authenticated) {
@@ -18,25 +18,31 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const credential = {
-      username: username,
+      email: email,
       password: password,
     };
+
     try {
-      const data = await fetch("http://localhost:8080/api/login", {
+      const response = await fetch("http://localhost:8080/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(credential),
       });
-      const json = await data.json();
-      setAuthenticated(true);
-      navigate("/userprofile", {
-        state: { currentUser: currentUser, authenticated: authenticated },
-      });
+      // const json = await response.json();
+      //if the verifyLogin middleware successful, then navigate to userprofile
+      if (response.ok) {
+        setAuthenticated(true);
+        navigate("/userprofile", {
+          state: { currentUser: currentUser, authenticated: authenticated },
+        });
+      } else {
+        setLoginError(true); //to trigger the Invalid Login Information element to render
+      }
     } catch (err) {
-      setAuthenticated(false);
       setLoginError(true);
+      console.log("login not successful");
     }
   };
 
@@ -49,8 +55,8 @@ const Login = () => {
       <div id="login_container">
         <form onSubmit={handleSubmit}>
           <label>
-            <p>Username</p>
-            <input type="text" onChange={(e) => setUserName(e.target.value)} />
+            <p>Email</p>
+            <input type="text" onChange={(e) => setEmail(e.target.value)} />
           </label>
           <label>
             <p>Password</p>
@@ -59,7 +65,8 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </label>
-          {loginError && (
+          {/* if loginError evaluates to true, then conditionally render element */}
+          {loginError === true && (
             <p style={{ color: "red" }}>
               Invalid login information. Please try again or{" "}
               <a href="/signup">sign up</a>.
