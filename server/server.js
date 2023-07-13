@@ -5,6 +5,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const apiRouter = require('./routes/api');
+const connectDB = require('./connectDB')
 
 const app = express();
 
@@ -13,18 +14,19 @@ const allowedOrigins = ['http://localhost:8080', 'http://localhost:3000'];
 app.use(cors({
   origin: allowedOrigins,
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], 
-  allowedHeaders: ['Content-Type'], 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type'],
 }));
 
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-const { connectDB, Users } = require("../server/models/userModel.js");
 
 const PORT = 3000;
 
 connectDB();
+
+console.log(module.exports)
 
 /**
  * handle parsing request body
