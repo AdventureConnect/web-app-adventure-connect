@@ -20,6 +20,7 @@ const createUser = async (info) => {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(info),
     });
     return;
@@ -36,15 +37,15 @@ const Signup = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [zipcode, setZipcode] = useState();
-  const [description, setDescription] = useState();
-  const [images, setImages] = useState([]);
+  const [bio, setBio] = useState();
+  // const [ images, setImages ] = useState([]);
 
-  const handleImageFiles = (e) => {
-    const temp = images;
-    temp.push(e.target.files[0]);
-    setImages(temp);
-    console.log(images);
-  };
+  // const handleImageFiles = e => {
+  //     const temp = images;
+  //     temp.push(e.target.files[0]);
+  //     setImages(temp);
+  //     console.log(images);
+  // }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,46 +53,29 @@ const Signup = () => {
       createUser({
         name: name,
         email: email,
-        zipcode: zipcode,
+        password: password,
+        zipCode: zipcode,
         interests: interests,
-        images: images,
-        description: description,
+        // images: images,
+        bio: bio,
       });
     } catch (err) {
       return err;
     }
   };
 
-  const imageSelector = [];
-  for (let i = 0; i < 6; i++) {
-    imageSelector.push(
-      <div>
-        <input
-          type="file"
-          id={`image${i}`}
-          key={`image${i}`}
-          accept="image/*"
-          onChange={(e) => handleImageFiles(e)}
-          style={{ display: "none" }}
-        ></input>
-        <label
-          htmlFor={`image${i}`}
-          style={{
-            color: "lightgray",
-            border: "dashed",
-            width: "90px",
-            height: "90px",
-            fontSize: "72px",
-          }}
-        >
-          +
-        </label>
-      </div>
-    );
-  }
+  // const imageSelector = [];
+  // for (let i = 0; i < 6; i++) {
+  //     imageSelector.push(
+  //         <div>
+  //             <input type='file' id={`image${i}`} key={`image${i}`} accept='image/*' onChange={e => handleImageFiles(e)} style={{display: 'none'}}></input>
+  //             <label htmlFor={`image${i}`} style={{color: 'lightgray', border: 'dashed', width:'90px', height: '90px', fontSize: '72px'}}>+</label>
+  //         </div>
+  //     )
+  // }
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div>
           <label>Name</label>
           <input
@@ -133,7 +117,7 @@ const Signup = () => {
               textAlign: "center",
             }}
           >
-            {imageSelector}
+            {/* {imageSelector} */}
           </div>
         </div>
         <div>
@@ -146,12 +130,13 @@ const Signup = () => {
               temp.push(
                 <label key={opt.value.toLowerCase()}>{opt.value}</label>
               );
+              interestsTemp.push(opt.value);
               setInterestLabels(temp);
               setInterests(interestsTemp);
               console.log(interests);
             }}
           />
-          <div id="interestBox">{interests}</div>
+          <div id="interestBox">{interestLabels}</div>
         </div>
         <div>
           <label>Tell us more about yourself</label>
@@ -160,7 +145,7 @@ const Signup = () => {
             type="text"
             placeholder="Favorite outdoor memories
                     What are you looking for?"
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => setBio(e.target.value)}
             style={{ height: "150px", width: "250px", textAlign: "top" }}
           ></input>
         </div>

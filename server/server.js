@@ -5,6 +5,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const apiRouter = require("./routes/api");
+const connectDB = require("./connectDB");
 
 const app = express();
 
@@ -22,11 +23,11 @@ app.use(
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-const { connectDB, Users } = require("../server/models/userModel.js");
-
 const PORT = 3000;
 
 connectDB();
+
+console.log(module.exports);
 
 /**
  * handle parsing request body

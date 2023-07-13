@@ -11,10 +11,10 @@ module.exports = {
     publicPath: "/",
   },
   devServer: {
-    static: {
-      directory: path.resolve(__dirname, "dist"),
-      publicPath: "/dist",
-    },
+    // static: {
+    //   directory: path.resolve(__dirname, "dist"),
+    //   publicPath: "/dist",
+    // },
     port: 8080,
     historyApiFallback: true,
     proxy: {
