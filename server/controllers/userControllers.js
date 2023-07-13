@@ -4,78 +4,95 @@ const userController = {};
 
 //put all the necessary user shit in here as middleware, then put them into routes in api.js, then put that all together in server.js
 
-//verifying user upon logging in, to be put in route for post to /api/login. if route is successful, redirect to show user page 
+//verifying user upon logging in, to be put in route for post to /api/login. if route is successful, redirect to show user page
 
 userController.verifyLogin = async (req, res, next) => {
-  const { username, password } = req.body
+  const { username, password } = req.body;
+  console.log(req.body);
 
   try {
-    //find a user that has a matching username and password 
+    //find a user that has a matching username and password
     const user = await Users.findOne({ username, password });
 
     if (user) {
-      console.log('successful log in');
+      console.log("successful log in");
       //maybe just make a cookie for activities and zipcode? so don't have to query the database again later when finding similar users?
-      res.cookie('currentUsername', user.username, { httpOnly: false, overwrite: true });
-      res.cookie('currentInterests', JSON.stringify(user.interests), { httpOnly: false, overwrite: true });
-      res.cookie('zipCode', JSON.stringify(user.zip_code), { httpOnly: false, overwrite: true});
-      res.status(200).json({ message: 'Login successful!' });
+      res.cookie("currentUsername", user.username, {
+        httpOnly: false,
+        overwrite: true,
+      });
+      res.cookie("currentInterests", JSON.stringify(user.interests), {
+        httpOnly: false,
+        overwrite: true,
+      });
+      res.cookie("zipCode", JSON.stringify(user.zip_code), {
+        httpOnly: false,
+        overwrite: true,
+      });
+      res.status(200).json({ message: "Login successful!" });
       res.locals.loginStatus = true;
     } else {
       // If the user is not found, send an error response
-      res.status(401).json({ message: 'Invalid credentials!' });
+      res.status(401).json({ message: "Invalid credentials!" });
     }
   } catch (error) {
     // If an error occurs, send an error response
-    res.status(500).json({ message: 'Server error!' });
+    return next(error);
   }
   return next();
-  }
+};
 
+userController.createNewUser = async (req, res, next) => {
+  //set all the values for no user from req.body
+  const username = req.body.username;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const email = req.body.email;
+  const interests = req.body.interests;
+  const zipCode = req.body.zipCode;
+  const password = req.body.password;
 
-  userController.createNewUser = async (req, res, next) => {
-    //set all the values for no user from req.body
-    const username = req.body.username;
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
-    const email = req.body.email;
-    const interests = req.body.interests;
-    const zipCode = req.body.zipCode;
-    const password = req.body.password;
-
-    const newUser = new Users({
-      username,
-      firstName,
-      lastName,
-      email,
-      password,
-      interests,
-      zipCode
-    });
-    res.cookie('currentUsername', user.username, { httpOnly: false, overwrite: true });
-    res.cookie('currentInterests', JSON.stringify(user.interests), { httpOnly: false, overwrite: true });
-    res.cookie('zipCode', JSON.stringify(user.zip_code), { httpOnly: false, overwrite: true});
-  //save the new user to the database 
-  newUser.save()
-  .then(() => {
-    console.log('User saved to the database');
-  })
-  .catch(error => {
-    console.error('Error saving user:', error);
+  const newUser = new Users({
+    username,
+    firstName,
+    lastName,
+    email,
+    password,
+    interests,
+    zipCode,
   });
-    return next();
-}
+  res.cookie("currentUsername", user.username, {
+    httpOnly: false,
+    overwrite: true,
+  });
+  res.cookie("currentInterests", JSON.stringify(user.interests), {
+    httpOnly: false,
+    overwrite: true,
+  });
+  res.cookie("zipCode", JSON.stringify(user.zip_code), {
+    httpOnly: false,
+    overwrite: true,
+  });
+  //save the new user to the database
+  newUser
+    .save()
+    .then(() => {
+      console.log("User saved to the database");
+    })
+    .catch((error) => {
+      console.error("Error saving user:", error);
+    });
+  return next();
+};
 
 userController.updateUser = async (req, res, next) => {
   try {
     // grab username from the currentUser cookie
     const username = req.cookies.currentUsername;
     //find document by username and update it with the values from req.body
-    const updatedUser = await Users.findOneAndUpdate(
-      { username },
-      req.body,
-      { new: true }
-    );
+    const updatedUser = await Users.findOneAndUpdate({ username }, req.body, {
+      new: true,
+    });
 
     if (updatedUser) {
       console.log(updatedUser);
@@ -87,7 +104,6 @@ userController.updateUser = async (req, res, next) => {
     }
   } catch (error) {
     console.error(error);
-    
   }
   return next();
 };
@@ -99,7 +115,7 @@ userController.getProfiles = async (req, res, next) => {
     //grab interests from the cookie, parse it from JSON format
     const interests = JSON.parse(req.cookies.currentInterests);
 
-   //find users with same zipcode and at least one interest in common 
+    //find users with same zipcode and at least one interest in common
     const users = await Users.find({
       zip_code: zipCode,
       interests: { $in: interests },
@@ -117,7 +133,6 @@ userController.getProfiles = async (req, res, next) => {
     res.status(500).json({ message: "Server error!" });
   }
   return next();
-}
-
+};
 
 module.exports = userController;
