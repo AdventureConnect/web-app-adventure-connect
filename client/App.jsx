@@ -10,6 +10,8 @@ import AccountInterests from "./components/AccountInterests.jsx";
 import AccountMgmt from "./components/AccountMgmt.jsx";
 import ChangePassword from "./components/ChangePassword.jsx";
 import Dashboard from "./components/Dashboard.jsx";
+import Settings from "./components/Settings.jsx";
+import SettingsContainer from './components/SettingsContainer.jsx';
 import "./styles.css";
 
 const App = () => {
@@ -28,6 +30,7 @@ const App = () => {
           <Route path="/account/interests" element={<AccountInterests />} />
           <Route path="/account/management" element={<AccountMgmt />} />
           <Route path="/account/password" element={<ChangePassword />} />
+          <Route path="/settingsContainer" element={<SettingsContainer/>}/>
           <Route
             path="*"
             element={<div>404 Error. This page was not found</div>}

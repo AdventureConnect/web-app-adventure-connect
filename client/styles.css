@@ -54,3 +54,42 @@ li, a {
 .indicators > button {
   margin: 5px;
 }
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+
+ @font-face {
+    font-family: 'Montserrat', sans-serif;
+    src: url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+}
+
+@font-face {
+    font-family: 'Poppins', sans-serif;
+    src: url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Poppins:wght@300&display=swap');
+}
+
+@font-face {
+    font-family: 'Lato', sans-serif;
+    src: url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap');
+} 
+
+ @font-face {
+    font-family:'Lato', sans-serif;
+    src: url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap');
+}
+
+@font-face {
+    font-family: 'Fredoka', sans-serif;
+    src: url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400&display=swap');
+}
+
+@font-face {
+    font-family: 'Varela Round', sans-serif;
+    src: url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+} 
