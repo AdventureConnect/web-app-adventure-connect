@@ -27,6 +27,7 @@ const App = () => {
           <Route path="/account/interests" element={<AccountInterests />} />
           <Route path="/account/management" element={<AccountMgmt />} />
           <Route path="/account/password" element={<ChangePassword />} />
+          <Route path="/userpage" element={<UserPage />} />
           <Route path="*" element={<div>404 Error. This page was not found</div>} />
         </Routes>
       </BrowserRouter>
