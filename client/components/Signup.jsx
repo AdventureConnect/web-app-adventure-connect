@@ -42,14 +42,8 @@ const Signup = () => {
     const [ password, setPassword ] = useState();
     const [ zipcode, setZipcode ] = useState();
     const [ bio, setBio ] = useState();
-    // const [ images, setImages ] = useState([]);
-
-    // const handleImageFiles = e => {
-    //     const temp = images;
-    //     temp.push(e.target.files[0]);
-    //     setImages(temp);
-    //     console.log(images);
-    // }
+    const [ images, setImages ] = useState([]);
+    const [ imageData, setImageData ] = useState();
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -60,7 +54,6 @@ const Signup = () => {
                 password: password,
                 zipCode: zipcode,
                 interests: interests,
-                // images: images,
                 bio: bio,
             })
         }
@@ -69,18 +62,20 @@ const Signup = () => {
         }
     }
 
-    // const imageSelector = [];
-    // for (let i = 0; i < 6; i++) {
-    //     imageSelector.push(
-    //         <div>
-    //             <input type='file' id={`image${i}`} key={`image${i}`} accept='image/*' onChange={e => handleImageFiles(e)} style={{display: 'none'}}></input>
-    //             <label htmlFor={`image${i}`} style={{color: 'lightgray', border: 'dashed', width:'90px', height: '90px', fontSize: '72px'}}>+</label>
-    //         </div>
-    //     )
-    // }
+    const imageSelector = [];
+    for (let i = 0; i < 1; i++) {
+        imageSelector.push(
+            <div>
+                <input type='file' name={`image${i}`} id={`image${i}`} key={`image${i}`} accept='image/*' style={{display: 'none'}}></input>
+                <label htmlFor={`image${i}`} style={{color: 'lightgray', border: 'dashed', width:'90px', height: '90px', fontSize: '72px'}}>+</label>
+            </div>
+        )
+    }
+
     return (
         <div>
-            <form onSubmit={handleSubmit}>
+            {/* <form onSubmit={handleSubmit} encType='multipart/form-data'> */}
+            <form action='/api/signup/upload_images' method='post' encType='multipart/form-data' onSubmit={handleSubmit}>
                 <div>
                     <label >Name</label>
                     <input type='text' require='true' onChange={e => setName(e.target.value)}></input>
@@ -100,7 +95,7 @@ const Signup = () => {
                 <div>
                     <label>Photos</label>
                     <div style={{display: 'grid', gridTemplate: '1fr 1fr 1fr', textAlign: 'center'}}>
-                        {/* {imageSelector} */}
+                        {imageSelector}
                     </div>
                 </div>
                 <div>
@@ -115,6 +110,7 @@ const Signup = () => {
                             interestsTemp.push(opt.value)
                             setInterestLabels(temp);
                             setInterests(interestsTemp);
+                            form.set(interests, interests);
                             console.log(interests);
                         }}
                     />

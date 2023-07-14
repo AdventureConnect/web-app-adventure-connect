@@ -1,4 +1,19 @@
 const Users = require("../models/userModel");
+const multer = require('multer');
+const Images = require('../models/imageModel');
+const fs = require('fs');
+const path = require('path');
+
+const storage = multer.diskStorage({
+  destination: function (req, res, cb) {
+    cb(null, 'uploads/')
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+});
+
+const upload = multer({ storage: storage });
 
 const userController = {};
 
@@ -55,6 +70,26 @@ userController.verifyLogin = async (req, res, next) => {
     // console.log(JSON.stringify(req.body));
     // const {username, firstName, lastName, email, interests, zipCode, password} = req.body
     console.log('before inserting new document to db');
+    upload.single('image1');
+
+    const obj = {
+      img: {
+        data: fs.readFileSync(
+          path.join(__dirname + '../../../uploads/' + req.file.filename)
+        ),
+        contentType: "image/png",
+      },
+    };
+    console.log(obj.img.data);
+    try {
+      Images.create({
+        image: obj.img.data,
+      });
+  
+    }
+    catch (err) {
+      return err;
+    }
 
     const newUser = new Users({
       name: req.body.name,
@@ -63,6 +98,7 @@ userController.verifyLogin = async (req, res, next) => {
       zipCode: req.body.zipCode,
       interests: req.body.interests,
       bio: req.body.bio,
+      // image1: obj.img.data
     });
     console.log('made the document')
     try {
