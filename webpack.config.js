@@ -5,15 +5,15 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 module.exports = {
   mode: "development",
   entry: "./client/index.js",
-  output: {
-    path: path.join(__dirname, "/dist"),
-    filename: "bundle.js",
-  },
+  // output: {
+  //   path: path.join(__dirname, "/dist"),
+  //   filename: "bundle.js",
+  // },
   devServer: {
-    static: {
-      directory: path.resolve(__dirname, "dist"),
-      publicPath: "/dist",
-    },
+    // static: {
+    //   directory: path.resolve(__dirname, "dist"),
+    //   publicPath: "/dist",
+    // },
     port: 8080,
     historyApiFallback: true,
     proxy: {

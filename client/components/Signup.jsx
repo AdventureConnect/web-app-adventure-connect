@@ -21,14 +21,15 @@ const createUser = async (info) => {
             headers: {
                 'Content-Type': 'application/json'
             },
+            credentials: 'include',
             body: JSON.stringify(info)
         })
         return;
-   }
-   catch (err) {
+    }
+    catch (err) {
         alert(`An error has occurred! ${err.message}`);
         return err;
-   }
+    }
 
 }
 
@@ -37,28 +38,29 @@ const Signup = () => {
     const [ interests, setInterests ] = useState([]);
     const [ name, setName ] = useState();
     const [ email, setEmail ] = useState();
-    const [ password, setPassword ] = useState(); 
+    const [ password, setPassword ] = useState();
     const [ zipcode, setZipcode ] = useState();
-    const [ description, setDescription ] = useState();
-    const [ images, setImages ] = useState([]);
-    
-    const handleImageFiles = e => {
-        const temp = images;
-        temp.push(e.target.files[0]);
-        setImages(temp);
-        console.log(images);
-    }
-    
+    const [ bio, setBio ] = useState();
+    // const [ images, setImages ] = useState([]);
+
+    // const handleImageFiles = e => {
+    //     const temp = images;
+    //     temp.push(e.target.files[0]);
+    //     setImages(temp);
+    //     console.log(images);
+    // }
+
     const handleSubmit = async e => {
         e.preventDefault();
         try {
             createUser({
                 name: name,
                 email: email,
-                zipcode: zipcode,
+                password: password,
+                zipCode: zipcode,
                 interests: interests,
-                images: images,
-                description: description,
+                // images: images,
+                bio: bio,
             })
         }
         catch (err) {
@@ -66,18 +68,18 @@ const Signup = () => {
         }
     }
 
-    const imageSelector = [];
-    for (let i = 0; i < 6; i++) {
-        imageSelector.push(
-            <div>
-                <input type='file' id={`image${i}`} key={`image${i}`} accept='image/*' onChange={e => handleImageFiles(e)} style={{display: 'none'}}></input>
-                <label htmlFor={`image${i}`} style={{color: 'lightgray', border: 'dashed', width:'90px', height: '90px', fontSize: '72px'}}>+</label>
-            </div>
-        )
-    }
+    // const imageSelector = [];
+    // for (let i = 0; i < 6; i++) {
+    //     imageSelector.push(
+    //         <div>
+    //             <input type='file' id={`image${i}`} key={`image${i}`} accept='image/*' onChange={e => handleImageFiles(e)} style={{display: 'none'}}></input>
+    //             <label htmlFor={`image${i}`} style={{color: 'lightgray', border: 'dashed', width:'90px', height: '90px', fontSize: '72px'}}>+</label>
+    //         </div>
+    //     )
+    // }
     return (
         <div>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div>
                     <label >Name</label>
                     <input type='text' require='true' onChange={e => setName(e.target.value)}></input>
@@ -97,7 +99,7 @@ const Signup = () => {
                 <div>
                     <label>Photos</label>
                     <div style={{display: 'grid', gridTemplate: '1fr 1fr 1fr', textAlign: 'center'}}>
-                        {imageSelector}
+                        {/* {imageSelector} */}
                     </div>
                 </div>
                 <div>
@@ -108,18 +110,19 @@ const Signup = () => {
                             const temp = interestLabels.slice();
                             const interestsTemp = interests.slice();
                             temp.push(<label key={opt.value.toLowerCase()}>{opt.value}</label>);
+                            interestsTemp.push(opt.value)
                             setInterestLabels(temp);
                             setInterests(interestsTemp);
                             console.log(interests);
                         }}
                     />
-                    <div id='interestBox'>{interests}</div>
+                    <div id='interestBox'>{interestLabels}</div>
                 </div>
                 <div>
                     <label>Tell us more about yourself</label>
                     <br></br>
                     <input type='text' placeholder='Favorite outdoor memories
-                    What are you looking for?' onChange={e => setDescription(e.target.value)} style={{height: '150px', width: '250px', textAlign: 'top'}}></input>
+                    What are you looking for?' onChange={e => setBio(e.target.value)} style={{height: '150px', width: '250px', textAlign: 'top'}}></input>
                 </div>
                 <button type='submit'>Create Account</button>
             </form>
