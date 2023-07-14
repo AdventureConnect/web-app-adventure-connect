@@ -10,11 +10,13 @@ import AccountInterests from "./components/AccountInterests.jsx";
 import AccountMgmt from "./components/AccountMgmt.jsx";
 import ChangePassword from "./components/ChangePassword.jsx";
 import Dashboard from "./components/Dashboard.jsx"
+import Header from "./components/Header.jsx";
 import "./styles.css"
 
 const App = () => {
   return (
     <div>
+      <Header />
       <BrowserRouter>
         <Routes>
           <Route index element={<Login />} />
