@@ -1,4 +1,5 @@
 const Users = require("../models/userModel");
+const { createErr } = require("../utils/errorCreator");
 
 const userController = {};
 
@@ -26,11 +27,23 @@ userController.verifyLogin = async (req, res, next) => {
       return next();
     } else {
       // If the user is not found, send an error response
-      res.status(401).json({ message: "Invalid login credentials!" });
+      return next(
+        createErr({
+          method: "userController.verifyLogin",
+          type: "user does not exist in database",
+          err: "user was not found using provided credentials",
+        })
+      );
     }
   } catch (error) {
     // If an error occurs, send an error response
-    return next(error);
+    return next(
+      createErr({
+        method: "userController.verifyLogin",
+        type: "could not verify",
+        err: error,
+      })
+    );
   }
 };
 
@@ -60,8 +73,13 @@ userController.createNewUser = async (req, res, next) => {
     console.log("saved the user to the db");
     return next();
   } catch (error) {
-    console.log(error);
-    next(error);
+    return next(
+      createErr({
+        method: "userController.createNewUser",
+        type: "Method Failed",
+        err: error,
+      })
+    );
   }
 };
 
@@ -75,17 +93,29 @@ userController.updateUser = async (req, res, next) => {
     });
 
     if (updatedUser) {
-      console.log(updatedUser);
-      res.status(200);
       // Document found and updated successfully
+      console.log(updatedUser);
+      return next();
     } else {
-      console.log("User not found");
-      // No document with the specified email was found
+      //if user not found then forward error to error handler
+      return next(
+        createErr({
+          method: "userController.updateUser",
+          type: "Method Failed",
+          err: "no document with the specified email was found",
+        })
+      );
     }
+    return next();
   } catch (error) {
-    console.error(error);
+    return next(
+      createErr({
+        method: "userController.updateUser",
+        type: "Method Failed",
+        err: error,
+      })
+    );
   }
-  return next();
 };
 
 userController.getProfiles = async (req, res, next) => {
@@ -101,18 +131,22 @@ userController.getProfiles = async (req, res, next) => {
       interests: { $in: interests },
     });
 
-    console.log(users);
     // Array of users with matching zipCode and at least one common interest
+    // console.log(users);
 
-    res.status(200);
     //store users on res.locals
     res.locals.matchingUsers = users;
+
+    return next();
   } catch (error) {
-    console.error(error);
-    // An error occurred while querying the database
-    res.status(500).json({ message: "Server error!" });
+    return next(
+      createErr({
+        method: "userController.getProfiles",
+        type: "Method Failed",
+        err: error,
+      })
+    );
   }
-  return next();
 };
 
 module.exports = userController;

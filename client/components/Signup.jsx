@@ -23,6 +23,7 @@ const Signup = () => {
   const [zipcode, setZipcode] = useState();
   const [bio, setBio] = useState();
   const [redirect, setRedirect] = useState(false);
+  const [emailInUse, setEmailInUse] = useState(true);
 
   //for navigating to login after successful submission of create user
 
@@ -39,6 +40,7 @@ const Signup = () => {
   //     setImages(temp);
   //     console.log(images);
   // }
+
   const createUser = async (info) => {
     try {
       const response = await fetch("http://localhost:8080/api/signup", {
@@ -50,6 +52,8 @@ const Signup = () => {
         body: JSON.stringify(info),
       });
 
+      console.log(response, "response");
+
       //if the createNewUser request is successful, then initiate redirect
       if (response.ok) setRedirect(true);
     } catch (err) {
@@ -57,6 +61,24 @@ const Signup = () => {
       return err;
     }
   };
+
+  // const checkEmail = async (email) => {
+  //   try {
+  //     const response = await fetch("http://localhost:8080/api/checkUser", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ email: email }),
+  //     });
+
+  //     if (response.ok) {
+  //       console.log(response.body);
+  //     }
+  //   } catch (error) {
+  //     console.log("Error in checkEmail function:", error);
+  //   }
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -100,8 +122,13 @@ const Signup = () => {
           <input
             type="text"
             require="true"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              // checkEmail(e.target.value);
+              //put another callback to check if the current email is in use
+            }}
           ></input>
+          {emailInUse && <span> Hey, Find Another Email!</span>}
         </div>
         <div>
           <label>Password</label>

@@ -10,6 +10,7 @@ import AccountInterests from "./components/AccountInterests.jsx";
 import AccountMgmt from "./components/AccountMgmt.jsx";
 import ChangePassword from "./components/ChangePassword.jsx";
 import Dashboard from "./components/Dashboard.jsx";
+import UserPage from "./components/UserPage.jsx";
 import "./styles.css";
 
 const App = () => {
@@ -40,5 +41,3 @@ const App = () => {
 };
 
 export default App;
-
-//account
