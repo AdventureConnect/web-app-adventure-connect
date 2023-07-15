@@ -194,38 +194,78 @@ userController.uploadImages = (req, res) => {
   });
 };
 
+//Jay's old version
+// userController.updateUser = async (req, res, next) => {
+//   try {
+//     // grab email from the currentUser cookie
+//     const email = req.cookies.currentemail;
+//     //find document by email and update it with the values from req.body
+//     const updatedUser = await Users.findOneAndUpdate({ email }, req.body, {
+//       new: true,
+//     });
+
+//     if (updatedUser) {
+//       // Document found and updated successfully
+//       console.log(updatedUser);
+//       return next();
+//     } else {
+//       //if user not found then forward error to error handler
+//       return next(
+//         createErr({
+//           method: "userController.updateUser",
+//           type: "Method Failed",
+//           err: "no document with the specified email was found",
+//         })
+//       );
+//     }
+//     return next();
+//   } catch (error) {
+//     return next(
+//       createErr({
+//         method: "userController.updateUser",
+//         type: "Method Failed",
+//         err: error,
+//       })
+//     );
+//   }
+// };
+
+//Julia's updated version
 userController.updateUser = async (req, res, next) => {
   try {
-    // grab email from the currentUser cookie
-    const email = req.cookies.currentemail;
-    //find document by email and update it with the values from req.body
-    const updatedUser = await Users.findOneAndUpdate({ email }, req.body, {
-      new: true,
-    });
-
-    if (updatedUser) {
-      // Document found and updated successfully
-      console.log(updatedUser);
-      return next();
+    const currentEmail = req.cookies.currentEmail;
+    const { email, ...updatedFields } = req.body;
+    let updatedUser;
+    if (email && email !== currentEmail) {
+      // if emmail is different, check if the new email already exists
+      const emailExists = await Users.exists({ email });
+      if (emailExists) {
+        return res.status(400).json({ message: "Email already exists" });
+      }
+      //Update user with email change
+      updatedUser = await Users.findOneAndUpdate(
+        { email: currentEmail },
+        { $set: { email, ...updatedFields } },
+        { new: true }
+      );
     } else {
-      //if user not found then forward error to error handler
-      return next(
-        createErr({
-          method: "userController.updateUser",
-          type: "Method Failed",
-          err: "no document with the specified email was found",
-        })
+      // Update user without email change
+      updatedUser = await Users.findOneAndUpdate(
+        { email: currentEmail },
+        { $set: updatedFields },
+        { new: true }
       );
     }
-    return next();
+    if (updatedUser) {
+      console.log(updatedUser);
+      return res.status(200).json({ message: "User updated successfully" });
+    } else {
+      console.log("User not found");
+      return res.status(404).json({ message: "User not found" });
+    }
   } catch (error) {
-    return next(
-      createErr({
-        method: "userController.updateUser",
-        type: "Method Failed",
-        err: error,
-      })
-    );
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 

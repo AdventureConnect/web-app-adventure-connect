@@ -4,7 +4,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { set } from "mongoose";
 
 const Signup = () => {
-  const activities = [
+  const list = [
     { label: "Backpacking", value: "Backpacking" },
     { label: "Camping", value: "Camping" },
     { label: "Climbing", value: "Climbing" },
@@ -24,10 +24,12 @@ const Signup = () => {
   const [password, setPassword] = useState();
   const [zipcode, setZipcode] = useState();
   const [bio, setBio] = useState();
-  const [redirect, setRedirect] = useState(false);
+  // const [redirect, setRedirect] = useState(false);
   const [emailInUse, setEmailInUse] = useState(false);
   const [emailTimeout, setEmailTimeout] = useState(null);
   const [badSignup, setBadSignup] = useState(false);
+  const [activities, setActivities] = useState(list);
+  const [validZipcode, setValidZipCode] = useState(true);
 
   //will be invoked by checkEmailTimer on typing, and will notify user in real time if account in use
   const checkEmailInUse = async (emailVal) => {
@@ -55,11 +57,6 @@ const Signup = () => {
     setEmailTimeout(timeout);
   };
 
-  //for navigating to login root directory after successful submission of create user
-  if (redirect === true) {
-    return <Navigate to="/" />;
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const info = {
@@ -67,7 +64,7 @@ const Signup = () => {
       email: email,
       password: password,
       zipCode: zipcode,
-      interests: interests,
+      interests: Array.from(interests),
       bio: bio,
     };
     try {
@@ -133,10 +130,11 @@ const Signup = () => {
             require="true"
             onChange={(e) => {
               setEmail(e.target.value);
+              console.log(e.target.value);
               setCheckEmailTimer(e.target.value);
             }}
           ></input>
-          {emailInUse && email.length && <span> Hey, Find Another Email!</span>}
+          {emailInUse && <span> Hey, Find Another Email!</span>}
         </div>
         <div>
           <label>Password</label>
@@ -151,7 +149,10 @@ const Signup = () => {
           <input
             type="text"
             require="true"
-            onChange={(e) => setZipcode(e.target.value)}
+            onChange={(e) => {
+              checkZipcode(e.target.value);
+              setZipcode(e.target.value);
+            }}
           ></input>
         </div>
         {/* <div>
