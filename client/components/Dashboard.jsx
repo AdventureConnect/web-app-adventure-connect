@@ -1,8 +1,10 @@
 import React from "react";
 import Carousel from "./Carousel"
 import CarouselItem from "./CarouselItem";
+import { useState } from "react";
 
 const Dashboard = () => {
+  // const [users, setUsers] = useState([]);
 
   const getUsers = async () => {
     console.log('get users function ran');
@@ -16,6 +18,7 @@ const Dashboard = () => {
       });
 
       console.log(response);
+      // setUsers(response);
       
       if (response.ok) {
         const users = await response.json();
@@ -39,6 +42,7 @@ const Dashboard = () => {
         <CarouselItem>Number 2</CarouselItem>
         <CarouselItem>Number 3</CarouselItem>
       </Carousel>
+      {/* {users}; */}
     </div>
   )
 }

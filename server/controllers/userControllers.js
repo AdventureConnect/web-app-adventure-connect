@@ -209,7 +209,7 @@ userController.getCurrentUser = async (req, res, next) => {
       // User found, send the user data as the response
       return res.status(200).json(user);
     } else {
-      // User not found
+    
       return res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {

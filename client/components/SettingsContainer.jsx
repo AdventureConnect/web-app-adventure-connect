@@ -41,13 +41,22 @@ const settingOptionsStyle = {
   flexDirection: 'column',
 }
 
+const buttonStyle = {
+  height: '30px', 
+              cursor:'pointer', 
+              borderRadius: '5px', 
+              border: 'none',
+              height: '35px',
+               boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', 
+               backgroundColor: '#D3D3D3',
+}
 
 const submitButtonContainerStyle = {
   display: "flex",
-  justifyContent: "center",
+  justifyContent: "left",
   marginTop: "20px",
-};
-
+  // m 
+}
 
 const SettingsContainer = () => {
     const [user, setUser] = useState({
@@ -62,6 +71,8 @@ const SettingsContainer = () => {
     const [selectedOption, setSelectedOption] = useState('editProfile');
     const [interestLabels, setInterestLabels] = useState([]);
     const [interests, setInterests] = useState([]);
+
+    const saveChangesText = "Save\nChanges";
   
     useEffect(() => {
       // Fetch the user's data from the backend (MongoDB) and populate the state
@@ -199,7 +210,7 @@ const SettingsContainer = () => {
               <input
                 type="text"
                 value={user.zipCode}
-                onChange={(e) => setUser(prevUser => ({ ...prevUser, zipCode: e.target.value }))}
+                onChange={(e) => setUser(prevUser => ({ ...prevUser, zipCode:e.target.value }))}
               />
   
               <h3>Bio</h3>
@@ -208,7 +219,7 @@ const SettingsContainer = () => {
                 onChange={(e) => setUser(prevUser => ({ ...prevUser, bio: e.target.value }))}
               ></textarea>
               <div style={submitButtonContainerStyle}>
-              <button style={{cursor: 'pointer',}}onClick={handleProfileSave}>Submit</button>
+              <button style={buttonStyle} onClick={handleProfileSave}>{saveChangesText}</button>
               </div>
             </div>
           );
@@ -229,7 +240,7 @@ const SettingsContainer = () => {
                 onChange={(e) => setUser(prevUser => ({ ...prevUser, password: e.target.value }))}
               />
               <div style={submitButtonContainerStyle}>
-              <button style={{cursor: 'pointer',}}onClick={handleAccountSave}>Submit</button>
+              <button style={buttonStyle}onClick={handleAccountSave}>Save Changes</button>
               </div>
             </div>
           );
@@ -263,7 +274,9 @@ const SettingsContainer = () => {
           <div id="interestBox">{interestLabels}</div>
         </div>
         <div style={submitButtonContainerStyle}>
-              <button style={{cursor: 'pointer',}}onClick={handleInterestsSave}>Submit</button>
+              <button style=
+              {buttonStyle}
+              onClick={handleInterestsSave}>Save Changes</button>
               </div>
             </div>
           );
