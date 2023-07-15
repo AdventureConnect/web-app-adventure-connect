@@ -56,7 +56,7 @@ const Login = () => {
     }}
     
   if (authenticated) {
-      return navigate('/userprofile', {state: {currentUser: currentUser, authenticated: authenticated}});
+      return navigate('/dashboard', {state: {currentUser: currentUser, authenticated: authenticated}});
   }
 
   const handleSubmit = async e => {
@@ -99,8 +99,8 @@ const Login = () => {
             </label>
             {loginError && <p style={{ color: 'red' }}>Invalid login information. Please try again or <a href='/signup'>sign up</a>.</p>}
             <div>
-              <button onClick={() => navigate('/signup')}>Register</button>
-              <button type='submit' >Login</button>
+              <button className='btn' onClick={() => navigate('/signup')}>Register</button>
+              <button className='btn' type='submit' >Login</button>
             </div>
           </form>
           <a href='#' onClick={() => sendOtp()}>Forgot your passowrd?</a>

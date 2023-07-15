@@ -29,12 +29,13 @@ const Signup = () => {
 
     const handleSubmit = async e => {
         e.preventDefault();
+        console.log('inside submit', interests)
         const info = {
             name: name,
             email: email,
             password: password,
             zipCode: zipcode,
-            interests: interests,
+            interests: Array.from(interests),
             bio: bio,
         };
         try {
@@ -111,6 +112,7 @@ const Signup = () => {
                             tempAct = tempAct.filter(act => act.label !== opt.value);
                             setInterests(tempInt);
                             setActivities(tempAct);
+                            console.log(interests);
                         }}
                     />
                     <div id='interestBox'>{interestLabels}</div>
@@ -121,7 +123,7 @@ const Signup = () => {
                     <input type='text' placeholder='Favorite outdoor memories
                     What are you looking for?' onChange={e => setBio(e.target.value)} style={{height: '150px', width: '250px', textAlign: 'top'}}></input>
                 </div>
-                <button type='submit'>Create Account</button>
+                <button className='btn' type='submit'>Create Account</button>
             </form>
         </div>
     )

@@ -133,7 +133,8 @@ userController.uploadImages = (req, res) => {
       return res.status(500).json({ message: 'Error uploading Files'});
     }
     const email = req.params.userEmail;
-    console.log(req.file);
+
+    console.log(req.files);
     if (!req.files) {
       res.status(400).send("No file uploaded.");
       return;

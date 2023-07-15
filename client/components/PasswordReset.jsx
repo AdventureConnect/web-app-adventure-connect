@@ -34,32 +34,40 @@ const PasswordReset = () => {
    }}
 
    const checkPasswords = () => {
-    if (confirmPassword !== password) {
-      setMismatch(true);
-    } else {
-      setMismatch(false);
-    }
+    setTimeout(() => {
+      if (confirmPassword !== password) {
+        setMismatch(true);
+      } else {
+        setMismatch(false);
+      }
+    }, 1000)
    }
   
     return (
-      <div>
+      <div style={{display:'flex', flexDirection: 'column'}}>
         <h2> Change Password </h2>
           <form>
-            <label> New Password: </label>
-            <input 
-              type='password'
-              required=''
-              value={password}
-              onChange={(e) => setPassword(e.target.value)} />
-            <label> Confirm Password: </label>
-            <input 
-              type='password'
-              required=''
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              onKeyUp={checkPasswords} />
-              {mismatch && <label>The passwords don't match</label>}
-            <button onClick={changePassword}>Reset passwod </button>
+            <div>
+              <label> New Password: </label>
+              <input 
+                type='password'
+                required=''
+                value={password}
+                onChange={(e) => setPassword(e.target.value)} />
+            </div>
+            <div>
+              <label> Confirm Password: </label>
+              <input 
+                type='password'
+                required=''
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                onKeyUp={checkPasswords} />
+            </div>
+            <div>
+              {mismatch && <label>The passwords don't match, please check again</label>}
+            </div>
+            <button className='btn' onClick={changePassword}>Reset passwod </button>
           </form>
       </div>
     );

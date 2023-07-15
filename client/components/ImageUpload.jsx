@@ -53,11 +53,20 @@ function ImageUpload() {
       e.preventDefault();
       e.stopPropagation();
       setDragActive(false);
+      // if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      //   const temp = files.slice();
+      //   temp.push(e.dataTransfer.files[0]);
+      //   setFiles(temp);
+      //   console.log(files);
+      // }
       if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-        const temp = files.slice();
-        temp.push(e.dataTransfer.files[0]);
-        setFiles(temp);
+        const temp = {...previewImg};
+        temp[Math.max(Object.keys(temp))+1] = e.dataTransfer.files[0];
+        setPreviewImg(temp);
+        setFiles(Object.values(temp)); 
+        console.log(previewImg);
         console.log(files);
+        // setFiles(Object.values(temp));
       }
     };
 
@@ -68,10 +77,19 @@ function ImageUpload() {
       if (files.length > 6) {
         return alert('You\'ve reached the maximum number of files');
       }
+      // if (e.target.files && e.target.files[0]) {
+      //   const temp = files.slice();
+      //   temp.push(e.target.files[0]);
+      //   setFiles(temp);
+      //   console.log(files);
+      // }
       if (e.target.files && e.target.files[0]) {
-        const temp = files.slice();
-        temp.push(e.target.files[0]);
-        setFiles(temp);
+        const temp = {...previewImg};
+        temp[Math.max(Object.keys(temp))+1] = e.target.files[0]
+        setPreviewImg(temp);
+        // setFiles(Object.values(temp));
+        setFiles(Object.values(temp)); 
+        console.log(previewImg);
         console.log(files);
       }
     };
@@ -84,6 +102,7 @@ function ImageUpload() {
     // handle file upload
     const handleFileUpload = async (e) => {
       e.preventDefault();
+      console.log('inside upload', files);
       const formData = new FormData();
       files.forEach(file => {
         formData.append('image', file);
@@ -93,6 +112,7 @@ function ImageUpload() {
       // }
       try {
         await fetch(`/api/upload-file-to-cloud-storage/${location.state.email}`, {
+        // await fetch(`/api/upload-file-to-cloud-storage/shiyu0811liu@gmail.com`, {
               method  : 'POST',
               // headers: {
               //   'Content-Type': 'multipart/form-data'
@@ -107,17 +127,33 @@ function ImageUpload() {
         return alert('Issue uploading your images. Please try again later.');
       }
     }
-  // const removeImage = (e)
+
+  const removeImage = (e) => {
+    let index = e.target.parentElement.getAttribute('image_index');
+    const imageObj = {...previewImg};
+    delete imageObj[index];
+    setPreviewImg(imageObj);
+    setFiles(Object.values(previewImg)); 
+    console.log(files);
+  }
+
   const preview = [];
-  files.forEach(file => {
-    console.log(file);
-    preview.push(<div><img className='image_preview' src={URL.createObjectURL(file)}/><button className='deleteImage'>x</button></div>)
-  })
+  // files.forEach(file => {
+  //   console.log(file);
+  //   preview.push(<div><img className='image_preview' src={URL.createObjectURL(file)}/><button className='deleteImage'>x</button></div>)
+  // })
+  for (const key in previewImg) {
+    preview.push(<div image_index={key} style={{overflow: 'hidden', width:'300px', height: '300px'}}><img className='image_preview' src={URL.createObjectURL(previewImg[key])}/><button className='deleteImage' onClick={e => removeImage(e)}>x</button></div>)
+  }
+  // Object.values(previewImg).forEach((file) => {
+  //   console.log(file);
+  //   preview.push(<div><img className='image_preview' src={URL.createObjectURL(file)}/><button className='deleteImage'>x</button></div>)
+  // })
 
   return (
-    <div>
-      <label>Share the Moments from Your Outdoor Adventures!</label>
-      <form encType='multipart/form-data' onDragEnter={handleDrag} onSubmit={(e) => e.preventDefault()}>
+    <div style={{width: '80%', height:'100%', margin: 'auto', textAlign:'center'}}>
+      <h3>Share Your Favorite Moments from Outdoor Adventures!</h3>
+      <form style={{height: '250px', margin:'5%'}} encType='multipart/form-data' onDragEnter={handleDrag} onSubmit={(e) => e.preventDefault()}>
         <input ref={inputRef} type='file' id='input-file-upload' name='image' accept='image/*' multiple={true} onChange={handleChange}/>
         <label id='label-file-upload' htmlFor='input-file-upload' className={dragActive ? 'drag-active' : '' }>
           <div>
@@ -129,11 +165,15 @@ function ImageUpload() {
           Upload
         </button> */}
         { dragActive && <div id='drag-file-element' onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div> }
-        <button onClick={e => handleFileUpload(e)} id='image_upload'>Upload</button>
        </form>
-       <div id='preview_container'>
+       <div style={{marginBottom: '3%'}}>
+        <button className='btn' onClick={e => handleFileUpload(e)} id='image_upload'>Upload</button>
+       </div>
+       <div id='preview_container' style={{width:'80%', margin:'auto', display:'grid', gridTemplateColumns: 'repeat(2, 1fr)'}}>
         {preview}
-        <label>{files.length}/6 Images Selected</label>
+       </div>
+       <div>
+        <label>{preview.length}/6 Images Selected</label>
        </div>
     </div>
   );

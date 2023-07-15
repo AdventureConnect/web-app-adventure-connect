@@ -54,17 +54,19 @@ const resendOTP = async () => {
   }, [disable]);
 
   return (
-    <div className="container">
+    <div className="container" style={{display:'flex', flexDirection:'column'}}>
       <h3>Email Verification</h3>
       <p>We have sent a verification code to your email.</p>
       <form>
-         <input type="text" className="verification-input" value={OTPinput} onChange={(e) => { setOTPinput(e.target.value) }} /> 
-          <button className="verify-code" onClick={() => verifyOTP()}>Verify Account</button>
-                
+        <div>
+          <input type="text" className="verification-input" value={OTPinput} onChange={(e) => { setOTPinput(e.target.value) }} /> 
+          <button className="verify-code" onClick={() => verifyOTP()}>Verify Account</button>           
+        </div>
+        <div>
           <a className="resend-otp" onClick={() => resendOTP()} > Didn't receive code? 
             {disable ? ` Resend OTP in ${timerCount}s` : " Resend OTP"}
-          </a>
-             
+          </a>   
+        </div>
       </form>
     </div>
   );
