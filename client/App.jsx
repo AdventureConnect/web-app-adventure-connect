@@ -1,16 +1,22 @@
-import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "./components/Login.jsx";
-import Signup from "./components/Signup.jsx";
+import React,{ useState, createContext } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Login from './components/Login.jsx';
+import Signup from './components/Signup.jsx';
 import PasswordReset from './components/PasswordReset.jsx'
-import UserProfile from "./components/UserProfile.jsx";
-import SettingsBar from "./components/Settings.jsx";
-import EditProfile from "./components/EditProfile.jsx";
-import AccountInterests from "./components/AccountInterests.jsx";
-import AccountMgmt from "./components/AccountMgmt.jsx";
-import ChangePassword from "./components/ChangePassword.jsx";
-import Dashboard from "./components/Dashboard.jsx"
-import "./styles.css"
+import UserProfile from './components/UserProfile.jsx';
+import UserSpecific from './components/UserSpecific.jsx';
+import SettingsBar from './components/Settings.jsx';
+import EditProfile from './components/EditProfile.jsx';
+import AccountInterests from './components/AccountInterests.jsx';
+import AccountMgmt from './components/AccountMgmt.jsx';
+import ChangePassword from './components/ChangePassword.jsx';
+import Dashboard from './components/Dashboard.jsx'
+import ImageUpload from './components/ImageUpload.jsx';
+import OTP from './components/OTP.jsx';
+export const RecoveryContext = createContext();
+import Header from "./components/Header.jsx"
+import Matches from './components/Matches.jsx';
+import './styles.css'
 
 const App = () => {
   const [email, setEmail] = useState('');
@@ -18,22 +24,30 @@ const App = () => {
 
   return (
     <div>
-      <BrowserRouter>
-        <Routes>
-          <Route index element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/passwordreset" element={<PasswordReset />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/userprofile" element={<UserProfile />} />
-          <Route path="/settings" element={<SettingsBar />} />
-          <Route path="/account" element={<EditProfile />} />
-          <Route path="/account/interests" element={<AccountInterests />} />
-          <Route path="/account/management" element={<AccountMgmt />} />
-          <Route path="/account/password" element={<ChangePassword />} />
-          <Route path="/userpage" element={<UserPage />} />
-          <Route path="*" element={<div>404 Error. This page was not found</div>} />
-        </Routes>
-      </BrowserRouter>
+      <Header></Header>
+      <RecoveryContext.Provider
+        value={{ otp, setOTP, email, setEmail }}>
+        <BrowserRouter>
+          <Routes>
+            <Route index element={<Login />} />
+            <Route path='/signup' element={<Signup />} />
+            <Route path='/passwordreset' element={<PasswordReset />} />
+            <Route path='/dashboard' element={<Dashboard />} />
+            <Route path='/userprofile' element={<UserProfile />} />
+            <Route path='/settings' element={<SettingsBar />} />
+            <Route path='/account' element={<EditProfile />} />
+            <Route path='/account/interests' element={<AccountInterests />} />
+            <Route path='/account/management' element={<AccountMgmt />} />
+            <Route path='/account/password' element={<ChangePassword />} />
+            <Route path='/findInterests' element={<ChangePassword />} />
+            <Route path='*' element={<div>404 Error. This page was not found</div>} />
+            <Route path='/userspecific' element={<UserSpecific />} />
+            <Route path='/imageupload' element={<ImageUpload />} />
+            <Route path='/matches' element={<Matches />} />
+            <Route path='/otp' element={<OTP />} />
+          </Routes>
+        </BrowserRouter>
+      </RecoveryContext.Provider>
     </div>
   );
 };

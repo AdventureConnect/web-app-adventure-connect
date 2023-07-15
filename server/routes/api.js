@@ -1,15 +1,44 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userControllers')
+const userController = require('../controllers/userControllers');
+const Images = require('../models/imageModel');
 
-router.get("/", (req, res) => {
-  res.send("hello world");
+router.get('/check_email', userController.checkemail, async (req, res) => {
+  // console.log(req.query.email);
+  res.end();
+});
 
+router.post('/send_email', userController.sendEmail, async (req, res) => {
+  res.end();
+});
+
+router.put('/update-password', userController.updatePassword, async (req, res) => {
+  res.end();
+});
+
+router.get('/getImages', async (req, res) => {
+  const email = req.params.userEmail;
+  try {
+    const image = await Images.find({ email: email });
+    // console.log('image',image[0].image);
+    res.status(200).json(image);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+router.post('/upload-file-to-cloud-storage/:userEmail', userController.uploadImages, function (req, res, next) {
+  res.end();
+});
+
+router.get('/', (req, res) => {
+  res.send('hello world');
 });
 
 //login router, verify user then redirect to user profiles page
 //fine that im setting status and sending message in the controller instead of last step?
-router.post('/api/login', userController.verifyLogin, (req, res) => {
+router.post('/login', userController.verifyLogin, (req, res) => {
   //end the response, with status and message set in verifyUser middleware
   res.sendStatus(200);
   //front code on login component should determine whether to redirect to userProfiles based on error or not
@@ -34,7 +63,11 @@ router.get('/getUsers', userController.getProfiles, (req, res) => {
 router.get('/findMatches', userController.findMatches, (req, res) => {
   // console.log(res.locals.foundMatch, '\n-----------------------', '\nsending res.locals.foundMatch as json');
   console.log(res.locals.foundMatch.length, 'this is the length of what we send as json');
-  res.status(250).json(res.locals.foundMatch)
+  res.status(250).json(res.locals.foundMatch);
+});
+
+router.get('/findInterests', userController.getProfiles, (req, res) => {
+  res.status(250).json(res.locals.getProfiles);
 });
 
 router.get('/cookie', userController.createCookie, (req, res) => {

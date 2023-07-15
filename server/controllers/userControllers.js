@@ -1,4 +1,29 @@
 const Users = require("../models/userModel");
+const Images = require('../models/imageModel');
+require("dotenv").config();
+
+const { Storage } = require("@google-cloud/storage");
+const { format } = require("util");
+const multer = require('multer');
+const nodemailer = require('nodemailer');
+
+// const upload =  multer({
+//   storage: multer.memoryStorage(),
+//   limits: {
+//     fileSize: 5 * 1024 * 1024, // no larger than 5mb, you can change as needed.
+//   },
+//   onError : function(err, next) {
+//     console.log('error', err);
+//     next(err);
+//   }
+// });
+
+const cloudStorage = new Storage({
+  keyFilename: `${__dirname}/../web-app-adventure-connect-39d349a3f0d5.json`,
+  projectId: 'web-app-adventure-connect',
+});
+const bucketName = "adventure-connect-user-image-bucket";
+const bucket = cloudStorage.bucket(bucketName);
 
 const userController = {};
 
@@ -66,9 +91,9 @@ userController.verifyLogin = async (req, res, next) => {
     try {
       //save the new user to the database
       const savedUser = await Users.create(newUser)
-      // res.cookie('currentEmail', savedUser.email, { httpOnly: false, overwrite: true });
-      // res.cookie('currentInterests', JSON.stringify(savedUser.interests), { httpOnly: false, overwrite: true });
-      // res.cookie('zipCode', JSON.stringify(savedUser.zipCode), { httpOnly: false, overwrite: true});
+      res.cookie('currentEmail', savedUser.email, { httpOnly: false, overwrite: true });
+      res.cookie('currentInterests', JSON.stringify(savedUser.interests), { httpOnly: false, overwrite: true });
+      res.cookie('zipCode', JSON.stringify(savedUser.zipCode), { httpOnly: false, overwrite: true});
     console.log(JSON.stringify(savedUser.interests), `\nthis is JSON interests`, `\n`, JSON.stringify(savedUser.zipCode), `\n this is JSON zip code`, savedUser.email, `\n this is email`);
     console.log('saved the user to the db');
     console.log(savedUser);
@@ -87,6 +112,53 @@ userController.verifyLogin = async (req, res, next) => {
   //   console.log('Error saving user:', error);
   //   return next({error: error.message})
   // });
+}
+
+userController.uploadImages = (req, res) => {
+  const upload =  multer({
+    storage: multer.memoryStorage(),
+    limits: {
+      fileSize: 5 * 1024 * 1024, // no larger than 5mb, you can change as needed.
+    },
+    onError : function(err, next) {
+      console.log('error', err);
+      next(err);
+    }
+  }).array('image');
+
+  upload(req, res, function (err) {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ message: 'Error uploading Files'});
+    }
+    const email = req.params.userEmail;
+    console.log(req.file);
+    if (!req.files) {
+      res.status(400).send("No file uploaded.");
+      return;
+    }
+    try {
+      req.files.forEach(file => {
+        const blob = bucket.file(file.originalname);
+        const blobStream = blob.createWriteStream();
+        blobStream.on("error", (err) => {
+          // next(err);
+          console.log(err);
+        });
+        blobStream.on("finish", async () => {
+          // The public URL can be used to directly access the file via HTTP.
+          const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
+          Images.create({email: email, image: publicUrl});
+        });
+        // urls.push(publicUrl);
+        blobStream.end(file.buffer);
+      });
+      res.status(200).send('Images uploaded');
+    }
+    catch (err) {
+      res.status(500).send('Error uploading images');
+    }
+  });
 }
 
 userController.updateUser = async (req, res, next) => {
@@ -121,15 +193,18 @@ userController.getProfiles = async (req, res, next) => {
     const zipcode = Number(req.cookies.zipCode);
     //grab email from the cookie
     const email = req.cookies.currentEmail;
+    console.log(req.cookies.currentEmail, 'this is the email we are looking for in the db');
     //fetch current user's interests from the database
-    const currentUser = await Users.findOne({ email: email });
+    const currentUser = await Users.findOne({ email: 'aiden130@yahoo.com' });
+    console.log(currentUser, 'this is current user');
     const interests = currentUser.interests;
     //find users with same zipcode and at least one interest in common
     const users = await Users.find({
-      zipCode: zipcode,
+      // zipCode: zipcode,
       interests: { $in: interests },
     });
     console.log(users);
+    res.locals.getProfiles = users
     res.status(200);
     res.json(users);
   } catch (error) {
