@@ -22,6 +22,10 @@ router.put("/user", userController.updateUser, (req, res) => {
   res.sendStatus(200);
 });
 
+router.post("/checkEmail", userController.checkEmail, (req, res) => {
+  res.status(200).send(res.locals.emailInUse);
+});
+
 //route to grab similar users to populate UserProfiles, based on zipcode and interest
 router.get("/getUsers", userController.getProfiles, (req, res) => {
   res.status(200).json(res.locals.matchingUsers);

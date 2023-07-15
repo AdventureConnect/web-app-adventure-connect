@@ -1,6 +1,7 @@
 import React, { useEffect, useState, history } from "react";
 import Select from "react-select";
 import { Navigate } from "react-router-dom";
+import { set } from "mongoose";
 
 const activities = [
   { label: "Backpacking", value: "Backpacking" },
@@ -23,7 +24,37 @@ const Signup = () => {
   const [zipcode, setZipcode] = useState();
   const [bio, setBio] = useState();
   const [redirect, setRedirect] = useState(false);
-  const [emailInUse, setEmailInUse] = useState(true);
+  const [emailInUse, setEmailInUse] = useState(false);
+  const [emailTimeout, setEmailTimeout] = useState(null);
+
+  //will be invoked by checkEmailTimer on typing, and will notify user in real time if account in use
+  const checkEmailInUse = async (emailVal) => {
+    try {
+      const response = await fetch("http://localhost:8080/api/checkEmail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: emailVal }),
+      });
+
+      const data = await response.json();
+      setEmailInUse(data);
+    } catch (error) {
+      console.log("Error in checkEmailInUse function:", error);
+    }
+  };
+
+  //set a timeout to after typing has stopped
+  const setCheckEmailTimer = (emailVal) => {
+    if (emailInUse) setEmailInUse(false);
+    setEmailTimeout(clearTimeout(emailTimeout));
+    const timeout = setTimeout(() => checkEmailInUse(emailVal), 500);
+    setEmailTimeout(timeout);
+  };
+
+  //when the user types in the email input, it should clear the timeoutid stored in the EmailTimeout
+  //when the timeout ends, it should send an fetch reqquest checkEmailInUse
 
   //for navigating to login after successful submission of create user
 
@@ -52,33 +83,13 @@ const Signup = () => {
         body: JSON.stringify(info),
       });
 
-      console.log(response, "response");
-
       //if the createNewUser request is successful, then initiate redirect
       if (response.ok) setRedirect(true);
     } catch (err) {
-      alert(`An error has occurred! ${err.message}`);
-      return err;
+      console.log("Signup createUser error: ", err);
+      return;
     }
   };
-
-  // const checkEmail = async (email) => {
-  //   try {
-  //     const response = await fetch("http://localhost:8080/api/checkUser", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ email: email }),
-  //     });
-
-  //     if (response.ok) {
-  //       console.log(response.body);
-  //     }
-  //   } catch (error) {
-  //     console.log("Error in checkEmail function:", error);
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -124,11 +135,12 @@ const Signup = () => {
             require="true"
             onChange={(e) => {
               setEmail(e.target.value);
-              // checkEmail(e.target.value);
+              setCheckEmailTimer(e.target.value);
+              // checkEmaicbl(e.target.value);
               //put another callback to check if the current email is in use
             }}
           ></input>
-          {emailInUse && <span> Hey, Find Another Email!</span>}
+          {emailInUse && email.length && <span> Hey, Find Another Email!</span>}
         </div>
         <div>
           <label>Password</label>
@@ -171,7 +183,7 @@ const Signup = () => {
               interestsTemp.push(opt.value);
               setInterestLabels(temp);
               setInterests(interestsTemp);
-              console.log(interests);
+              // console.log(interests);
             }}
           />
           <div id="interestBox">{interestLabels}</div>

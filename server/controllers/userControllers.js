@@ -47,6 +47,31 @@ userController.verifyLogin = async (req, res, next) => {
   }
 };
 
+userController.checkEmail = async (req, res, next) => {
+  try {
+    const user = await Users.findOne(req.body);
+    console.log(user);
+    if (user) {
+      //if email in use assign locals variable to true and forward to next middleware
+      res.locals.emailInUse = true;
+    } else {
+      //if email not in use assign locals variable to false and forward to next middleware
+      res.locals.emailInUse = false;
+    }
+    return next();
+  } catch (error) {
+    return next(
+      createErr({
+        method: "userController.checkEmail",
+        type: "not successful",
+        err: error,
+      })
+    );
+  }
+
+  //if email syntax does not match normal email regex, then throw error
+};
+
 userController.createNewUser = async (req, res, next) => {
   console.log("before inserting new document to db");
 
@@ -62,6 +87,7 @@ userController.createNewUser = async (req, res, next) => {
   try {
     //save the new user to the database
     const savedUser = await Users.create(newUser);
+    // console.log(savedUser, "savedUser");
     const cookieHeaders = {
       httpOnly: false,
       overwrite: true,
@@ -71,6 +97,7 @@ userController.createNewUser = async (req, res, next) => {
     res.cookie("zipCode", savedUser.zipCode, cookieHeaders);
 
     console.log("saved the user to the db");
+
     return next();
   } catch (error) {
     return next(
