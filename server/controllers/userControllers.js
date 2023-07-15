@@ -1,11 +1,12 @@
 const Users = require("../models/userModel");
-const Images = require('../models/imageModel');
+const { createErr } = require("../utils/errorCreator");
+const Images = require("../models/imageModel");
 require("dotenv").config();
 
 const { Storage } = require("@google-cloud/storage");
 const { format } = require("util");
-const multer = require('multer');
-const nodemailer = require('nodemailer');
+const multer = require("multer");
+const nodemailer = require("nodemailer");
 
 // const upload =  multer({
 //   storage: multer.memoryStorage(),
@@ -20,7 +21,7 @@ const nodemailer = require('nodemailer');
 
 const cloudStorage = new Storage({
   keyFilename: `${__dirname}/../web-app-adventure-connect-39d349a3f0d5.json`,
-  projectId: 'web-app-adventure-connect',
+  projectId: "web-app-adventure-connect",
 });
 const bucketName = "adventure-connect-user-image-bucket";
 const bucket = cloudStorage.bucket(bucketName);
@@ -52,16 +53,53 @@ userController.verifyLogin = async (req, res, next) => {
       return next();
     } else {
       // If the user is not found, send an error response
-      res.status(401).json({ message: "Invalid login credentials!" });
+      return next(
+        createErr({
+          method: "userController.verifyLogin",
+          type: "user does not exist in database",
+          err: "user was not found using provided credentials",
+        })
+      );
     }
   } catch (error) {
     // If an error occurs, send an error response
-    console.log(error);
-    return next(error);
+    return next(
+      createErr({
+        method: "userController.verifyLogin",
+        type: "could not verify",
+        err: error,
+      })
+    );
   }
-  return next();
-  }
+};
 
+userController.createNewUser = async (req, res, next) => {
+  console.log("before inserting new document to db");
+
+  const newUser = new Users({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    zipCode: req.body.zipCode,
+    interests: req.body.interests,
+    bio: req.body.bio,
+  });
+  console.log("made the document");
+  try {
+    //save the new user to the database
+    const savedUser = await Users.create(newUser);
+    const cookieHeaders = {
+      httpOnly: false,
+      overwrite: true,
+    };
+    res.cookie("currentEmail", savedUser.email, cookieHeaders);
+    res.cookie("currentInterests", savedUser.interests, cookieHeaders);
+    res.cookie("zipCode", savedUser.zipCode, cookieHeaders);
+
+<<<<<<<<< Temporary merge branch 1
+    console.log("saved the user to the db");
+    return next();
+=========
   userController.createNewUser = async (req, res, next) => {
     console.log(Users);
     //set all the values for no user from req.body
@@ -74,19 +112,9 @@ userController.verifyLogin = async (req, res, next) => {
       email: req.body.email,
       password: req.body.password,
       zipCode: req.body.zipCode,
+      interests: req.body.interests,
       bio: req.body.bio,
     });
-
-    req.body.interests.forEach(email => {
-      newUser.interests.push(email)
-    });
-
-    req.body.matches.forEach(email => {
-      newUser.matches.push(email)
-    });
-
-    console.log(newUser.interests);
-    console.log(newUser.matches);
     console.log('made the document')
     try {
       //save the new user to the database
@@ -96,40 +124,35 @@ userController.verifyLogin = async (req, res, next) => {
       res.cookie('zipCode', JSON.stringify(savedUser.zipCode), { httpOnly: false, overwrite: true});
     console.log(JSON.stringify(savedUser.interests), `\nthis is JSON interests`, `\n`, JSON.stringify(savedUser.zipCode), `\n this is JSON zip code`, savedUser.email, `\n this is email`);
     console.log('saved the user to the db');
-    console.log(savedUser);
     return next()
+>>>>>>>>> Temporary merge branch 2
   } catch (error) {
-    console.log(error);
-    next(error);
+    return next(
+      createErr({
+        method: "userController.createNewUser",
+        type: "Method Failed",
+        err: error,
+      })
+    );
   }
-
-  // .then((data) => {
-  //   Users.insertOne({data})
-  //   console.log('User saved to the database');
-  //   return next();
-  // })
-  // .catch(error => {
-  //   console.log('Error saving user:', error);
-  //   return next({error: error.message})
-  // });
-}
+};
 
 userController.uploadImages = (req, res) => {
-  const upload =  multer({
+  const upload = multer({
     storage: multer.memoryStorage(),
     limits: {
       fileSize: 5 * 1024 * 1024, // no larger than 5mb, you can change as needed.
     },
-    onError : function(err, next) {
-      console.log('error', err);
+    onError: function (err, next) {
+      console.log("error", err);
       next(err);
-    }
-  }).array('image');
+    },
+  }).array("image");
 
   upload(req, res, function (err) {
     if (err) {
       console.log(err);
-      return res.status(500).json({ message: 'Error uploading Files'});
+      return res.status(500).json({ message: "Error uploading Files" });
     }
     const email = req.params.userEmail;
     console.log(req.file);
@@ -138,7 +161,7 @@ userController.uploadImages = (req, res) => {
       return;
     }
     try {
-      req.files.forEach(file => {
+      req.files.forEach((file) => {
         const blob = bucket.file(file.originalname);
         const blobStream = blob.createWriteStream();
         blobStream.on("error", (err) => {
@@ -147,43 +170,78 @@ userController.uploadImages = (req, res) => {
         });
         blobStream.on("finish", async () => {
           // The public URL can be used to directly access the file via HTTP.
-          const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
-          Images.create({email: email, image: publicUrl});
+          const publicUrl = format(
+            `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+          );
+          Images.create({ email: email, image: publicUrl });
         });
         // urls.push(publicUrl);
         blobStream.end(file.buffer);
       });
-      res.status(200).send('Images uploaded');
-    }
-    catch (err) {
-      res.status(500).send('Error uploading images');
+      res.status(200).send("Images uploaded");
+    } catch (err) {
+      res.status(500).send("Error uploading images");
     }
   });
-}
+};
 
+//Jay's old version
+// userController.updateUser = async (req, res, next) => {
+//   try {
+//     // grab email from the currentUser cookie
+//     const email = req.cookies.currentemail;
+//     //find document by email and update it with the values from req.body
+//     const updatedUser = await Users.findOneAndUpdate({ email }, req.body, {
+//       new: true,
+//     });
+
+//     if (updatedUser) {
+//       // Document found and updated successfully
+//       console.log(updatedUser);
+//       return next();
+//     } else {
+//       //if user not found then forward error to error handler
+//       return next(
+//         createErr({
+//           method: "userController.updateUser",
+//           type: "Method Failed",
+//           err: "no document with the specified email was found",
+//         })
+//       );
+//     }
+//     return next();
+//   } catch (error) {
+//     return next(
+//       createErr({
+//         method: "userController.updateUser",
+//         type: "Method Failed",
+//         err: error,
+//       })
+//     );
+//   }
+// };
+
+//Julia's updated version
 userController.updateUser = async (req, res, next) => {
   try {
-    // grab username from the currentUser cookie
-    const username = req.cookies.currentUsername;
-    //find document by username and update it with the values from req.body
-    const updatedUser = await Users.findOneAndUpdate(
-      { username },
-      req.body,
-      { new: true }
-    );
+    // grab email from the currentUser cookie
+    const email = req.cookies.currentemail;
+    //find document by email and update it with the values from req.body
+    const updatedUser = await Users.findOneAndUpdate({ email }, req.body, {
+      new: true,
+    });
 
     if (updatedUser) {
       console.log(updatedUser);
-      res.status(200);
-      // Document found and updated successfully
+      return res.status(200).json({ message: "User updated successfully" });
     } else {
-      console.log("User not found")
-      // No document with the specified username was found
+      console.log("User not found");
+      return res.status(404).json({ message: "User not found" });
     }
   } catch (error) {
     console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
-  return next();
 };
 
 userController.getProfiles = async (req, res, next) => {
@@ -203,56 +261,46 @@ userController.getProfiles = async (req, res, next) => {
       // zipCode: zipcode,
       interests: { $in: interests },
     });
-    console.log(users);
-    res.locals.getProfiles = users
-    res.status(200);
-    res.json(users);
+
+    // Array of users with matching zipCode and at least one common interest
+    // console.log(users);
+
+    //store users on res.locals
+    res.locals.matchingUsers = users;
+
+    return next();
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error!" });
+    return next(
+      createErr({
+        method: "userController.getProfiles",
+        type: "Method Failed",
+        err: error,
+      })
+    );
   }
-}
-
-userController.findMatches = async (req, res, next) => {
-  const email = 'ajmattus@gmail.com'
-  console.log(req.cookies.currentEmail, 'this is the email on the cookie');
-
-  try {
-
-    const foundMatch = await Users.find({matches:{$in:decodeURIComponent(req.cookies.currentEmail)}})
-
-    if (foundMatch) {
-      console.log('Found a match');
-      console.log(foundMatch, `this is foundMatch`);
-      res.locals.foundMatch = foundMatch
-      console.log('saved foundMatch to res.locals');
-    }
-
-    return next()
-  } catch (error) {
-    console.log(error);
-    return next(error)
-  }
+  return next();
+<<<<<<<<< Temporary merge branch 1
+};
+=========
 }
 
 userController.checkemail = async (req, res) => {
   const email = req.query.email;
   console.log(email);
   try {
-    const user = await Users.find({email: email});
-    res.status(200).json({user: user});
-  }
-  catch (error) {
+    const user = await Users.find({ email: email });
+    res.status(200).json({ user: user });
+  } catch (error) {
     console.error(error);
     // An error occurred while querying the database
     res.status(500).json({ message: "Server error!" });
   }
-}
+};
 
 userController.sendEmail = async (req, res) => {
   // console.log(process.env.MY_EMAIL, process.env.APP_PASSWORD)
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     secure: true,
     auth: {
       user: process.env.MY_EMAIL,
@@ -263,9 +311,9 @@ userController.sendEmail = async (req, res) => {
   const { recipient_email, OTP } = req.body;
 
   const mailOptions = {
-    from: 'adventureconnect_ptri11@codesmith.com',
+    from: "adventureconnect_ptri11@codesmith.com",
     to: recipient_email,
-    subject: 'AdventureConnect Password Reset',
+    subject: "AdventureConnect Password Reset",
     html: `<html>
              <body>
                <h2>Password Recovery</h2>
@@ -278,39 +326,31 @@ userController.sendEmail = async (req, res) => {
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.log(error);
-      res.status(500).send({ message: "An error occurred while sending the email" });
+      res
+        .status(500)
+        .send({ message: "An error occurred while sending the email" });
     } else {
-      console.log('Email sent: ' + info.response);
+      console.log("Email sent: " + info.response);
       res.status(200).send({ message: "Email sent successfully" });
     }
   });
-}
+};
 
-userController.updatePassword = async (req, res) =>{
+userController.updatePassword = async (req, res) => {
   const { email, newPassword } = req.body;
   try {
-    const updatedUser = await Users.findOneAndUpdate({email: email}, { password: newPassword });
-    res.status(200).json({updateUser: updatedUser});
-  }
-  catch (error) {
+    const updatedUser = await Users.findOneAndUpdate(
+      { email: email },
+      { password: newPassword }
+    );
+    res.status(200).json({ updateUser: updatedUser });
+  } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error!" });
   }
 }
 
-userController.createCookie = async (req, res, next) => {
-  console.log('before creating cookie');
-  try {
-    res.cookie('currentEmail', 'ajmattus@gmail.com', { httpOnly: false, overwrite: true });
-
-    console.log('made the cookie')
-
-    return next()
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-};
+>>>>>>>>> Temporary merge branch 2
 
 module.exports = userController;
 
