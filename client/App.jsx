@@ -1,21 +1,22 @@
-import React, { useState, createContext } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "./components/Login.jsx";
-import Signup from "./components/Signup.jsx";
-import PasswordReset from "./components/PasswordReset.jsx";
-import UserProfile from "./components/UserProfile.jsx";
-import UserSpecific from "./components/UserSpecific.jsx";
-import SettingsContainer from "./components/Settings.jsx";
-import EditProfile from "./components/EditProfile.jsx";
-import AccountInterests from "./components/AccountInterests.jsx";
-import AccountMgmt from "./components/AccountMgmt.jsx";
-import ChangePassword from "./components/ChangePassword.jsx";
-import Dashboard from "./components/Dashboard.jsx";
-import ImageUpload from "./components/ImageUpload.jsx";
-import OTP from "./components/OTP.jsx";
+import React,{ useState, createContext } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Login from './components/Login.jsx';
+import Signup from './components/Signup.jsx';
+import PasswordReset from './components/PasswordReset.jsx'
+import UserProfile from './components/UserProfile.jsx';
+import UserSpecific from './components/UserSpecific.jsx';
+import SettingsBar from './components/Settings.jsx';
+import EditProfile from './components/EditProfile.jsx';
+import AccountInterests from './components/AccountInterests.jsx';
+import AccountMgmt from './components/AccountMgmt.jsx';
+import ChangePassword from './components/ChangePassword.jsx';
+import Dashboard from './components/Dashboard.jsx'
+import ImageUpload from './components/ImageUpload.jsx';
+import OTP from './components/OTP.jsx';
 export const RecoveryContext = createContext();
-import UserPage from "./components/UserPage.jsx";
-import "./styles.css";
+import Header from "./components/Header.jsx"
+import Matches from './components/Matches.jsx';
+import './styles.css'
 
 const App = () => {
   const [email, setEmail] = useState("");

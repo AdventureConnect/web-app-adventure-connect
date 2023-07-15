@@ -12,7 +12,7 @@ const UserProfile = () => {
       <h3>Your location</h3>
       <p>Example zip code</p>
       {/* Put the designated route here */}
-      <a href="/">Edit address</a>
+      <a href="/editaddress">Edit address</a>
 
       <h3>Bio</h3>
       <textarea name="bio" id="bio" cols="30" rows="10"></textarea>

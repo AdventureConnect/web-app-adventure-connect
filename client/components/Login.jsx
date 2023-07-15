@@ -51,11 +51,7 @@ const Login = () => {
             console.log(response.data.message);
           }
         }
-      } catch (err) {
-        alert("Please enter your email");
-      }
-    }
-  };
+    }}
 
   if (authenticated) {
     return navigate("/userprofile", {

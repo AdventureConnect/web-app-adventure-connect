@@ -6,14 +6,9 @@ const usersSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   zipCode: { type: Number, required: true },
-  interests: { type: Array },
+  interests: [{type: String}],
   bio: { type: String },
-  image1: { type: Buffer },
-  image2: { type: Buffer },
-  image3: { type: Buffer },
-  image4: { type: Buffer },
-  image5: { type: Buffer },
-  image6: { type: Buffer }
+  matches: [{type: String}]
 });
 
 const Users = mongoose.model("Users", usersSchema);

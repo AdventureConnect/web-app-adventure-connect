@@ -31,7 +31,7 @@ const userController = {};
 //verifying user upon logging in, to be put in route for post to /api/login. if route is successful, redirect to show user page
 
 userController.verifyLogin = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body
 
   try {
     //find a user that has a matching email and password
@@ -45,9 +45,10 @@ userController.verifyLogin = async (req, res, next) => {
     if (user) {
       console.log("successful log in");
       //maybe just make a cookie for activities and zipcode? so don't have to query the database again later when finding similar users?
-      res.cookie("currentemail", user.email, cookieHeaders);
-      res.cookie("currentInterests", user.interests, cookieHeaders);
-      res.cookie("zipCode", user.zip_code, cookieHeaders);
+      res.cookie('currentUsername', user.username, { httpOnly: false, overwrite: true });
+      res.cookie('currentInterests', JSON.stringify(user.interests), { httpOnly: false, overwrite: true });
+      res.cookie('zipCode', JSON.stringify(user.zip_code), { httpOnly: false, overwrite: true});
+      res.status(200).json({ message: 'Login successful!' });
       res.locals.loginStatus = true;
       return next();
     } else {
@@ -72,31 +73,6 @@ userController.verifyLogin = async (req, res, next) => {
   }
 };
 
-userController.checkEmail = async (req, res, next) => {
-  try {
-    const user = await Users.findOne(req.body);
-    console.log(user);
-    if (user) {
-      //if email in use assign locals variable to true and forward to next middleware
-      res.locals.emailInUse = true;
-    } else {
-      //if email not in use assign locals variable to false and forward to next middleware
-      res.locals.emailInUse = false;
-    }
-    return next();
-  } catch (error) {
-    return next(
-      createErr({
-        method: "userController.checkEmail",
-        type: "not successful",
-        err: error,
-      })
-    );
-  }
-
-  //if email syntax does not match normal email regex, then throw error
-};
-
 userController.createNewUser = async (req, res, next) => {
   console.log("before inserting new document to db");
 
@@ -112,7 +88,6 @@ userController.createNewUser = async (req, res, next) => {
   try {
     //save the new user to the database
     const savedUser = await Users.create(newUser);
-    // console.log(savedUser, "savedUser");
     const cookieHeaders = {
       httpOnly: false,
       overwrite: true,
@@ -121,9 +96,36 @@ userController.createNewUser = async (req, res, next) => {
     res.cookie("currentInterests", savedUser.interests, cookieHeaders);
     res.cookie("zipCode", savedUser.zipCode, cookieHeaders);
 
+<<<<<<<<< Temporary merge branch 1
     console.log("saved the user to the db");
-
     return next();
+=========
+  userController.createNewUser = async (req, res, next) => {
+    console.log(Users);
+    //set all the values for no user from req.body
+    // console.log(JSON.stringify(req.body));
+    // const {username, firstName, lastName, email, interests, zipCode, password} = req.body
+    console.log('before inserting new document to db');
+
+    const newUser = new Users({
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+      zipCode: req.body.zipCode,
+      interests: req.body.interests,
+      bio: req.body.bio,
+    });
+    console.log('made the document')
+    try {
+      //save the new user to the database
+      const savedUser = await Users.create(newUser)
+      res.cookie('currentEmail', savedUser.email, { httpOnly: false, overwrite: true });
+      res.cookie('currentInterests', JSON.stringify(savedUser.interests), { httpOnly: false, overwrite: true });
+      res.cookie('zipCode', JSON.stringify(savedUser.zipCode), { httpOnly: false, overwrite: true});
+    console.log(JSON.stringify(savedUser.interests), `\nthis is JSON interests`, `\n`, JSON.stringify(savedUser.zipCode), `\n this is JSON zip code`, savedUser.email, `\n this is email`);
+    console.log('saved the user to the db');
+    return next()
+>>>>>>>>> Temporary merge branch 2
   } catch (error) {
     return next(
       createErr({
@@ -134,17 +136,6 @@ userController.createNewUser = async (req, res, next) => {
     );
   }
 };
-
-// .then((data) => {
-//   Users.insertOne({data})
-//   console.log('User saved to the database');
-//   return next();
-// })
-// .catch(error => {
-//   console.log('Error saving user:', error);
-//   return next({error: error.message})
-// });
-// }
 
 userController.uploadImages = (req, res) => {
   const upload = multer({
@@ -233,29 +224,13 @@ userController.uploadImages = (req, res) => {
 //Julia's updated version
 userController.updateUser = async (req, res, next) => {
   try {
-    const currentEmail = req.cookies.currentEmail;
-    const { email, ...updatedFields } = req.body;
-    let updatedUser;
-    if (email && email !== currentEmail) {
-      // if emmail is different, check if the new email already exists
-      const emailExists = await Users.exists({ email });
-      if (emailExists) {
-        return res.status(400).json({ message: "Email already exists" });
-      }
-      //Update user with email change
-      updatedUser = await Users.findOneAndUpdate(
-        { email: currentEmail },
-        { $set: { email, ...updatedFields } },
-        { new: true }
-      );
-    } else {
-      // Update user without email change
-      updatedUser = await Users.findOneAndUpdate(
-        { email: currentEmail },
-        { $set: updatedFields },
-        { new: true }
-      );
-    }
+    // grab email from the currentUser cookie
+    const email = req.cookies.currentemail;
+    //find document by email and update it with the values from req.body
+    const updatedUser = await Users.findOneAndUpdate({ email }, req.body, {
+      new: true,
+    });
+
     if (updatedUser) {
       console.log(updatedUser);
       return res.status(200).json({ message: "User updated successfully" });
@@ -270,15 +245,20 @@ userController.updateUser = async (req, res, next) => {
 };
 
 userController.getProfiles = async (req, res, next) => {
+  console.log('get profiles middleware ran');
   try {
     //grab zipCode from the cookie and convert to number to match schema
-    const zipCode = Number(req.cookies.zipCode);
-    //grab interests from the cookie, parse it from JSON format
-    const interests = JSON.parse(req.cookies.currentInterests);
-
+    const zipcode = Number(req.cookies.zipCode);
+    //grab email from the cookie
+    const email = req.cookies.currentEmail;
+    console.log(req.cookies.currentEmail, 'this is the email we are looking for in the db');
+    //fetch current user's interests from the database
+    const currentUser = await Users.findOne({ email: 'aiden130@yahoo.com' });
+    console.log(currentUser, 'this is current user');
+    const interests = currentUser.interests;
     //find users with same zipcode and at least one interest in common
     const users = await Users.find({
-      zip_code: zipCode,
+      // zipCode: zipcode,
       interests: { $in: interests },
     });
 
@@ -299,7 +279,10 @@ userController.getProfiles = async (req, res, next) => {
     );
   }
   return next();
+<<<<<<<<< Temporary merge branch 1
 };
+=========
+}
 
 userController.checkemail = async (req, res) => {
   const email = req.query.email;
@@ -365,6 +348,20 @@ userController.updatePassword = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Server error!" });
   }
-};
+}
+
+>>>>>>>>> Temporary merge branch 2
 
 module.exports = userController;
+
+// this searches the matches array for any emails
+// await Users.find({matches:{$in:'ajmattus@gmail.com'}})
+
+// this searches the interests array for any interests
+// await Users.find({interests:{$in:'Rafting'}})
+
+// this searches the interests array that at least have both Rafting and Camping
+// const foundMatch = await Users.find({interests:{$all:['Rafting', 'Camping']}})
+
+// use this for decoding email addresses encoded on cookies
+// await Users.find({matches:{$in:decodeURIComponent(req.cookies.currentEmail)}})

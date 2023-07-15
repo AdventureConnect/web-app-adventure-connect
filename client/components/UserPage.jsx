@@ -4,25 +4,25 @@ import Carousel from "./Carousel";
 const UserPage = () => {
   const [userView, setUserView] = useState();
 
-  // useEffect(() => {
-  //     async function getUser() {
-  //         try {
-  //             // refactor line 10 to the correct endpoint for getting specific user information
-  //             const data = await fetch(`http://localhost:8080/api/${props.currentUser}`, {
-  //                 method: 'GET',
-  //             })
-  //             const json = await data.json();
-  //             setUserView(json);
-  //             return;
-  //         }
-  //         catch (err) {
-  //             alert(`An error has occurred! ${err.message}`);
-  //             return err;
-  //         }
-  //     };
+    // useEffect(() => {
+    //     async function getUser() {
+    //         try {
+    //             // refactor line 10 to the correct endpoint for getting specific user information
+    //             const data = await fetch(`http://localhost:8080/api/${props.currentUser}`, {
+    //                 method: 'GET',
+    //             })
+    //             const json = await data.json();
+    //             setUserView(json);
+    //             return;
+    //         }
+    //         catch (err) {
+    //             alert(`An error has occurred! ${err.message}`);
+    //             return err;
+    //         }
+    //     };
 
-  //     getUser();
-  // }, []);
+    //     getUser();
+    // }, []);
 
   // just for testing; will need to be replaced with actual image data pulled from mongodb later
   const images = [
@@ -38,23 +38,16 @@ const UserPage = () => {
   //     </div>
   // ))
 
-  return (
-    <div className="box">
-      <Carousel images={images} />
-      <div>
-        <h3>Alex Honnold</h3>
-        <p>
-          5 miles awayJust All my hiking partners retired or have passed away.
-          Looking for people willing to free solo with me. Contact me at
-          alexhonnold@gmail.com
-        </p>
-      </div>
-      <div>
-        <label>Climbing</label>
-        <label>Hiking</label>
-      </div>
-    </div>
-  );
-};
+    return (
+        <div className='user-page'>
+            <div className='front'>
+                <h1>Austin</h1>
+            </div>
+            <div className='back'>
+                <p>5 miles away</p>
+            </div>
+        </div>
+    );
+}
 
 export default UserPage;

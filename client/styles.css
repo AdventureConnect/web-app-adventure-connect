@@ -6,7 +6,7 @@ ul {
 }
 
 li, a {
-  color: pink;
+  color: rgba(228, 26, 60, 0.781);
   text-decoration: none;
   padding: 5px;
   font-size: large;
@@ -22,33 +22,76 @@ li, a {
   display:inline-block;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  margin-left: 100px;
 }
 
 .carousel {
-  overflow: hidden;
-  width: 300px;
-  height: 300px;
+  display: grid;
+  /* overflow: hidden; */
+  border: blue 5px solid;
+  margin-top: 100px;
+  margin-left: 500px;
+  position: relative;
+  width: 250px;
+  height: 320px;
+  /* background: green; */
 }
 
-.inner {
+/* .inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-flow: column;
   white-space: nowrap;
   transition: transform 0.3s;
-}
+  border: pink solid 5px;
+  gap: 5px;
+
+  position: relative;
+
+} */
 
 .carousel-item {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 200px;
-  width: 300px;
-  background-color: aquamarine;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(255, 221, 127);
+  color: black;
+  transform-style: all 0.5s ease;
+}
+
+.user-page {
+  transform-style: preserve-3d;
+}
+
+.carousel-item:hover {
+  transform: rotateY(180deg);
+}
+
+.front {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background: yellow;
+  color: black;
+}
+
+.back {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background: yellow;
   color: black;
 }
 
 .indicators {
   display: flex;
   justify-content: center;
+  margin-left: 500px;
 }
 
 .indicators > button {
