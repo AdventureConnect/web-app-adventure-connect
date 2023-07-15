@@ -1,6 +1,6 @@
 import React, { useEffect, useState, history } from "react";
 import Select from "react-select";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { set } from "mongoose";
 
 const Signup = () => {
@@ -16,7 +16,7 @@ const Signup = () => {
     { label: "Trail Running", value: "Trail Running" },
   ];
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const [ interestLabels, setInterestLabels ] = useState([]);
   const [interests, setInterests] = useState(new Set());
   const [name, setName] = useState();
@@ -27,6 +27,7 @@ const Signup = () => {
   const [redirect, setRedirect] = useState(false);
   const [emailInUse, setEmailInUse] = useState(false);
   const [emailTimeout, setEmailTimeout] = useState(null);
+  const [badSignup, setBadSignup] = useState(false);
 
   //will be invoked by checkEmailTimer on typing, and will notify user in real time if account in use
   const checkEmailInUse = async (emailVal) => {
@@ -70,7 +71,7 @@ const Signup = () => {
       bio: bio,
     };
     try {
-      fetch("http://localhost:8080/api/signup", {
+      const response = await fetch("http://localhost:8080/api/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -78,7 +79,11 @@ const Signup = () => {
         credentials: "include",
         body: JSON.stringify(info),
       });
-      navigate("/imageupload", { state: { email: email } });
+
+      if (response.ok) navigate("/imageupload", { state: { email: email } });
+      else {
+        setBadSignup(true);
+      }
       return;
     } catch (err) {
       alert(`An error has occurred! ${err.message}`);
@@ -172,7 +177,7 @@ const Signup = () => {
               tempInt.add(opt.value);
               tempAct = tempAct.filter((act) => act.label !== opt.value);
               setInterests(tempInt);
-              setActivities(tempAct);
+              // setActivities(tempAct);
             }}
           />
           <div id="interestBox">{interestLabels}</div>
@@ -190,6 +195,8 @@ const Signup = () => {
         </div>
         <button type="submit">Create Account</button>
       </form>
+      {/* should conditionally render this message if handlesubmit is not successful */}
+      {badSignup && <span> Invalid Signup, Try Again!</span>}
     </div>
   );
 };
