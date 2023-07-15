@@ -109,6 +109,8 @@ li, a {
   left: 0px;
 }
 
-/* #image_upload {
-  
-} */
+.image_preview {
+  overflow: hidden;
+  width: 300px;
+  height: auto
+}

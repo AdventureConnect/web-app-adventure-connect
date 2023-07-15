@@ -1,37 +1,31 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import FormData from 'form-data';
 import Select from 'react-select';
 
-const activities = [
-    { label: 'Backpacking',  value: 'Backpacking' },
-    { label: 'Camping',  value: 'Camping' },
-    { label: 'Climbing',  value: 'Climbing' },
-    { label: 'Hiking',  value: 'Hiking' },
-    { label: 'Mountain Biking',  value: 'Mountain Biking' },
-    { label: 'Rafting',  value: 'Rafting' },
-    { label: 'Road Cycling',  value: 'Road Cycling' },
-    { label: 'Roller Skating',  value: 'Roller Skating' },
-    { label: 'Trail Running',  value: 'Trail Running' }
-];
-
 const Signup = () => {
+
+    const list = [
+        { label: 'Backpacking',  value: 'Backpacking' },
+        { label: 'Camping',  value: 'Camping' },
+        { label: 'Climbing',  value: 'Climbing' },
+        { label: 'Hiking',  value: 'Hiking' },
+        { label: 'Mountain Biking',  value: 'Mountain Biking' },
+        { label: 'Rafting',  value: 'Rafting' },
+        { label: 'Road Cycling',  value: 'Road Cycling' },
+        { label: 'Roller Skating',  value: 'Roller Skating' },
+        { label: 'Trail Running',  value: 'Trail Running' }
+    ];
+
     const navigate = useNavigate();
-    const [ interestLabels, setInterestLabels ] = useState([]);
-    const [ interests, setInterests ] = useState([]);
-    // const [ activities, setActivities ] = useState(activities);
+    // const [ interestLabels, setInterestLabels ] = useState([]);
+    const [ interests, setInterests ] = useState(new Set());
+    const [ activities, setActivities ] = useState(list);
     const [ name, setName ] = useState();
     const [ email, setEmail ] = useState();
     const [ password, setPassword ] = useState();
     const [ zipcode, setZipcode ] = useState();
     const [ bio, setBio ] = useState();
-    const [ file, setFile ] = useState([]);
-    const [ imageData, setImageData ] = useState();
-
-    // const handleFileChange = async e => {
-    //     setFile(e.target.files[0]);
-    // }
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -52,20 +46,6 @@ const Signup = () => {
                 credentials: 'include',
                 body: JSON.stringify(info)
             })
-
-            // const imageData = new FormData();
-            // imageData.append('file', file);
-            // imageData.append('fileName', file.name);
-
-            // console.log(imageData)
-
-            // fetch('http://localhost:8080/api/signup/upload_images', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'multipart/form-data',
-            //     },
-            //     body: imageData
-            // })
             navigate('/imageupload', {state:{email: email}});
             return;
         }
@@ -75,16 +55,23 @@ const Signup = () => {
         };
         
     }
-
-    // const imageSelector = [];
-    // for (let i = 0; i < 1; i++) {
-    //     imageSelector.push(
-    //         <div>
-    //             <input type='file' name={`image${i}`} id={`image${i}`} key={`image${i}`} accept='image/*' style={{display: 'none'}} onChange={handleFileChange}></input>
-    //             <label htmlFor={`image${i}`} style={{color: 'lightgray', border: 'dashed', width:'90px', height: '90px', fontSize: '72px'}}>+</label>
-    //         </div>
-    //     )
-    // }
+    
+    const removeInterest = (e) => {
+        e.preventDefault();
+        let interest = e.target.parentElement.getAttribute('interest');  
+        const tempInt = new Set(interests);
+        const tempAct = activities.slice();
+        tempInt.delete(interest);
+        tempAct.push({label: interest, value: interest});
+        setInterests(tempInt);
+        setActivities(tempAct.sort((a,b) => a.label.localeCompare(b.label)));
+        console.log(interests);
+    }
+    
+    const interestLabels = [];
+    interests.forEach(interest => {
+        interestLabels.push(<div interest={interest}>{interest}<button className='deleteInterest' onClick={e => removeInterest(e)}>x</button></div>);
+    })
 
     return (
         <div>
@@ -115,16 +102,15 @@ const Signup = () => {
                 <div>
                     <label>Interests</label>
                     <Select
+                        placeholder=''
                         options={activities}
                         onChange={opt => {
-                            const temp = interestLabels.slice();
-                            const interestsTemp = interests.slice();
-                            temp.push(<label key={opt.value.toLowerCase()}>{opt.value}</label>);
-                            interestsTemp.push(opt.value);
-                            interestsTemp.push(opt.value)
-                            setInterestLabels(temp);
-                            setInterests(interestsTemp);
-                            console.log(interests);
+                            const tempInt = new Set(interests);
+                            let tempAct = activities.slice();
+                            tempInt.add(opt.value);
+                            tempAct = tempAct.filter(act => act.label !== opt.value);
+                            setInterests(tempInt);
+                            setActivities(tempAct);
                         }}
                     />
                     <div id='interestBox'>{interestLabels}</div>

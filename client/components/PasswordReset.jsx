@@ -4,11 +4,14 @@ import { useNavigate } from 'react-router';
 
 const PasswordReset = () => {
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [mismatch, setMismatch] = useState(false);
     const { email } = useContext(RecoveryContext);
     const navigate = useNavigate();
   
     const changePassword = () => {
-      if (password) {
+
+      if (password && !mismatch) {
         try {
             fetch(`http://localhost:8080/api/update-password`, {
               method: 'PUT',
@@ -29,6 +32,14 @@ const PasswordReset = () => {
             return alert('Please enter your new Password');     
         }
    }}
+
+   const checkPasswords = () => {
+    if (confirmPassword !== password) {
+      setMismatch(true);
+    } else {
+      setMismatch(false);
+    }
+   }
   
     return (
       <div>
@@ -37,10 +48,17 @@ const PasswordReset = () => {
             <label> New Password: </label>
             <input 
               type='password'
-              placeholder='........'
               required=''
               value={password}
               onChange={(e) => setPassword(e.target.value)} />
+            <label> Confirm Password: </label>
+            <input 
+              type='password'
+              required=''
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              onKeyUp={checkPasswords} />
+              {mismatch && <label>The passwords don't match</label>}
             <button onClick={changePassword}>Reset passwod </button>
           </form>
       </div>

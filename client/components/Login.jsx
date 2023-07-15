@@ -62,7 +62,7 @@ const Login = () => {
   const handleSubmit = async e => {
       e.preventDefault();
       const credential = {
-        username: username,
+        email: userEmail,
         password: password
       }
       try {

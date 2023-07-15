@@ -8,6 +8,7 @@ function ImageUpload() {
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef(null);
   const [ files, setFiles ] = useState([]);
+  const [ previewImg, setPreviewImg ] = useState({});
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -46,6 +47,9 @@ function ImageUpload() {
 
     // triggers when file is dropped
     const handleDrop = function(e) {
+      if (files.length > 6) {
+        return alert('You\'ve reached the maximum number of files');
+      }
       e.preventDefault();
       e.stopPropagation();
       setDragActive(false);
@@ -60,6 +64,10 @@ function ImageUpload() {
     // triggers when file is selected with click
     const handleChange = function(e) {
       e.preventDefault();
+      // while (files.length < 6) {
+      if (files.length > 6) {
+        return alert('You\'ve reached the maximum number of files');
+      }
       if (e.target.files && e.target.files[0]) {
         const temp = files.slice();
         temp.push(e.target.files[0]);
@@ -80,9 +88,9 @@ function ImageUpload() {
       files.forEach(file => {
         formData.append('image', file);
       });
-      for (var pair of formData.entries()) {
-        console.log(pair[0]+ ' - ' + pair[1]); 
-      }
+      // for (var pair of formData.entries()) {
+      //   console.log(pair[0]+ ' - ' + pair[1]); 
+      // }
       try {
         await fetch(`/api/upload-file-to-cloud-storage/${location.state.email}`, {
               method  : 'POST',
@@ -99,10 +107,16 @@ function ImageUpload() {
         return alert('Issue uploading your images. Please try again later.');
       }
     }
+  // const removeImage = (e)
+  const preview = [];
+  files.forEach(file => {
+    console.log(file);
+    preview.push(<div><img className='image_preview' src={URL.createObjectURL(file)}/><button className='deleteImage'>x</button></div>)
+  })
 
   return (
     <div>
-      <label>Upload Your Images</label>
+      <label>Share the Moments from Your Outdoor Adventures!</label>
       <form encType='multipart/form-data' onDragEnter={handleDrag} onSubmit={(e) => e.preventDefault()}>
         <input ref={inputRef} type='file' id='input-file-upload' name='image' accept='image/*' multiple={true} onChange={handleChange}/>
         <label id='label-file-upload' htmlFor='input-file-upload' className={dragActive ? 'drag-active' : '' }>
@@ -117,6 +131,10 @@ function ImageUpload() {
         { dragActive && <div id='drag-file-element' onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div> }
         <button onClick={e => handleFileUpload(e)} id='image_upload'>Upload</button>
        </form>
+       <div id='preview_container'>
+        {preview}
+        <label>{files.length}/6 Images Selected</label>
+       </div>
     </div>
   );
 }
