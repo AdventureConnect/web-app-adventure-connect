@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
 const ImageSchema = new mongoose.Schema({
-    image: { type: Buffer }
+    email: { type: String, require: true},
+    image: { type: String }
 }, {
     timestamps: true
 });

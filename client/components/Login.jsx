@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { RecoveryContext } from '../App';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -8,7 +10,51 @@ const Login = () => {
   const [ currentUser, setCurrentUser ] = useState();
   const [ username, setUserName ] = useState();
   const [ password, setPassword ] = useState();
+  const [userEmail, setUserEmail] = useState('');
+  const { setOTP, setEmail } = useContext(RecoveryContext);
+  
+  const sendOtp = async () => {
+    if (userEmail) {
+      try {
+        const data = await fetch(`http://localhost:8080/api/check_email?email=${userEmail}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        const json = await data.json();
+        console.log(json);
+        if (json.user) {
+          const OTP = Math.floor(Math.random() * 9000 + 1000);
+          console.log(OTP);
+          setOTP(OTP);
+          setEmail(userEmail);
 
+          try {
+            await fetch(`http://localhost:8080/api/send_email`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+                },
+              credentials: 'include',
+              body: JSON.stringify({
+                  OTP: OTP,
+                  recipient_email: userEmail
+              })
+            });
+            navigate('/otp');
+          }
+          catch (err) {
+            alert('User with this email does not exist!');
+            console.log(response.data.message);
+          }
+        }}
+
+        catch (err) {
+          alert('Please enter your email');
+        }
+    }}
+    
   if (authenticated) {
       return navigate('/userprofile', {state: {currentUser: currentUser, authenticated: authenticated}});
   }
@@ -45,19 +91,19 @@ const Login = () => {
       <form onSubmit={handleSubmit}>
             <label>
               <p>Username</p>
-              <input type="text" onChange={e => setUserName(e.target.value)}/>
+              <input type='text' onChange={e => setUserEmail(e.target.value)}/>
             </label>
             <label>
               <p>Password</p>
-              <input type="password" onChange={e => setPassword(e.target.value)}/>
+              <input type='password' onChange={e => setPassword(e.target.value)}/>
             </label>
-            {loginError && <p style={{ color: 'red' }}>Invalid login information. Please try again or <a href="/signup">sign up</a>.</p>}
+            {loginError && <p style={{ color: 'red' }}>Invalid login information. Please try again or <a href='/signup'>sign up</a>.</p>}
             <div>
               <button onClick={() => navigate('/signup')}>Register</button>
-              <button type="submit" >Login</button>
+              <button type='submit' >Login</button>
             </div>
           </form>
-          <Link to='/passwordreset'>Forgot your passowrd?</Link>
+          <a href='#' onClick={() => sendOtp()}>Forgot your passowrd?</a>
       </div>
     </div>
     );

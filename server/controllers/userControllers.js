@@ -1,19 +1,29 @@
 const Users = require("../models/userModel");
-const multer = require('multer');
 const Images = require('../models/imageModel');
-const fs = require('fs');
-const path = require('path');
+require("dotenv").config();
 
-const storage = multer.diskStorage({
-  destination: function (req, res, cb) {
-    cb(null, 'uploads/')
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + '-' + Date.now())
-  }
+const { Storage } = require("@google-cloud/storage");
+const { format } = require("util");
+const multer = require('multer');
+const nodemailer = require('nodemailer');
+
+// const upload =  multer({
+//   storage: multer.memoryStorage(),
+//   limits: {
+//     fileSize: 5 * 1024 * 1024, // no larger than 5mb, you can change as needed.
+//   },
+//   onError : function(err, next) {
+//     console.log('error', err);
+//     next(err);
+//   }
+// });
+
+const cloudStorage = new Storage({
+  keyFilename: `${__dirname}/../web-app-adventure-connect-39d349a3f0d5.json`,
+  projectId: 'web-app-adventure-connect',
 });
-
-const upload = multer({ storage: storage });
+const bucketName = "adventure-connect-user-image-bucket";
+const bucket = cloudStorage.bucket(bucketName);
 
 const userController = {};
 
@@ -70,27 +80,7 @@ userController.verifyLogin = async (req, res, next) => {
     // console.log(JSON.stringify(req.body));
     // const {username, firstName, lastName, email, interests, zipCode, password} = req.body
     console.log('before inserting new document to db');
-    upload.single('image1');
-
-    const obj = {
-      img: {
-        data: fs.readFileSync(
-          path.join(__dirname + '../../../uploads/' + req.file.filename)
-        ),
-        contentType: "image/png",
-      },
-    };
-    console.log(obj.img.data);
-    try {
-      Images.create({
-        image: obj.img.data,
-      });
-  
-    }
-    catch (err) {
-      return err;
-    }
-
+   
     const newUser = new Users({
       name: req.body.name,
       email: req.body.email,
@@ -98,7 +88,6 @@ userController.verifyLogin = async (req, res, next) => {
       zipCode: req.body.zipCode,
       interests: req.body.interests,
       bio: req.body.bio,
-      // image1: obj.img.data
     });
     console.log('made the document')
     try {
@@ -124,6 +113,53 @@ userController.verifyLogin = async (req, res, next) => {
   //   console.log('Error saving user:', error);
   //   return next({error: error.message})
   // });
+}
+
+userController.uploadImages = (req, res) => {
+  const upload =  multer({
+    storage: multer.memoryStorage(),
+    limits: {
+      fileSize: 5 * 1024 * 1024, // no larger than 5mb, you can change as needed.
+    },
+    onError : function(err, next) {
+      console.log('error', err);
+      next(err);
+    }
+  }).array('image');
+
+  upload(req, res, function (err) {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ message: 'Error uploading Files'});
+    }
+    const email = req.params.userEmail;
+    console.log(req.file);
+    if (!req.files) {
+      res.status(400).send("No file uploaded.");
+      return;
+    }
+    try {
+      req.files.forEach(file => {
+        const blob = bucket.file(file.originalname);
+        const blobStream = blob.createWriteStream();
+        blobStream.on("error", (err) => {
+          // next(err);
+          console.log(err);
+        });
+        blobStream.on("finish", async () => {
+          // The public URL can be used to directly access the file via HTTP.
+          const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
+          Images.create({email: email, image: publicUrl});
+        });
+        // urls.push(publicUrl);
+        blobStream.end(file.buffer);
+      });
+      res.status(200).send('Images uploaded');
+    }
+    catch (err) {
+      res.status(500).send('Error uploading images');
+    }
+  });
 }
 
 userController.updateUser = async (req, res, next) => {
@@ -177,6 +213,69 @@ userController.getProfiles = async (req, res, next) => {
     res.status(500).json({ message: "Server error!" });
   }
   return next();
+}
+
+userController.checkemail = async (req, res) => {
+  const email = req.query.email;
+  console.log(email);
+  try {
+    const user = await Users.find({email: email});
+    res.status(200).json({user: user});
+  }
+  catch (error) {
+    console.error(error);
+    // An error occurred while querying the database
+    res.status(500).json({ message: "Server error!" });
+  }
+}
+
+userController.sendEmail = async (req, res) => {
+  // console.log(process.env.MY_EMAIL, process.env.APP_PASSWORD)
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    secure: true,
+    auth: {
+      user: process.env.MY_EMAIL,
+      pass: process.env.APP_PASSWORD,
+    },
+  });
+
+  const { recipient_email, OTP } = req.body;
+
+  const mailOptions = {
+    from: 'adventureconnect_ptri11@codesmith.com',
+    to: recipient_email,
+    subject: 'AdventureConnect Password Reset',
+    html: `<html>
+             <body>
+               <h2>Password Recovery</h2>
+               <p>Use this OTP to reset your password. OTP is valid for 1 minute</p>
+               <h3>${OTP}</h3>
+             </body>
+           </html>`,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send({ message: "An error occurred while sending the email" });
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.status(200).send({ message: "Email sent successfully" });
+    }
+  });
+}
+
+userController.updatePassword = async (req, res) =>{
+  const { email, newPassword } = req.body;
+  try {
+    const updatedUser = await Users.findOneAndUpdate({email: email}, { password: newPassword });
+    res.status(200).json({updateUser: updatedUser});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error!" });
+  }
 }
 
 

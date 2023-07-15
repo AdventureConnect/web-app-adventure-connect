@@ -1,5 +1,7 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
+import FormData from 'form-data';
 import Select from 'react-select';
 
 const activities = [
@@ -14,26 +16,8 @@ const activities = [
     { label: 'Trail Running',  value: 'Trail Running' }
 ];
 
-const createUser = async (info) => {
-    try {
-        fetch('http://localhost:8080/api/signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify(info)
-        })
-        return;
-    }
-    catch (err) {
-        alert(`An error has occurred! ${err.message}`);
-        return err;
-    }
-
-}
-
 const Signup = () => {
+    const navigate = useNavigate();
     const [ interestLabels, setInterestLabels ] = useState([]);
     const [ interests, setInterests ] = useState([]);
     // const [ activities, setActivities ] = useState(activities);
@@ -42,40 +26,70 @@ const Signup = () => {
     const [ password, setPassword ] = useState();
     const [ zipcode, setZipcode ] = useState();
     const [ bio, setBio ] = useState();
-    const [ images, setImages ] = useState([]);
+    const [ file, setFile ] = useState([]);
     const [ imageData, setImageData ] = useState();
+
+    // const handleFileChange = async e => {
+    //     setFile(e.target.files[0]);
+    // }
 
     const handleSubmit = async e => {
         e.preventDefault();
+        const info = {
+            name: name,
+            email: email,
+            password: password,
+            zipCode: zipcode,
+            interests: interests,
+            bio: bio,
+        };
         try {
-            createUser({
-                name: name,
-                email: email,
-                password: password,
-                zipCode: zipcode,
-                interests: interests,
-                bio: bio,
+            fetch('http://localhost:8080/api/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify(info)
             })
+
+            // const imageData = new FormData();
+            // imageData.append('file', file);
+            // imageData.append('fileName', file.name);
+
+            // console.log(imageData)
+
+            // fetch('http://localhost:8080/api/signup/upload_images', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'multipart/form-data',
+            //     },
+            //     body: imageData
+            // })
+            navigate('/imageupload', {state:{email: email}});
+            return;
         }
         catch (err) {
+            alert(`An error has occurred! ${err.message}`);
             return err;
-        }
+        };
+        
     }
 
-    const imageSelector = [];
-    for (let i = 0; i < 1; i++) {
-        imageSelector.push(
-            <div>
-                <input type='file' name={`image${i}`} id={`image${i}`} key={`image${i}`} accept='image/*' style={{display: 'none'}}></input>
-                <label htmlFor={`image${i}`} style={{color: 'lightgray', border: 'dashed', width:'90px', height: '90px', fontSize: '72px'}}>+</label>
-            </div>
-        )
-    }
+    // const imageSelector = [];
+    // for (let i = 0; i < 1; i++) {
+    //     imageSelector.push(
+    //         <div>
+    //             <input type='file' name={`image${i}`} id={`image${i}`} key={`image${i}`} accept='image/*' style={{display: 'none'}} onChange={handleFileChange}></input>
+    //             <label htmlFor={`image${i}`} style={{color: 'lightgray', border: 'dashed', width:'90px', height: '90px', fontSize: '72px'}}>+</label>
+    //         </div>
+    //     )
+    // }
 
     return (
         <div>
             {/* <form onSubmit={handleSubmit} encType='multipart/form-data'> */}
-            <form action='/api/signup/upload_images' method='post' encType='multipart/form-data' onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
                 <div>
                     <label >Name</label>
                     <input type='text' require='true' onChange={e => setName(e.target.value)}></input>
@@ -92,12 +106,12 @@ const Signup = () => {
                     <label>Zipcode</label>
                     <input type='text' require='true' onChange={e => setZipcode(e.target.value)}></input>
                 </div>
-                <div>
+                {/* <div>
                     <label>Photos</label>
                     <div style={{display: 'grid', gridTemplate: '1fr 1fr 1fr', textAlign: 'center'}}>
                         {imageSelector}
                     </div>
-                </div>
+                </div> */}
                 <div>
                     <label>Interests</label>
                     <Select
@@ -110,7 +124,6 @@ const Signup = () => {
                             interestsTemp.push(opt.value)
                             setInterestLabels(temp);
                             setInterests(interestsTemp);
-                            form.set(interests, interests);
                             console.log(interests);
                         }}
                     />

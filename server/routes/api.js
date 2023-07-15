@@ -1,60 +1,40 @@
 const express = require("express");
 const router = express.Router();
 const userController = require('../controllers/userControllers')
-const multer = require('multer');
 const Images = require('../models/imageModel');
-const fs = require('fs');
-const path = require('path');
 
-const storage = multer.diskStorage({
-  destination: function (req, res, cb) {
-    cb(null, 'uploads/')
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + '-' + Date.now())
+router.get('/check_email', userController.checkemail, async (req, res) => {
+  // console.log(req.query.email);
+  res.end();
+});
+
+router.post('/send_email', userController.sendEmail,  async (req, res) => {
+  res.end();
+});
+
+router.put('/update-password', userController.updatePassword, async (req, res) => {
+  res.end();
+});
+
+router.get('/getImages', async (req, res) => {
+  const email = req.params.userEmail;
+  try {
+    const image = await Images.find({email: email});
+    // console.log('image',image[0].image);
+    res.status(200).json(image);
+  }
+  catch (err) {
+    console.log(err);
+    res.status(500).json(err);
   }
 });
 
-const upload = multer({ storage: storage });
-
-// router.get('/imageretrieve', async (req, res) => {
-//   try {
-//     const image = await Images.findOne({});
-//     console.log(image.image);
-//     // res.contentType
-//     // res.render(image[0].image)
-//     return;
-//   }
-//   catch(err) {
-//     return err;
-//   }
-// })
-// test route for image upload , 
-// router.post('/signup/upload_images', upload.single('image1'), (req, res) => {
-//   console.log('upload')
-//   const obj = {
-//     img: {
-//       data: fs.readFileSync(
-//         path.join(__dirname + '../../../uploads/' + req.file.filename)
-//       ),
-//       contentType: "image/png",
-//     },
-//   };
-//   console.log(obj.img.data);
-//   try {
-//     Images.create({
-//       image: obj.img.data,
-//     });
-
-//   }
-//   catch (err) {
-//     return err;
-//   }
-// });
+router.post('/upload-file-to-cloud-storage/:userEmail', userController.uploadImages, function (req, res, next) {
+  res.end();
+});
 
 router.get("/", (req, res) => {
   res.send("hello world");
-
 });
 
 //login router, verify user then redirect to user profiles page
