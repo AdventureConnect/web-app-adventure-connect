@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userControllers');
+const userController = require('../controllers/userControllers')
 
-router.get('/', (req, res) => {
-  res.send('hello world');
+router.get("/", (req, res) => {
+  res.send("hello world");
+
 });
 
 //login router, verify user then redirect to user profiles page
-router.post('/login', userController.verifyLogin, (req, res) => {
+//fine that im setting status and sending message in the controller instead of last step?
+router.post('/api/login', userController.verifyLogin, (req, res) => {
   //end the response, with status and message set in verifyUser middleware
   res.sendStatus(200);
   //front code on login component should determine whether to redirect to userProfiles based on error or not

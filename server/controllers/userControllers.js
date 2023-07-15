@@ -1,4 +1,4 @@
-const Users = require('../models/userModel');
+const Users = require("../models/userModel");
 
 const userController = {};
 
@@ -77,7 +77,17 @@ userController.verifyLogin = async (req, res, next) => {
     console.log(error);
     next(error);
   }
-};
+
+  // .then((data) => {
+  //   Users.insertOne({data})
+  //   console.log('User saved to the database');
+  //   return next();
+  // })
+  // .catch(error => {
+  //   console.log('Error saving user:', error);
+  //   return next({error: error.message})
+  // });
+}
 
 userController.updateUser = async (req, res, next) => {
   try {
@@ -147,6 +157,69 @@ userController.findMatches = async (req, res, next) => {
   } catch (error) {
     console.log(error);
     return next(error)
+  }
+}
+
+userController.checkemail = async (req, res) => {
+  const email = req.query.email;
+  console.log(email);
+  try {
+    const user = await Users.find({email: email});
+    res.status(200).json({user: user});
+  }
+  catch (error) {
+    console.error(error);
+    // An error occurred while querying the database
+    res.status(500).json({ message: "Server error!" });
+  }
+}
+
+userController.sendEmail = async (req, res) => {
+  // console.log(process.env.MY_EMAIL, process.env.APP_PASSWORD)
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    secure: true,
+    auth: {
+      user: process.env.MY_EMAIL,
+      pass: process.env.APP_PASSWORD,
+    },
+  });
+
+  const { recipient_email, OTP } = req.body;
+
+  const mailOptions = {
+    from: 'adventureconnect_ptri11@codesmith.com',
+    to: recipient_email,
+    subject: 'AdventureConnect Password Reset',
+    html: `<html>
+             <body>
+               <h2>Password Recovery</h2>
+               <p>Use this OTP to reset your password. OTP is valid for 1 minute</p>
+               <h3>${OTP}</h3>
+             </body>
+           </html>`,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send({ message: "An error occurred while sending the email" });
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.status(200).send({ message: "Email sent successfully" });
+    }
+  });
+}
+
+userController.updatePassword = async (req, res) =>{
+  const { email, newPassword } = req.body;
+  try {
+    const updatedUser = await Users.findOneAndUpdate({email: email}, { password: newPassword });
+    res.status(200).json({updateUser: updatedUser});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error!" });
   }
 }
 

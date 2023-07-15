@@ -97,12 +97,3 @@ li, a {
 .indicators > button {
   margin: 5px;
 }
-
-.userPicture {
-  height: 300px;
-  width: 300px;
-}
-
-span a {
-  display: inline;
-}

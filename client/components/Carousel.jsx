@@ -62,16 +62,10 @@ import React, { useState } from "react"
 import CarouselItem from "./CarouselItem"
 
 const Carousel = ({ children }) => {
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [likes, setLikes] = useState(0);
 
-  const updateIndex = (newIndex) => {
-    if (newIndex < 0) {
-      newIndex = 0
-    } else if (newIndex >= React.Children.count(children)) {
-      newIndex = React.Children.count(children) - 1
-    }
-
-    setActiveIndex(newIndex)
+  const handleLikes = () => {
+    setLikes(likes + 1)
   }
 
   return (
@@ -81,8 +75,8 @@ const Carousel = ({ children }) => {
       <CarouselItem/>
       </div>
       <div className="indicators">
-        <button onClick={() => updateIndex(activeIndex - 1)}>Dislike</button>
-        <button onClick={() => updateIndex(activeIndex + 1)}>Like</button>
+        <button>Dislike</button>
+        <button>Like</button>
       </div>
     </div>
     </>

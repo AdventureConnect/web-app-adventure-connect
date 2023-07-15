@@ -8,7 +8,6 @@ const usersSchema = new mongoose.Schema({
   zipCode: { type: Number, required: true },
   interests: [{type: String}],
   bio: { type: String },
-  matches: [{type: String}],
 });
 
 const Users = mongoose.model("Users", usersSchema);

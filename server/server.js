@@ -21,6 +21,7 @@ app.use(
 );
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser());
 
 const PORT = 3000;

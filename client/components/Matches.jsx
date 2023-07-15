@@ -27,7 +27,7 @@ const Matches = () => {
   return (
     <>
     <ul>
-      {matchToDisplay.map(match => <li>{match.name}</li>)}
+      {matchToDisplay.map(match => <li>{match.name} {match.email}</li>)}
     </ul>
     {/* look at the matches prop in the user model based on the email inside our cookie so we know who's account is logged in */}
     {/* then iterate through the array of matches which each element in the array should be the email or the _id.$oid */}

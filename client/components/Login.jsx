@@ -9,6 +9,26 @@ const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
+          try {
+            await fetch(`http://localhost:8080/api/send_email`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+                },
+              credentials: 'include',
+              body: JSON.stringify({
+                  OTP: OTP,
+                  recipient_email: userEmail
+              })
+            });
+            navigate('/otp');
+          }
+          catch (err) {
+            alert('User with this email does not exist!');
+            console.log(response.data.message);
+          }
+}
+
   if (authenticated) {
     return navigate("/userprofile", {
       state: { currentUser: currentUser, authenticated: authenticated },
