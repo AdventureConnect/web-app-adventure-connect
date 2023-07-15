@@ -1,12 +1,12 @@
 const Users = require("../models/userModel");
 const { createErr } = require("../utils/errorCreator");
-const Images = require('../models/imageModel');
+const Images = require("../models/imageModel");
 require("dotenv").config();
 
 const { Storage } = require("@google-cloud/storage");
 const { format } = require("util");
-const multer = require('multer');
-const nodemailer = require('nodemailer');
+const multer = require("multer");
+const nodemailer = require("nodemailer");
 
 // const upload =  multer({
 //   storage: multer.memoryStorage(),
@@ -21,7 +21,7 @@ const nodemailer = require('nodemailer');
 
 const cloudStorage = new Storage({
   keyFilename: `${__dirname}/../web-app-adventure-connect-39d349a3f0d5.json`,
-  projectId: 'web-app-adventure-connect',
+  projectId: "web-app-adventure-connect",
 });
 const bucketName = "adventure-connect-user-image-bucket";
 const bucket = cloudStorage.bucket(bucketName);
@@ -135,33 +135,33 @@ userController.createNewUser = async (req, res, next) => {
   }
 };
 
-  // .then((data) => {
-  //   Users.insertOne({data})
-  //   console.log('User saved to the database');
-  //   return next();
-  // })
-  // .catch(error => {
-  //   console.log('Error saving user:', error);
-  //   return next({error: error.message})
-  // });
-}
+// .then((data) => {
+//   Users.insertOne({data})
+//   console.log('User saved to the database');
+//   return next();
+// })
+// .catch(error => {
+//   console.log('Error saving user:', error);
+//   return next({error: error.message})
+// });
+// }
 
 userController.uploadImages = (req, res) => {
-  const upload =  multer({
+  const upload = multer({
     storage: multer.memoryStorage(),
     limits: {
       fileSize: 5 * 1024 * 1024, // no larger than 5mb, you can change as needed.
     },
-    onError : function(err, next) {
-      console.log('error', err);
+    onError: function (err, next) {
+      console.log("error", err);
       next(err);
-    }
-  }).array('image');
+    },
+  }).array("image");
 
   upload(req, res, function (err) {
     if (err) {
       console.log(err);
-      return res.status(500).json({ message: 'Error uploading Files'});
+      return res.status(500).json({ message: "Error uploading Files" });
     }
     const email = req.params.userEmail;
     console.log(req.file);
@@ -170,7 +170,7 @@ userController.uploadImages = (req, res) => {
       return;
     }
     try {
-      req.files.forEach(file => {
+      req.files.forEach((file) => {
         const blob = bucket.file(file.originalname);
         const blobStream = blob.createWriteStream();
         blobStream.on("error", (err) => {
@@ -179,19 +179,20 @@ userController.uploadImages = (req, res) => {
         });
         blobStream.on("finish", async () => {
           // The public URL can be used to directly access the file via HTTP.
-          const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
-          Images.create({email: email, image: publicUrl});
+          const publicUrl = format(
+            `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+          );
+          Images.create({ email: email, image: publicUrl });
         });
         // urls.push(publicUrl);
         blobStream.end(file.buffer);
       });
-      res.status(200).send('Images uploaded');
-    }
-    catch (err) {
-      res.status(500).send('Error uploading images');
+      res.status(200).send("Images uploaded");
+    } catch (err) {
+      res.status(500).send("Error uploading images");
     }
   });
-}
+};
 
 userController.updateUser = async (req, res, next) => {
   try {
@@ -258,26 +259,25 @@ userController.getProfiles = async (req, res, next) => {
     );
   }
   return next();
-}
+};
 
 userController.checkemail = async (req, res) => {
   const email = req.query.email;
   console.log(email);
   try {
-    const user = await Users.find({email: email});
-    res.status(200).json({user: user});
-  }
-  catch (error) {
+    const user = await Users.find({ email: email });
+    res.status(200).json({ user: user });
+  } catch (error) {
     console.error(error);
     // An error occurred while querying the database
     res.status(500).json({ message: "Server error!" });
   }
-}
+};
 
 userController.sendEmail = async (req, res) => {
   // console.log(process.env.MY_EMAIL, process.env.APP_PASSWORD)
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     secure: true,
     auth: {
       user: process.env.MY_EMAIL,
@@ -288,9 +288,9 @@ userController.sendEmail = async (req, res) => {
   const { recipient_email, OTP } = req.body;
 
   const mailOptions = {
-    from: 'adventureconnect_ptri11@codesmith.com',
+    from: "adventureconnect_ptri11@codesmith.com",
     to: recipient_email,
-    subject: 'AdventureConnect Password Reset',
+    subject: "AdventureConnect Password Reset",
     html: `<html>
              <body>
                <h2>Password Recovery</h2>
@@ -303,25 +303,28 @@ userController.sendEmail = async (req, res) => {
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.log(error);
-      res.status(500).send({ message: "An error occurred while sending the email" });
+      res
+        .status(500)
+        .send({ message: "An error occurred while sending the email" });
     } else {
-      console.log('Email sent: ' + info.response);
+      console.log("Email sent: " + info.response);
       res.status(200).send({ message: "Email sent successfully" });
     }
   });
-}
+};
 
-userController.updatePassword = async (req, res) =>{
+userController.updatePassword = async (req, res) => {
   const { email, newPassword } = req.body;
   try {
-    const updatedUser = await Users.findOneAndUpdate({email: email}, { password: newPassword });
-    res.status(200).json({updateUser: updatedUser});
-  }
-  catch (error) {
+    const updatedUser = await Users.findOneAndUpdate(
+      { email: email },
+      { password: newPassword }
+    );
+    res.status(200).json({ updateUser: updatedUser });
+  } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error!" });
   }
-}
-
+};
 
 module.exports = userController;

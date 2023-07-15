@@ -3,21 +3,22 @@ import Select from "react-select";
 import { Navigate } from "react-router-dom";
 import { set } from "mongoose";
 
-const activities = [
-  { label: "Backpacking", value: "Backpacking" },
-  { label: "Camping", value: "Camping" },
-  { label: "Climbing", value: "Climbing" },
-  { label: "Hiking", value: "Hiking" },
-  { label: "Mountain Biking", value: "Mountain Biking" },
-  { label: "Rafting", value: "Rafting" },
-  { label: "Road Cycling", value: "Road Cycling" },
-  { label: "Roller Skating", value: "Roller Skating" },
-  { label: "Trail Running", value: "Trail Running" },
-];
-
 const Signup = () => {
-  const [interestLabels, setInterestLabels] = useState([]);
-  const [interests, setInterests] = useState([]);
+  const activities = [
+    { label: "Backpacking", value: "Backpacking" },
+    { label: "Camping", value: "Camping" },
+    { label: "Climbing", value: "Climbing" },
+    { label: "Hiking", value: "Hiking" },
+    { label: "Mountain Biking", value: "Mountain Biking" },
+    { label: "Rafting", value: "Rafting" },
+    { label: "Road Cycling", value: "Road Cycling" },
+    { label: "Roller Skating", value: "Roller Skating" },
+    { label: "Trail Running", value: "Trail Running" },
+  ];
+
+  // const navigate = useNavigate();
+  // const [ interestLabels, setInterestLabels ] = useState([]);
+  const [interests, setInterests] = useState(new Set());
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -53,28 +54,23 @@ const Signup = () => {
     setEmailTimeout(timeout);
   };
 
-  //when the user types in the email input, it should clear the timeoutid stored in the EmailTimeout
-  //when the timeout ends, it should send an fetch reqquest checkEmailInUse
-
-  //for navigating to login after successful submission of create user
-
-  //create a conditional, to navigate to / if redirect is false
+  //for navigating to login root directory after successful submission of create user
   if (redirect === true) {
     return <Navigate to="/" />;
   }
 
-  // const [ images, setImages ] = useState([]);
-
-  // const handleImageFiles = e => {
-  //     const temp = images;
-  //     temp.push(e.target.files[0]);
-  //     setImages(temp);
-  //     console.log(images);
-  // }
-
-  const createUser = async (info) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const info = {
+      name: name,
+      email: email,
+      password: password,
+      zipCode: zipcode,
+      interests: interests,
+      bio: bio,
+    };
     try {
-      const response = await fetch("http://localhost:8080/api/signup", {
+      fetch("http://localhost:8080/api/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -82,41 +78,38 @@ const Signup = () => {
         credentials: "include",
         body: JSON.stringify(info),
       });
-
-      //if the createNewUser request is successful, then initiate redirect
-      if (response.ok) setRedirect(true);
-    } catch (err) {
-      console.log("Signup createUser error: ", err);
+      navigate("/imageupload", { state: { email: email } });
       return;
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      createUser({
-        name: name,
-        email: email,
-        password: password,
-        zipCode: zipcode,
-        interests: interests,
-        // images: images,
-        bio: bio,
-      });
     } catch (err) {
+      alert(`An error has occurred! ${err.message}`);
       return err;
     }
   };
 
-  // const imageSelector = [];
-  // for (let i = 0; i < 6; i++) {
-  //     imageSelector.push(
-  //         <div>
-  //             <input type='file' id={`image${i}`} key={`image${i}`} accept='image/*' onChange={e => handleImageFiles(e)} style={{display: 'none'}}></input>
-  //             <label htmlFor={`image${i}`} style={{color: 'lightgray', border: 'dashed', width:'90px', height: '90px', fontSize: '72px'}}>+</label>
-  //         </div>
-  //     )
-  // }
+  const removeInterest = (e) => {
+    e.preventDefault();
+    let interest = e.target.parentElement.getAttribute("interest");
+    const tempInt = new Set(interests);
+    const tempAct = activities.slice();
+    tempInt.delete(interest);
+    tempAct.push({ label: interest, value: interest });
+    setInterests(tempInt);
+    setActivities(tempAct.sort((a, b) => a.label.localeCompare(b.label)));
+    console.log(interests);
+  };
+
+  const interestLabels = [];
+  interests.forEach((interest) => {
+    interestLabels.push(
+      <div interest={interest}>
+        {interest}
+        <button className="deleteInterest" onClick={(e) => removeInterest(e)}>
+          x
+        </button>
+      </div>
+    );
+  });
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -136,8 +129,6 @@ const Signup = () => {
             onChange={(e) => {
               setEmail(e.target.value);
               setCheckEmailTimer(e.target.value);
-              // checkEmaicbl(e.target.value);
-              //put another callback to check if the current email is in use
             }}
           ></input>
           {emailInUse && email.length && <span> Hey, Find Another Email!</span>}
@@ -158,7 +149,7 @@ const Signup = () => {
             onChange={(e) => setZipcode(e.target.value)}
           ></input>
         </div>
-        <div>
+        {/* <div>
           <label>Photos</label>
           <div
             style={{
@@ -167,23 +158,21 @@ const Signup = () => {
               textAlign: "center",
             }}
           >
-            {/* {imageSelector} */}
+            {imageSelector}
           </div>
-        </div>
+        </div> */}
         <div>
           <label>Interests</label>
           <Select
+            placeholder=""
             options={activities}
             onChange={(opt) => {
-              const temp = interestLabels.slice();
-              const interestsTemp = interests.slice();
-              temp.push(
-                <label key={opt.value.toLowerCase()}>{opt.value}</label>
-              );
-              interestsTemp.push(opt.value);
-              setInterestLabels(temp);
-              setInterests(interestsTemp);
-              // console.log(interests);
+              const tempInt = new Set(interests);
+              let tempAct = activities.slice();
+              tempInt.add(opt.value);
+              tempAct = tempAct.filter((act) => act.label !== opt.value);
+              setInterests(tempInt);
+              setActivities(tempAct);
             }}
           />
           <div id="interestBox">{interestLabels}</div>
