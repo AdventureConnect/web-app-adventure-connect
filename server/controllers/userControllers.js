@@ -31,27 +31,11 @@ userController.verifyLogin = async (req, res, next) => {
     }
   } catch (error) {
     // If an error occurs, send an error response
+    console.log(error);
     return next(error);
   }
   return next();
   }
-
-  // userController.test = (req, res, next) => {
-  //   res.send('test')
-  // }
-
-  // fetch(endpoint, {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify({
-  //     properties
-  //   })
-  // })
-  // .then(response => response.json())
-  // .then(data => console.log(data))
-  // .catch(error => console.log(error))
 
   userController.createNewUser = async (req, res, next) => {
     console.log(Users);
@@ -65,18 +49,29 @@ userController.verifyLogin = async (req, res, next) => {
       email: req.body.email,
       password: req.body.password,
       zipCode: req.body.zipCode,
-      interests: req.body.interests,
       bio: req.body.bio,
     });
+
+    req.body.interests.forEach(email => {
+      newUser.interests.push(email)
+    });
+
+    req.body.matches.forEach(email => {
+      newUser.matches.push(email)
+    });
+
+    console.log(newUser.interests);
+    console.log(newUser.matches);
     console.log('made the document')
     try {
       //save the new user to the database
       const savedUser = await Users.create(newUser)
-      res.cookie('currentEmail', savedUser.email, { httpOnly: false, overwrite: true });
-      res.cookie('currentInterests', JSON.stringify(savedUser.interests), { httpOnly: false, overwrite: true });
-      res.cookie('zipCode', JSON.stringify(savedUser.zipCode), { httpOnly: false, overwrite: true});
+      // res.cookie('currentEmail', savedUser.email, { httpOnly: false, overwrite: true });
+      // res.cookie('currentInterests', JSON.stringify(savedUser.interests), { httpOnly: false, overwrite: true });
+      // res.cookie('zipCode', JSON.stringify(savedUser.zipCode), { httpOnly: false, overwrite: true});
     console.log(JSON.stringify(savedUser.interests), `\nthis is JSON interests`, `\n`, JSON.stringify(savedUser.zipCode), `\n this is JSON zip code`, savedUser.email, `\n this is email`);
     console.log('saved the user to the db');
+    console.log(savedUser);
     return next()
   } catch (error) {
     console.log(error);
@@ -100,7 +95,7 @@ userController.updateUser = async (req, res, next) => {
       res.status(200);
       // Document found and updated successfully
     } else {
-      console.log("User not found");
+      console.log("User not found")
       // No document with the specified username was found
     }
   } catch (error) {
@@ -110,30 +105,75 @@ userController.updateUser = async (req, res, next) => {
 };
 
 userController.getProfiles = async (req, res, next) => {
+  console.log('get profiles middleware ran');
   try {
     //grab zipCode from the cookie and convert to number to match schema
-    const zipCode = Number(req.cookies.zipCode);
-    //grab interests from the cookie, parse it from JSON format
-    const interests = JSON.parse(req.cookies.currentInterests);
-
+    const zipcode = Number(req.cookies.zipCode);
+    //grab email from the cookie
+    const email = req.cookies.currentEmail;
+    //fetch current user's interests from the database
+    const currentUser = await Users.findOne({ email: email });
+    const interests = currentUser.interests;
     //find users with same zipcode and at least one interest in common
     const users = await Users.find({
-      zip_code: zipCode,
+      zipCode: zipcode,
       interests: { $in: interests },
     });
-
     console.log(users);
-    // Array of users with matching zipCode and at least one common interest
-
     res.status(200);
-    //store users on res.locals
-    res.locals.matchingUsers = users;
+    res.json(users);
   } catch (error) {
     console.error(error);
-    // An error occurred while querying the database
-    res.status(500).json({ message: 'Server error!' });
+    res.status(500).json({ message: "Server error!" });
   }
-  return next();
+}
+
+userController.findMatches = async (req, res, next) => {
+  const email = 'ajmattus@gmail.com'
+  console.log(req.cookies.currentEmail, 'this is the email on the cookie');
+
+  try {
+
+    const foundMatch = await Users.find({matches:{$in:decodeURIComponent(req.cookies.currentEmail)}})
+
+    if (foundMatch) {
+      console.log('Found a match');
+      console.log(foundMatch, `this is foundMatch`);
+      res.locals.foundMatch = foundMatch
+      console.log('saved foundMatch to res.locals');
+    }
+
+    return next()
+  } catch (error) {
+    console.log(error);
+    return next(error)
+  }
+}
+
+userController.createCookie = async (req, res, next) => {
+  console.log('before creating cookie');
+  try {
+    res.cookie('currentEmail', 'ajmattus@gmail.com', { httpOnly: false, overwrite: true });
+
+    console.log('made the cookie')
+
+    return next()
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
 };
 
 module.exports = userController;
+
+// this searches the matches array for any emails
+// await Users.find({matches:{$in:'ajmattus@gmail.com'}})
+
+// this searches the interests array for any interests
+// await Users.find({interests:{$in:'Rafting'}})
+
+// this searches the interests array that at least have both Rafting and Camping
+// const foundMatch = await Users.find({interests:{$all:['Rafting', 'Camping']}})
+
+// use this for decoding email addresses encoded on cookies
+// await Users.find({matches:{$in:decodeURIComponent(req.cookies.currentEmail)}})

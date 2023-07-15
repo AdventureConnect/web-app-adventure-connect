@@ -11,9 +11,10 @@ import AccountMgmt from "./components/AccountMgmt.jsx";
 import ChangePassword from "./components/ChangePassword.jsx";
 import Dashboard from "./components/Dashboard.jsx"
 import Header from "./components/Header.jsx";
+import UserPage from "./components/UserPage.jsx"
+import EditAddress from "./components/EditAddress.jsx"
+import Matches from "./components/Matches.jsx"
 import "./styles.css"
-import Dashboard from "./components/Dashboard.jsx";
-import "./styles.css";
 
 const App = () => {
   return (
@@ -21,7 +22,7 @@ const App = () => {
       <Header />
       <BrowserRouter>
         <Routes>
-          {/* <Route index element={<SettingsBar />} /> this component needs to go somewhere */}
+          <Route path="/settings" element={<SettingsBar />} /> this component needs to go somewhere
           {/* <Route index element={<Login />} /> */}
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
@@ -32,10 +33,10 @@ const App = () => {
           <Route path="/account/interests" element={<AccountInterests />} />
           <Route path="/account/management" element={<AccountMgmt />} />
           <Route path="/account/password" element={<ChangePassword />} />
-          <Route
-            path="*"
-            element={<div>404 Error. This page was not found</div>}
-          />
+          <Route path="/userpage" element={<UserPage />} />
+          <Route path="/editaddress" element={<EditAddress />} />
+          <Route path="/matches" element={<Matches />} />
+          <Route path="*" element={<div>404 Error. This page was not found</div>} />
         </Routes>
       </BrowserRouter>
     </div>
@@ -43,5 +44,3 @@ const App = () => {
 };
 
 export default App;
-
-//account

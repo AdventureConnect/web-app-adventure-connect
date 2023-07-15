@@ -22,6 +22,7 @@ export default function SettingsBar() {
 
   return (
     <>
+      <div className="sidebar-container">
       <ul>
         {sidebarData.map((item) => (
           <li key={item.path}>
@@ -29,6 +30,7 @@ export default function SettingsBar() {
           </li>
         ))}
       </ul>
+      </div>
     </>
   );
 }
