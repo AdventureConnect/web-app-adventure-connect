@@ -7,13 +7,13 @@ module.exports = {
   mode: process.env.NODE_ENV,
   entry: "./client/index.js",
   output: {
-    path: path.join(__dirname, "/dist"),
+    path: path.join(__dirname, "dist"),
     filename: "bundle.js",
     publicPath: "/",
   },
   devServer: {
     static: {
-      directory: path.resolve(__dirname, "dist"),
+      directory: path.resolve(__dirname, "/dist"),
       publicPath: "/dist",
     },
     port: 8080,
@@ -24,7 +24,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, "/client/index.html"),
+      template: path.join(__dirname, "client/index.html"),
       inject: true,
     }),
     // added below to fix webpack source map for node modules preventing react-0router-dom from loading
@@ -64,11 +64,11 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: "./client/index.html",
-    }),
-  ],
+  // plugins: [
+  //   new HtmlWebpackPlugin({
+  //     template: "./client/index.html",
+  //   }),
+  // ],
   resolve: {
     extensions: [".js", ".jsx"],
   },

@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "start": "BROWSER=google-chrome webpack-dev-server --hot --mode development --open",
+    "start": "node server/server.js",
     "test": "npm test",
     "build": "NODE_ENV=production webpack",
     "dev": "NODE_ENV=development concurrently \"nodemon --watch server ./server/server.js\" \"webpack serve --open\"",

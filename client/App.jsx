@@ -6,9 +6,6 @@ import PasswordReset from "./components/PasswordReset.jsx";
 import UserProfile from "./components/UserProfile.jsx";
 import UserSpecific from "./components/UserSpecific.jsx";
 import SettingsBar from "./components/Settings.jsx";
-import EditProfile from "./components/EditProfile.jsx";
-import AccountInterests from "./components/AccountInterests.jsx";
-import AccountMgmt from "./components/AccountMgmt.jsx";
 import ChangePassword from "./components/ChangePassword.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 import ImageUpload from "./components/ImageUpload.jsx";
@@ -34,9 +31,6 @@ const App = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/userprofile" element={<UserProfile />} />
             <Route path="/settings" element={<SettingsBar />} />
-            <Route path="/account" element={<EditProfile />} />
-            <Route path="/account/interests" element={<AccountInterests />} />
-            <Route path="/account/management" element={<AccountMgmt />} />
             <Route path="/account/password" element={<ChangePassword />} />
             <Route
               path="*"
