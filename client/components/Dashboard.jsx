@@ -13,9 +13,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <div>
-        <Carousel />
-      </div>
+      <div>{/* <Carousel /> */}</div>
       <h2>You have {matches} matches!</h2>
       <button onClick={handleButtonIncrement}>Increment</button>
       <button>Find Matches</button>

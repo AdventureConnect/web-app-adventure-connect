@@ -68,7 +68,7 @@ const Login = () => {
   //   }
 
   if (authenticated) {
-    return navigate("/userprofile", {
+    return navigate("/dashboard", {
       state: { currentUser: currentUser, authenticated: authenticated },
     });
   }
@@ -89,7 +89,7 @@ const Login = () => {
       });
       const json = await data.json();
       setAuthenticated(true);
-      navigate("/userprofile", {
+      navigate("/dashboard", {
         state: { currentUser: currentUser, authenticated: authenticated },
       });
     } catch (err) {
