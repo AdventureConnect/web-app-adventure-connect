@@ -4,7 +4,7 @@ require("dotenv").config();
 // move to MONGO_URIO variable to dotenv file
 const MONGO_URI =
   "mongodb+srv://adventure:2U2wruh3QzUWaOiS@adventureconnect.se8hcii.mongodb.net/?retryWrites=true&w=majority"; //replace with new URI
-console.log(MONGO_URI);
+// console.log(MONGO_URI);
 
 // call this function inside server.js
 const connectDB = () => {

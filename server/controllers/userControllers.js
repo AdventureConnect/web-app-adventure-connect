@@ -23,7 +23,7 @@ const cloudStorage = new Storage({
   keyFilename: `${__dirname}/../web-app-adventure-connect-39d349a3f0d5.json`,
   projectId: "web-app-adventure-connect",
 });
-const bucketName = "adventure-connect-user-image-bucket";
+const bucketName = "adventure-connect-image-bucket";
 const bucket = cloudStorage.bucket(bucketName);
 
 const userController = {};

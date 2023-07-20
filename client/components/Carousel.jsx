@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // import { motion, AnimatePresence } from "framer-motion";
 
 const Carousel = ({ images }) => {
-    const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
@@ -20,10 +20,8 @@ const Carousel = ({ images }) => {
 
   return (
     <div className="carousel">
-        <img
-          key={currentIndex}
-          src={images[currentIndex]}
-        /><div className="slide_direction">
+      <img key={currentIndex} src={images[currentIndex]} />
+      <div className="slide_direction">
         <div className="left" onClick={handlePrevious}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -151,6 +149,7 @@ const Carousel = ({ images }) => {
 //     </div>
 //   );
 // };
+/*
 import React, { useState, useEffect } from "react"
 import CarouselItem from "./CarouselItem";
 
@@ -192,15 +191,15 @@ const Carousel = ({ children }) => {
     <div>{test}</div>
     <div className="carousel-container">
       <div className="carousel">
-      {/* <CarouselItem name={data}/> */}
-      </div>
-      <div className="indicators">
-        <button>Dislike</button>
-        <button onClick={handleLikeClick}>Like</button>
-      </div>
-    </div>
-    </>
-  )
-}
+      // {/* <CarouselItem name={data}/> */
+//       </div>
+//       <div className="indicators">
+//         <button>Dislike</button>
+//         <button onClick={handleLikeClick}>Like</button>
+//       </div>
+//     </div>
+//     </>
+//   )
+// }
 
 export default Carousel;

@@ -1,20 +1,26 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const userController = require('../controllers/userControllers');
-const Images = require('../models/imageModel');
+const userController = require("../controllers/userControllers");
+const Images = require("../models/imageModel");
 
-router.get("/check_email", userController.checkemail, async (req, res) => {
-  // console.log(req.query.email);
-  res.end();
-});
+router.get(
+  "/check_email",
+  /*userController.checkemail, */ async (req, res) => {
+    // console.log(req.query.email);
+    res.status(200).send("check email: success");
+  }
+);
 
-router.post("/send_email", userController.sendEmail, async (req, res) => {
-  res.end();
-});
+router.post(
+  "/send_email",
+  /*userController.sendEmail,*/ async (req, res) => {
+    res.end();
+  }
+);
 
 router.put(
   "/update-password",
-  userController.updatePassword,
+  // userController.updatePassword,
   async (req, res) => {
     res.end();
   }
@@ -34,14 +40,14 @@ router.get("/getImages", async (req, res) => {
 
 router.post(
   "/upload-file-to-cloud-storage/:userEmail",
-  userController.uploadImages,
+  // userController.uploadImages,
   function (req, res, next) {
     res.end();
   }
 );
 
-router.get('/', (req, res) => {
-  res.send('hello world');
+router.get("/", (req, res) => {
+  res.send("hello world");
 });
 
 //login router, verify user then redirect to user profiles page
@@ -52,7 +58,7 @@ router.post("/login", userController.verifyLogin, (req, res) => {
 });
 
 //signup route:
-router.post('/signup', userController.createNewUser, (req, res) => {
+router.post("/signup", userController.createNewUser, (req, res) => {
   res.sendStatus(200);
 });
 
@@ -61,43 +67,70 @@ router.put("/user", userController.updateUser, (req, res) => {
   res.sendStatus(200);
 });
 
-router.post("/checkEmail", userController.checkEmail, (req, res) => {
-  res.status(200).send(res.locals.emailInUse);
-router.put('/user', userController.updateUser, (req, res) => {
-  res.end();
-});
+router.post(
+  "/checkEmail",
+  // userController.checkEmail,
+  (req, res) => {
+    res.status(200).send(res.locals.emailInUse);
+    router.put("/user", userController.updateUser, (req, res) => {
+      res.end();
+    });
+  }
+);
 
 //route to grab similar users to populate UserProfiles, based on zipcode and interest
 router.get("/getUsers", userController.getProfiles, (req, res) => {
   res.status(200).json(res.locals.matchingUsers);
 });
 
-router.get('/findMatches', userController.findMatches, (req, res) => {
-  // console.log(res.locals.foundMatch, '\n-----------------------', '\nsending res.locals.foundMatch as json');
-  console.log(res.locals.foundMatch.length, 'this is the length of what we send as json');
-  res.status(250).json(res.locals.foundMatch);
-});
+router.get(
+  "/findMatches",
+  // userController.findMatches,
+  (req, res) => {
+    // console.log(res.locals.foundMatch, '\n-----------------------', '\nsending res.locals.foundMatch as json');
+    console.log(
+      res.locals.foundMatch.length,
+      "this is the length of what we send as json"
+    );
+    res.status(250).json(res.locals.foundMatch);
+  }
+);
 
-router.get('/findInterests', userController.getProfiles, (req, res) => {
+router.get("/findInterests", userController.getProfiles, (req, res) => {
   res.status(250).json(res.locals.getProfiles);
 });
 
-router.get('/cookie', userController.createCookie, (req, res) => {
-  res.sendStatus(200);
-});
+router.get(
+  "/cookie",
+  // userController.createCookie,
+  (req, res) => {
+    res.sendStatus(200);
+  }
+);
 
-router.get('/findMatches', userController.findMatches, (req, res) => {
-  // console.log(res.locals.foundMatch, '\n-----------------------', '\nsending res.locals.foundMatch as json');
-  console.log(res.locals.foundMatch.length, 'this is the length of what we send as json');
-  res.status(250).json(res.locals.foundMatch);
-});
+router.get(
+  "/findMatches",
+  // userController.findMatches,
+  (req, res) => {
+    // console.log(res.locals.foundMatch, '\n-----------------------', '\nsending res.locals.foundMatch as json');
+    console.log(
+      res.locals.foundMatch.length,
+      "this is the length of what we send as json"
+    );
+    res.status(250).json(res.locals.foundMatch);
+  }
+);
 
-router.get('/findInterests', userController.getProfiles, (req, res) => {
+router.get("/findInterests", userController.getProfiles, (req, res) => {
   res.status(250).json(res.locals.getProfiles);
 });
 
-router.get('/cookie', userController.createCookie, (req, res) => {
-  res.sendStatus(200);
-});
+router.get(
+  "/cookie",
+  // userController.createCookie,
+  (req, res) => {
+    res.sendStatus(200);
+  }
+);
 
 module.exports = router;
