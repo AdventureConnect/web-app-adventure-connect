@@ -21,7 +21,7 @@ app.use(
 );
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 const PORT = 3000;
@@ -39,7 +39,14 @@ app.use(express.urlencoded({ extended: true }));
 /**
  * handle requests for static files
  */
-app.use(express.static(path.resolve(__dirname, "../client")));
+app.use(express.static(path.resolve(__dirname, "../dist")));
+// app.use(express.static(path.resolve(__dirname, "./client/index.html")));
+
+app.get("/", (req, res) => {
+  return res
+    .status(200)
+    .sendFile(path.resolve(__dirname, "./client/index.html"));
+});
 
 /**
  * define route handlers
