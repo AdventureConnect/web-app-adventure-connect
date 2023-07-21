@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userControllers");
 const Images = require("../models/imageModel");
+const bcrypt = require("bcrypt");
 
 router.get(
   "/check_email",
@@ -55,6 +56,8 @@ router.get("/", (req, res) => {
 router.post("/login", userController.verifyLogin, (req, res) => {
   //end the response, with status and message set in verifyUser middleware
   res.sendStatus(200);
+  // console.log('login successful');
+  // res.end();
 });
 
 //signup route:
