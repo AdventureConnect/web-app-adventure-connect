@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import matchList from "../../match-components/matchlist.js";
 
 const initialState = {
-  matches: [],
-  amount: 0,
+  matchList: matchList,
+  total: 5,
   isLoading: true,
 };
 

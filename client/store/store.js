@@ -1,10 +1,10 @@
 /**
- * importing configureStore to add reduc store to react App
+ * importing configureStore to add redux store to react App
  * Chandler
  */
 
 import { configureStore } from "@reduxjs/toolkit";
-import matchReducer from "../features/matches/matches";
+import matchReducer from "../features/matches/matchReducer";
 
 export const store = configureStore({
   reducer: {
