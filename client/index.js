@@ -4,6 +4,8 @@ import App from "./App.jsx";
 import { store } from "./store/store.js";
 import { Provider } from "react-redux";
 
+import "../styles/tailwind.css"
+
 // const domNode = document.getElementById("root");
 // const root = createRoot(domNode);
 // root.render(<App />);

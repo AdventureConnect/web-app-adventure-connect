@@ -1,6 +1,5 @@
 const path = require("path");
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -29,8 +28,6 @@ const PORT = 3000;
 
 connectDB();
 
-// console.log(module.exports);
-
 /**
  * handle parsing request body
  */
@@ -41,18 +38,18 @@ app.use(express.urlencoded({ extended: true }));
  * handle requests for static files
  */
 app.use(express.static(path.resolve(__dirname, "../dist")));
-// app.use(express.static(path.resolve(__dirname, "./client/index.html")));
 
+
+/**
+ * define route handlers
+*/
 app.get("/", (req, res) => {
   return res
     .status(200)
     .sendFile(path.resolve(__dirname, "./client/index.html"));
 });
 
-/**
- * define route handlers
- */
-
+//I think once we have general routes done we will want to change this to just app.use(apiRouter?)
 app.use("/api", apiRouter);
 
 // catch-all route handler for any requests to an unknown route

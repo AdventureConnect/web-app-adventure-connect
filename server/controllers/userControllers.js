@@ -35,12 +35,12 @@ userController.verifyLogin = async (req, res, next) => {
 
     if (user && (await user.comparePassword(password))) {
       // res.locals.loginStatus = true;
-      // res.locals.user = user;
-      console.log('log in successful');
+      res.locals.user = user;
       return next();
     } else {
       res.status(401).json({ message: "Invalid login credentials!" });
     }
+    return next()
   } catch (error) {
     return next(error);
   }

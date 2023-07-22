@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import Select from "react-select";
+
+import bg from "../../styles/bg-photo5.jpeg"
+
+import SignupForm from "./SignupForm";
+import { LuBackpack } from "react-icons/lu";
 
 const list = [
   { label: "Backpacking", value: "Backpacking" },
@@ -81,155 +85,67 @@ const Signup = () => {
   });
 
   return (
-    <>
-      <div>
-        {/* <form onSubmit={handleSubmit} encType='multipart/form-data'> */}
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>Name</label>
-            <input
-              type="text"
-              require="true"
-              onChange={(e) => setName(e.target.value)}
-            ></input>
+    <div className="flex justify-center items-center h-screen w-full p-10 bg-black/70">
+      <div 
+        className="
+          flex
+          flex-col
+          items-center
+          justify-center
+          rounded-xl 
+          h-full 
+          bg-cover 
+          bg-center 
+          w-full
+          text-zinc-200
+        "
+        style={{ backgroundImage: `url(${bg})` }}
+      >
+        <div 
+          className="
+            md:bg-black/30 
+            bg-black/50 
+            w-full 
+            h-full 
+            flex 
+            flex-col 
+            items-center 
+            justify-center 
+            rounded-xl
+          "
+        >
+          <div className="flex flex-col mb-36 absolute top-12 left-12">
+            <div className="flex items-center gap-2">
+              <h1 
+                className="
+                  flex
+                  gap-2
+                  text-3xl
+                  font-bold
+                  px-8
+                  mt-8
+                  rounded-full
+                  pointer-events-none
+              ">
+                Adventure Connect
+                <LuBackpack className="text-blue-500" size={40}/>
+              </h1>
+            </div>
           </div>
-          <div>
-            <label>Email Address</label>
-            <input
-              type="text"
-              require="true"
-              onChange={(e) => setEmail(e.target.value)}
-            ></input>
-          </div>
-          <div>
-            <label>Password</label>
-            <input
-              type="password"
-              require="true"
-              onChange={(e) => setPassword(e.target.value)}
-            ></input>
-          </div>
-          <div>
-            <label>Zipcode</label>
-            <input
-              type="text"
-              require="true"
-              onChange={(e) => setZipcode(e.target.value)}
-            ></input>
-          </div>
-          {/* <div>
-                    <label>Photos</label>
-                    <div style={{display: 'grid', gridTemplate: '1fr 1fr 1fr', textAlign: 'center'}}>
-                        {imageSelector}
-                    </div>
-                </div> */}
-          <div>
-            <label>Interests</label>
-            <Select
-              placeholder=""
-              options={activities}
-              onChange={(opt) => {
-                const tempInt = new Set(interests);
-                let tempAct = activities.slice();
-                tempInt.add(opt.value);
-                tempAct = tempAct.filter((act) => act.label !== opt.value);
-                setInterests(tempInt);
-                setActivities(tempAct);
-              }}
-            />
-            <div id="interestBox">{interestLabels}</div>
-          </div>
-          <div>
-            <label>Tell us more about yourself</label>
-            <br></br>
-            <input
-              type="text"
-              placeholder="Favorite outdoor memories
-                    What are you looking for?"
-              onChange={(e) => setBio(e.target.value)}
-              style={{ height: "150px", width: "250px", textAlign: "top" }}
-            ></input>
-          </div>
-          <button type="submit">Create Account</button>
-        </form>
+          <SignupForm 
+            setActivities={setActivities}
+            setEmail={setEmail}
+            setName={setName}
+            setPassword={setPassword}
+            setZipcode={setZipcode}
+            interests={interests}
+            setInterests={setInterests}
+            handleSubmit={handleSubmit}
+            activities={activities}
+          />
+        </div>
       </div>
-      <div>
-        <label>Email Address</label>
-        <input
-          type="text"
-          require="true"
-          onChange={(e) => {
-            setEmail(e.target.value);
-            console.log(e.target.value);
-            setCheckEmailTimer(e.target.value);
-          }}
-        ></input>
-        {emailInUse && <span> Hey, Find Another Email!</span>}
-      </div>
-      <div>
-        <label>Password</label>
-        <input
-          type="password"
-          require="true"
-          onChange={(e) => setPassword(e.target.value)}
-        ></input>
-      </div>
-      <div>
-        <label>Zipcode</label>
-        <input
-          type="text"
-          require="true"
-          onChange={(e) => {
-            checkZipcode(e.target.value);
-            setZipcode(e.target.value);
-          }}
-        ></input>
-      </div>
-      {/* <div>
-          <label>Photos</label>
-          <div
-            style={{
-              display: "grid",
-              gridTemplate: "1fr 1fr 1fr",
-              textAlign: "center",
-            }}
-          >
-            {imageSelector}
-          </div>
-        </div> */}
-      <div>
-        <label>Interests</label>
-        <Select
-          placeholder=""
-          options={activities}
-          onChange={(opt) => {
-            const tempInt = new Set(interests);
-            let tempAct = activities.slice();
-            tempInt.add(opt.value);
-            tempAct = tempAct.filter((act) => act.label !== opt.value);
-            setInterests(tempInt);
-            // setActivities(tempAct);
-          }}
-        />
-        <div id="interestBox">{interestLabels}</div>
-      </div>
-      <div>
-        <label>Tell us more about yourself</label>
-        <br></br>
-        <input
-          type="text"
-          placeholder="Favorite outdoor memories
-                    What are you looking for?"
-          onChange={(e) => setBio(e.target.value)}
-          style={{ height: "150px", width: "250px", textAlign: "top" }}
-        ></input>
-      </div>
-      <button type="submit">Create Account</button>
-      {/* </form> */}
-      {/* should conditionally render this message if handlesubmit is not successful */}
-      {badSignup && <span> Invalid Signup, Try Again!</span>}
-      {/* </div> */}
-    </>
+    </div>
   );
 };
 
