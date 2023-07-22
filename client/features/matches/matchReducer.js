@@ -1,27 +1,37 @@
 import { createSlice } from "@reduxjs/toolkit";
-import matchList from "../../match-components/matchlist.js";
+import userList from "../../match-components/userlist.js";
+import matchList from "../../match-components/matchList.js";
 
 const initialState = {
   matchList: matchList,
-  total: 5,
-  isLoading: true,
+  total: 0,
+  // isLoading: true,
 };
 
 const matchSlice = createSlice({
   name: "matches",
   initialState,
   reducers: {
-    addMatch: (state, payload) => {
-      state.matchList = matchList.push({
-        name: "Pie",
-        interests: ["hiking", "biking"],
-        zipCode: "20015",
-      });
+    // add a match to state, passing in the payload of information from the liked user profile
+    addMatch: ({ matchList, total }, { payload }) => {
+      matchList = matchList.push(payload);
+      total = total + 1;
+    },
+    removeMatch: ({ matchList, total }, { payload }) => {
+      // need to update to search and remove
+      matchList = matchList.filter((user) => user !== payload);
     },
   },
 });
 
 // console.log(matchSlice);
+/**
+ * eporting actions
+ */
+export const { addMatch, removeMatch } = matchSlice.actions;
 
-export const { addMatch } = matchSlice.actions; // reducers property/obj is the action
-export default matchSlice.reducer; //slice is the reducer
+/**
+ * exporting reducers
+ */
+
+export default matchSlice.reducer;

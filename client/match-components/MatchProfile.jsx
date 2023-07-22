@@ -1,9 +1,11 @@
 import React from "react";
+// import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addMatch } from "../features/matches/matchReducer";
+import { addMatch, removeMatch } from "../features/matches/matchReducer";
 
-const MatchProfile = ({ name, interests, zipCode }) => {
+const UserProfile = ({ name, email, interests, zipCode, handleLike }) => {
   const dispatch = useDispatch();
+
   return (
     <>
       <article className="profile-container">
@@ -11,10 +13,31 @@ const MatchProfile = ({ name, interests, zipCode }) => {
         <h1>{name}</h1>
         <p>{interests.join(", ")}</p>
         <p>{zipCode}</p>
-        <button onClick={() => dispatch(addMatch)}>Like</button>
+        <button
+          onClick={() =>
+            dispatch(
+              addMatch({ name: name, interests: interests, zipCode: zipCode })
+            )
+          }
+        >
+          Like
+        </button>
+        <button
+          onClick={() =>
+            dispatch(
+              removeMatch({
+                name: name,
+                interests: interests,
+                zipCode: zipCode,
+              })
+            )
+          }
+        >
+          Unlike
+        </button>
       </article>
     </>
   );
 };
 
-export default MatchProfile;
+export default UserProfile;

@@ -22,8 +22,8 @@ const Dashboard = () => {
       <div>{/* <Carousel /> */}</div>
       {/* <h2>You have {total} matches!</h2> */}
       <MatchContainer />
-      <button onClick={handleButtonIncrement}>Increment</button>
-      <button>Find Matches</button>
+      {/* <button onClick={handleButtonIncrement}>Increment</button>
+      <button>Find Matches</button> */}
     </>
   );
 };
