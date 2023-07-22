@@ -1,4 +1,3 @@
-const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { SourceMapDevToolPlugin } = require("webpack");
@@ -24,6 +23,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
+      favicon: path.resolve(__dirname, "./styles/favicon.png"),
       template: path.join(__dirname, "client/index.html"),
       inject: true,
     }),
@@ -42,19 +42,22 @@ module.exports = {
       {
         test: /jsx?$/,
         exclude: /node_modules/,
-        loader: "babel-loader",
-        options: {
-          presets: ["@babel/env", "@babel/react"],
-          //   plugins: [
-          //     "@babel/plugin-transform-runtime", //?
-          //     "@babel/transform-async-to-generator", //?
-          //   ],
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env", "@babel/preset-react"],
+            //   plugins: [
+            //     "@babel/plugin-transform-runtime", //?
+            //     "@babel/transform-async-to-generator", //?
+            //   ],
+          },
         },
       },
       {
-        test: /\.(scss|css)$/,
-        exclude: /node_modules/,
-        use: ["style-loader", "css-loader"],
+        test: /\.css$/i,
+        use: [
+          "style-loader", "css-loader", "postcss-loader"
+        ],
       },
       // react router source map loader
       {
@@ -62,6 +65,20 @@ module.exports = {
         enforce: "pre",
         use: ["source-map-loader"],
       },
+      // image loaders
+      {
+        test: /\.(gif|png|jpe?g|svg)$/i,
+        use: [
+          'file-loader',
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              bypassOnDebug: true, // webpack@1.x
+              disable: true, // webpack@2.x and newer
+            },
+          },
+        ],
+      }
     ],
   },
   // plugins: [

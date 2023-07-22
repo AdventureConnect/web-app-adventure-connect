@@ -53,11 +53,11 @@ userController.verifyLogin = async (req, res, next) => {
       res.locals.loginStatus = true;
       // store user information on res.locals object to have access to user information in react
       res.locals.user = user;
-      return next();
     } else {
       // If the user is not found, send an error response
-      res.status(401).json({ message: "Invalid login credentials!" });
+      res.locals.errorStatus = "Invalid login credentials"
     }
+    return next()
   } catch (error) {
     // If an error occurs, send an error response
     return next(error);

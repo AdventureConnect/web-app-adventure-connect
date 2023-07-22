@@ -13,7 +13,6 @@ import OTP from "./components/OTP.jsx";
 export const RecoveryContext = createContext();
 import Header from "./components/Header.jsx";
 import Matches from "./components/Matches.jsx";
-import "./styles.css";
 
 const App = () => {
   const [email, setEmail] = useState("");

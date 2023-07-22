@@ -54,7 +54,7 @@ router.get("/", (req, res) => {
 //fine that im setting status and sending message in the controller instead of last step?
 router.post("/login", userController.verifyLogin, (req, res) => {
   //end the response, with status and message set in verifyUser middleware
-  res.sendStatus(200);
+  res.status(200).json({ user: res.locals.user, error: res.locals.errorStatus });
 });
 
 //signup route:
