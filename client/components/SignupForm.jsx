@@ -28,8 +28,9 @@ function SignupForm({
     <div className="flex flex-col w-[350px] md:w-[500px] p-8 gap-8 ml-8 bg-black/60 text-zinc-300 rounded-xl">
       <div className="flex flex-col gap-2">
         <span className="flex items-center text-4xl font-bold pointer-events-none">
-          Register
+          Create your account
         </span>
+        <span className="text-zinc-400">Join now to connect with adventurers near you</span>
       </div>
       <form onSubmit={handleSubmit}>
         <div>
