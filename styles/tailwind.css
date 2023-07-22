@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities; 
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
+
+body {
+    @apply h-full w-full overflow-x-hidden;
+    font-family: 'DM Sans', sans-serif;
+}
+
+#__next {
+    @apply h-full;
+}

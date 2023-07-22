@@ -14,7 +14,6 @@ import LikedUsers from "./components/LikedUsers.jsx";
 export const RecoveryContext = createContext();
 import Header from "./components/Header.jsx";
 import Matches from "./components/Matches.jsx";
-import "./styles.css";
 import NavBar from "./components/NavBar/NavBar.jsx";
 
 const App = () => {
