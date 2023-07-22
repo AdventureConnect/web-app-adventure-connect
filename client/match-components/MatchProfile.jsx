@@ -18,7 +18,6 @@ const UserProfile = ({ name, id, interests, zipCode }) => {
           onClick={() =>
             dispatch(
               addMatch({
-                id,
                 name,
                 interests,
                 zipCode,
@@ -33,7 +32,6 @@ const UserProfile = ({ name, id, interests, zipCode }) => {
             onClick={() =>
               dispatch(
                 removeMatch({
-                  id,
                   name,
                   interests,
                   zipCode,

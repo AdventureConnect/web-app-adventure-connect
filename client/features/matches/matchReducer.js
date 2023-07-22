@@ -15,7 +15,7 @@ const matchSlice = createSlice({
     // add a match to state, passing in the payload of information from the liked user profile
     addMatch: ({ matchList, total }, { payload }) => {
       matchList = matchList.push(payload);
-      // total = total + 1;
+      total = total + 1;
     },
     //updating state to get rid of current match
     removeMatch: (state, { payload }) => {

@@ -7,8 +7,8 @@ import userList from "./userlist";
 
 const MatchContainer = () => {
   const { matchList, total } = useSelector((store) => store.matches);
-  console.log(matchList);
-  console.log(total);
+  console.log("matchList: ", matchList);
+  console.log("total: ", total);
   const potentialMatches = userList.map((user, i) => {
     // console.log(<MatchProfile key={(match.name, i)} {...match} />);
     return <UserProfile key={(user.name, i)} {...user} />;
