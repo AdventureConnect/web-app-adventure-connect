@@ -1,21 +1,24 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 
-import bg from "../../styles/bg-photo5.jpeg"
+import bg from "../../styles/bg-photo3.jpeg"
 
 import SignupForm from "./SignupForm";
-import { LuBackpack } from "react-icons/lu";
+import { LuBackpack, LuBike } from "react-icons/lu";
+import { FaRunning, FaHiking } from "react-icons/fa"
+import { GiCampingTent, GiMountainClimbing, GiCanoe, GiRollerSkate, GiRoad, GiLightBackpack } from "react-icons/gi"
+
 
 const list = [
-  { label: "Backpacking", value: "Backpacking" },
-  { label: "Camping", value: "Camping" },
-  { label: "Climbing", value: "Climbing" },
-  { label: "Hiking", value: "Hiking" },
-  { label: "Mountain Biking", value: "Mountain Biking" },
-  { label: "Rafting", value: "Rafting" },
-  { label: "Road Cycling", value: "Road Cycling" },
-  { label: "Roller Skating", value: "Roller Skating" },
-  { label: "Trail Running", value: "Trail Running" },
+  { label: "Backpacking", value: "Backpacking", icon: <GiLightBackpack size={20} className="text-blue-500"/> },
+  { label: "Camping", value: "Camping", icon: <GiCampingTent size={20} className="text-orange-500"/>},
+  { label: "Climbing", value: "Climbing", icon: <GiMountainClimbing size={20} className="text-red-500" /> },
+  { label: "Hiking", value: "Hiking", icon: <FaHiking size={20} className="text-green-500" /> },
+  { label: "Mountain Biking", value: "Mountain Biking", icon: <LuBike size={20} className="text-purple-500" /> },
+  { label: "Rafting", value: "Rafting", icon: <GiCanoe size={20} className="text-teal-500" /> },
+  { label: "Road Cycling", value: "Road Cycling", icon: <GiRoad size={20} className="text-indigo-500" /> },
+  { label: "Roller Skating", value: "Roller Skating", icon: <GiRollerSkate size={20} className="text-pink-500" />},
+  { label: "Trail Running", value: "Trail Running", icon: <FaRunning size={20} className="text-sky-500" /> },
 ];
 
 const Signup = () => {
@@ -95,7 +98,7 @@ const Signup = () => {
           rounded-xl 
           h-full 
           bg-cover 
-          bg-center 
+          bg-center
           w-full
           text-zinc-200
         "
@@ -103,13 +106,13 @@ const Signup = () => {
       >
         <div 
           className="
-            md:bg-black/30 
+            md:bg-black/50 
             bg-black/50 
             w-full 
             h-full 
             flex 
-            flex-col 
-            items-center 
+            flex-col
+            items-end 
             justify-center 
             rounded-xl
           "
@@ -120,7 +123,7 @@ const Signup = () => {
                 className="
                   flex
                   gap-2
-                  text-3xl
+                  text-4xl
                   font-bold
                   px-8
                   mt-8
@@ -128,9 +131,10 @@ const Signup = () => {
                   pointer-events-none
               ">
                 Adventure Connect
-                <LuBackpack className="text-blue-500" size={40}/>
+                <GiLightBackpack className="text-blue-500" size={40}/>
               </h1>
             </div>
+            <h2 className="text-zinc-400 px-8 pointer-events-none">Find Friends Outdoors</h2>
           </div>
           <SignupForm 
             setActivities={setActivities}
@@ -142,7 +146,22 @@ const Signup = () => {
             setInterests={setInterests}
             handleSubmit={handleSubmit}
             activities={activities}
+            list={list}
           />
+          <div className="flex gap-2 p-6">
+              <div className="pointer-events-none">
+                Already have an account?
+              </div>
+              <span 
+                className="
+                  text-blue-500 
+                  hover:text-blue-600 
+                  hover:transform
+                  hover:transition-all
+                  hover:scale-110
+                  cursor-pointer"
+                onClick={() => navigate("/")} >Sign in</span>
+            </div>
         </div>
       </div>
     </div>

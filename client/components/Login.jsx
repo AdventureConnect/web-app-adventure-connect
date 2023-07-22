@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
 // import { useContext } from "react";
 // import { RecoveryContext } from "../App";
-import { LuBackpack } from 'react-icons/lu'
+import { GiLightBackpack } from 'react-icons/gi'
 
 import bg from '../../styles/bg-photo.jpeg'
 import logo from '../../styles/logo.png'
@@ -133,14 +133,14 @@ const Login = () => {
           "
           style={{ backgroundImage: `url(${bg})` }}
         >
-          <div className="md:bg-black/30 bg-black/50 w-full h-full flex flex-col items-center justify-center rounded-xl">
-            <div className="flex flex-col mb-36 absolute top-12 left-12">
+          <div className="md:bg-black/50 bg-black/60 w-full h-full flex flex-col items-center justify-center rounded-xl">
+            <div className="flex flex-col mb-12 ">
               <div className="flex items-center gap-2">
                 <h1 
                   className="
                     flex 
                     gap-2 
-                    text-3xl 
+                    text-4xl 
                     font-bold 
                     text-zinc-300 
                     px-8 
@@ -150,7 +150,7 @@ const Login = () => {
                   "
                 >
                   Adventure Connect 
-                  <LuBackpack className="text-blue-500" size={40}/>
+                  <GiLightBackpack className="text-blue-500" size={40}/>
                 </h1> 
               </div>
               <h2 className="text-zinc-400 px-8 pointer-events-none">Find Friends Outdoors</h2>
