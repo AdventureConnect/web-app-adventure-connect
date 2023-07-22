@@ -15,7 +15,7 @@ const MatchContainer = () => {
   });
   const matches = matchList.map((user, i) => {
     // console.log(<MatchProfile key={(match.name, i)} {...match} />);
-    return <UserProfile key={(user.name, i)} {...user} />;
+    return <UserProfile key={(user.name, user.id)} {...user} />;
   });
   if (total < 1) {
     return (

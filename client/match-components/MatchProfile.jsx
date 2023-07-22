@@ -3,7 +3,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addMatch, removeMatch } from "../features/matches/matchReducer";
 
-const UserProfile = ({ name, email, interests, zipCode, handleLike }) => {
+const UserProfile = ({ name, id, interests, zipCode }) => {
   const dispatch = useDispatch();
 
   return (
@@ -13,28 +13,37 @@ const UserProfile = ({ name, email, interests, zipCode, handleLike }) => {
         <h1>{name}</h1>
         <p>{interests.join(", ")}</p>
         <p>{zipCode}</p>
+
         <button
           onClick={() =>
             dispatch(
-              addMatch({ name: name, interests: interests, zipCode: zipCode })
+              addMatch({
+                id,
+                name,
+                interests,
+                zipCode,
+              })
             )
           }
         >
           Like
         </button>
-        <button
-          onClick={() =>
-            dispatch(
-              removeMatch({
-                name: name,
-                interests: interests,
-                zipCode: zipCode,
-              })
-            )
-          }
-        >
-          Unlike
-        </button>
+        <div>
+          <button
+            onClick={() =>
+              dispatch(
+                removeMatch({
+                  id,
+                  name,
+                  interests,
+                  zipCode,
+                })
+              )
+            }
+          >
+            Unlike
+          </button>
+        </div>
       </article>
     </>
   );

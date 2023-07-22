@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 import userList from "../../match-components/userlist.js";
 import matchList from "../../match-components/matchList.js";
 
@@ -15,14 +15,23 @@ const matchSlice = createSlice({
     // add a match to state, passing in the payload of information from the liked user profile
     addMatch: ({ matchList, total }, { payload }) => {
       matchList = matchList.push(payload);
-      total = total + 1;
+      // total = total + 1;
     },
-    removeMatch: ({ matchList, total }, { payload }) => {
-      // need to update to search and remove
-      matchList = matchList.filter((user) => user !== payload);
+    //updating state to get rid of current match
+    removeMatch: (state, { payload }) => {
+      const currentState = current(state);
+      const newMatchList = currentState.matchList.filter(
+        (user) => user.name !== payload.name
+      );
+      return {
+        ...state,
+        matchList: [...newMatchList],
+      };
     },
   },
 });
+// console.log("user: ", user);
+// return { ...state, matchList };
 
 // console.log(matchSlice);
 /**

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 // import { useContext } from "react";
 // import { RecoveryContext } from "../App";
-import { LuBackpack } from 'react-icons/lu'
+import { LuBackpack } from "react-icons/lu";
 
-import bg from '../../styles/bg-photo.jpeg'
-import logo from '../../styles/logo.png'
+import bg from "../../styles/bg-photo.jpeg";
+import logo from "../../styles/logo.png";
 import LoginForm from "./LoginForm";
 
 const Login = () => {
@@ -87,23 +87,26 @@ const Login = () => {
     // };
 
     if (!username || !password) {
-      setLoginError("Username and password are required")
+      setLoginError("Username and password are required");
       setTimeout(() => {
-       setLoginError("");
-      }, 2000)
+        setLoginError("");
+      }, 2000);
       return;
     }
     try {
-      const res = await axios.post('/api/login', { email: userEmail, password })
-      
+      const res = await axios.post("/api/login", {
+        email: userEmail,
+        password,
+      });
+
       if (res.data.error) {
         setLoginError(res.data.error);
         setTimeout(() => {
           setLoginError("");
-        }, 2000)
-        setUserName("")
-        setPassword("")
-        e.target.reset()
+        }, 2000);
+        setUserName("");
+        setPassword("");
+        e.target.reset();
         return;
       }
       console.log(res.data);
@@ -117,9 +120,9 @@ const Login = () => {
   };
 
   return (
-      <div className="flex justify-center items-center h-screen w-full p-10 bg-black/70">
-        <div 
-          className="
+    <div className="flex justify-center items-center h-screen w-full p-10 bg-black/70">
+      <div
+        className="
             flex
             flex-col
             items-center
@@ -131,13 +134,13 @@ const Login = () => {
             w-full
             text-zinc-200
           "
-          style={{ backgroundImage: `url(${bg})` }}
-        >
-          <div className="md:bg-black/30 bg-black/50 w-full h-full flex flex-col items-center justify-center rounded-xl">
-            <div className="flex flex-col mb-36 absolute top-12 left-12">
-              <div className="flex items-center gap-2">
-                <h1 
-                  className="
+        style={{ backgroundImage: `url(${bg})` }}
+      >
+        <div className="md:bg-black/30 bg-black/50 w-full h-full flex flex-col items-center justify-center rounded-xl">
+          <div className="flex flex-col mb-36 absolute top-12 left-12">
+            <div className="flex items-center gap-2">
+              <h1
+                className="
                     flex 
                     gap-2 
                     text-3xl 
@@ -148,35 +151,46 @@ const Login = () => {
                     rounded-full 
                     pointer-events-none
                   "
-                >
-                  Adventure Connect 
-                  <LuBackpack className="text-blue-500" size={40}/>
-                </h1> 
-              </div>
-              <h2 className="text-zinc-400 px-8 pointer-events-none">Find Friends Outdoors</h2>
+              >
+                Adventure Connect
+                <LuBackpack className="text-blue-500" size={40} />
+              </h1>
             </div>
-            {/* main div container for the form */}
-            <LoginForm handleSubmit={handleSubmit} setUserName={setUserName} setPassword={setPassword} loginError={loginError} />
-            <div className="flex gap-2 p-6">
-              <div className="pointer-events-none">
-                Dont have an account?
-              </div>
-              <span 
-                className="
+            <h2 className="text-zinc-400 px-8 pointer-events-none">
+              Find Friends Outdoors
+            </h2>
+          </div>
+          {/* main div container for the form */}
+          <LoginForm
+            handleSubmit={handleSubmit}
+            setUserName={setUserName}
+            setPassword={setPassword}
+            loginError={loginError}
+          />
+          <div className="flex gap-2 p-6">
+            <div className="pointer-events-none">Dont have an account?</div>
+            <span
+              className="
                   text-blue-500 
                   hover:text-blue-600 
                   hover:transform
                   hover:transition-all
                   hover:scale-110
                   cursor-pointer"
-                onClick={() => navigate("signup")} >Sign up</span>
-            </div>
-            <a href="https://github.com/CampfireConnect/adventure-connect/tree/dev">
-              <img className="absolute w-38 h-12 right-14 bottom-20 rounded-md bg-blue-600/80" src={logo} />
-            </a>
+              onClick={() => navigate("signup")}
+            >
+              Sign up
+            </span>
           </div>
+          <a href="https://github.com/CampfireConnect/adventure-connect/tree/dev">
+            <img
+              className="absolute w-38 h-12 right-14 bottom-20 rounded-md bg-blue-600/80"
+              src={logo}
+            />
+          </a>
         </div>
       </div>
+    </div>
   );
 };
 
