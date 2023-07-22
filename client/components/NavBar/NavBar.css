@@ -1,0 +1,29 @@
+.Navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 10px;
+
+    
+}
+.Navigation nav ul li {
+    display: inline-block;
+    margin: 1.5vw;
+}
+
+.Navigation nav ul li a {
+    text-decoration: none;
+    color: black;
+}
+
+.Navigation a:hover {
+    border-bottom: 5 px solid #8c1cd1
+}
+
+.Navigation .HamburgerNav {
+    display: none;
+}

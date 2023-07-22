@@ -1,16 +1,16 @@
-ul {
+/* ul {
   border-right: blue solid 2px;
   width: 300px;
   height: 900px;
   list-style: none;
-}
+} */
 
-li, a {
+/* li, a {
   color: rgba(228, 26, 60, 0.781);
   text-decoration: none;
   padding: 5px;
   font-size: large;
-}
+} */
 
 #bio {
   size: 40;
