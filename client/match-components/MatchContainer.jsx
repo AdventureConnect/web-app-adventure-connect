@@ -7,7 +7,7 @@ const MatchContainer = () => {
   console.log(total);
   console.log(matchList);
   const matches = matchList.map((match, i) => {
-    console.log(<MatchProfile key={(match.name, i)} {...match} />);
+    // console.log(<MatchProfile key={(match.name, i)} {...match} />);
     return <MatchProfile key={(match.name, i)} {...match} />;
   });
   if (total > 0) {

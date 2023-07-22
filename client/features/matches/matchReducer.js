@@ -10,8 +10,18 @@ const initialState = {
 const matchSlice = createSlice({
   name: "matches",
   initialState,
+  reducers: {
+    addMatch: (state, payload) => {
+      state.matchList = matchList.push({
+        name: "Pie",
+        interests: ["hiking", "biking"],
+        zipCode: "20015",
+      });
+    },
+  },
 });
 
 // console.log(matchSlice);
 
-export default matchSlice.reducer;
+export const { addMatch } = matchSlice.actions; // reducers property/obj is the action
+export default matchSlice.reducer; //slice is the reducer
