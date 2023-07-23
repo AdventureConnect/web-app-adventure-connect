@@ -1,7 +1,7 @@
 import React from "react";
 // import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addMatch, removeMatch } from "../features/matches/matchReducer";
+import { addMatch, removeMatch } from "../features/matches/matchSlice";
 
 const UserProfile = ({ name, id, interests, zipCode }) => {
   const dispatch = useDispatch();

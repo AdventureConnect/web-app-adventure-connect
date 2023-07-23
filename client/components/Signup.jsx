@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 
-import bg from "../../styles/bg-photo5.jpeg"
+/**
+ * imports for redux
+ */
+import { useDispatch, useSelector } from "react-redux";
+import registerUser from "../features/auth/authActions";
+
+import bg from "../../styles/bg-photo5.jpeg";
 
 import SignupForm from "./SignupForm";
 import { LuBackpack } from "react-icons/lu";
@@ -19,6 +25,10 @@ const list = [
 ];
 
 const Signup = () => {
+  const { loading, userInfo, error, success } = useSelector(
+    (state) => state.auth
+  );
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   // const [ interestLabels, setInterestLabels ] = useState([]);
   const [interests, setInterests] = useState(new Set());
@@ -33,6 +43,7 @@ const Signup = () => {
    * @param {*} e
    * @returns status of reponse from server
    */
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const info = {
@@ -44,7 +55,7 @@ const Signup = () => {
       bio: bio,
     };
     try {
-      fetch("http://localhost:8080/api/signup", {
+      fetch("/api/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +63,8 @@ const Signup = () => {
         credentials: "include",
         body: JSON.stringify(info),
       });
-      navigate("/imageupload", { state: { email: email } });
+      navigate("/dashboard");
+      dispatch(registerUser(info));
       return;
     } catch (err) {
       alert(`An error has occurred! ${err.message}`);
@@ -86,7 +98,7 @@ const Signup = () => {
 
   return (
     <div className="flex justify-center items-center h-screen w-full p-10 bg-black/70">
-      <div 
+      <div
         className="
           flex
           flex-col
@@ -101,7 +113,7 @@ const Signup = () => {
         "
         style={{ backgroundImage: `url(${bg})` }}
       >
-        <div 
+        <div
           className="
             md:bg-black/30 
             bg-black/50 
@@ -116,7 +128,7 @@ const Signup = () => {
         >
           <div className="flex flex-col mb-36 absolute top-12 left-12">
             <div className="flex items-center gap-2">
-              <h1 
+              <h1
                 className="
                   flex
                   gap-2
@@ -126,13 +138,14 @@ const Signup = () => {
                   mt-8
                   rounded-full
                   pointer-events-none
-              ">
+              "
+              >
                 Adventure Connect
-                <LuBackpack className="text-blue-500" size={40}/>
+                <LuBackpack className="text-blue-500" size={40} />
               </h1>
             </div>
           </div>
-          <SignupForm 
+          <SignupForm
             setActivities={setActivities}
             setEmail={setEmail}
             setName={setName}
