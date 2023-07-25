@@ -9,7 +9,7 @@ import matchReducer from "../features/matches/matchSlice";
 
 export const store = configureStore({
   reducer: {
-    matches: matchReducer,
     auth: authReducer,
+    matches: matchReducer,
   },
 });

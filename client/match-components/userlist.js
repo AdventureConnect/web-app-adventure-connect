@@ -2,7 +2,7 @@ const userList = [
   {
     name: "Jelly",
     id: 0,
-    email1: "email1@email.com",
+    email: "email1@email.com",
     interests: ["hiking", "biking", "climbing"],
     zipCode: "90019",
   },

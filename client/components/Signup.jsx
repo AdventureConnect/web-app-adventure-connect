@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-
 /**
  * imports for redux
  */
 import { useDispatch, useSelector } from "react-redux";
-import registerUser from "../features/auth/authActions";
+import { register, reset } from "../features/auth/authSlice";
 
 import bg from "../../styles/bg-photo5.jpeg";
 
@@ -25,7 +24,7 @@ const list = [
 ];
 
 const Signup = () => {
-  const { loading, userInfo, error, success } = useSelector(
+  const { user, isLoading, success, error, message } = useSelector(
     (state) => state.auth
   );
   const dispatch = useDispatch();
@@ -38,6 +37,17 @@ const Signup = () => {
   const [password, setPassword] = useState();
   const [zipcode, setZipcode] = useState();
   const [bio, setBio] = useState();
+
+  useEffect(() => {
+    //if there is an error we want to send an error message
+    if (error) alert("message");
+    // if sign up is successful (re: stgate updating) we want to sned them on their way to dashboard
+    if (success || user) {
+      navigate("/dashboard");
+    }
+    dispatch(reset());
+  }, [user, error, success, navigate, dispatch]);
+
   /**
    * asyncronous function that initiates a fetch request to the API route when user clicks submit
    * @param {*} e
@@ -63,8 +73,8 @@ const Signup = () => {
         credentials: "include",
         body: JSON.stringify(info),
       });
+      dispatch(register(info));
       navigate("/dashboard");
-      dispatch(registerUser(info));
       return;
     } catch (err) {
       alert(`An error has occurred! ${err.message}`);
