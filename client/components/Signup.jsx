@@ -121,8 +121,8 @@ const Signup = () => {
       return;
     }
 
-    return dispatch(register(userInfo)).unwrap();
-    // navigate("/dashboard");
+    dispatch(register(userInfo));
+    navigate("/dashboard");
 
     // try {
     //   // const res = await axios.post("/api/signup", userInfo);
