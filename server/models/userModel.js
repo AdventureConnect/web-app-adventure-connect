@@ -7,7 +7,7 @@ const usersSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   zipCode: { type: Number, required: true },
-  interests: [{ type: String }],
+  interests: { type: Array },
   bio: { type: String },
   matches: [{ type: String }],
 });

@@ -1,4 +1,3 @@
-const Users = require("../models/userModel");
 const { createErr } = require("../utils/errorCreator");
 const Images = require("../models/imageModel");
 require("dotenv").config();
@@ -40,7 +39,6 @@ userController.verifyLogin = async (req, res, next) => {
     } else {
       res.status(401).json({ message: "Invalid login credentials!" });
     }
-    return next()
   } catch (error) {
     return next(error);
   }
@@ -50,7 +48,7 @@ userController.createNewUser = async (req, res, next) => {
   const { name, email, password, zipCode, interests, bio } = req.body;
 
   try {
-    const newUser = new User({
+    const newUser = await User.create({
       name,
       email,
       password,
@@ -59,15 +57,13 @@ userController.createNewUser = async (req, res, next) => {
       bio,
     });
 
-    await newUser.save();
-
     console.log('new user saved to database');
     console.log(newUser);
 
     res.locals.user = newUser;
     return next();
   } catch (error) {
-    return next(error);
+    return next({ message: { err: "Email is already taken" }});
   }
 };
 
