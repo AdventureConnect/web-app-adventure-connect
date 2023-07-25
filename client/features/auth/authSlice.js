@@ -10,8 +10,8 @@ const user = JSON.parse(localStorage.getItem("user"));
 
 const initialState = {
   user: user ? user : null, // for user object
-  error: null,
-  success: false, // for monitoring the registration process.
+  isError: null,
+  isSuccess: false, // for monitoring the registration process.
   isLoading: false,
   userToken: null, // for storing the JWT
   message: "",
@@ -20,11 +20,7 @@ const initialState = {
 export const register = () => {
   createAsyncThunk("auth/register", async (user, thunkAPI) => {
     try {
-      const response = await axios.post(API_URL, userData);
-      if (response.data) {
-        localStorage.setItem("user", JSON.stringify(response.data));
-        return response.data;
-      }
+      return await authService.register(user);
     } catch (err) {
       const message =
         (err.response && err.response.data && err.response.data.message) ||
@@ -41,8 +37,8 @@ const authSlice = createSlice({
   reducers: {
     reset: (state) => {
       state.isLoading = false;
-      state.success = false;
-      state.error = false;
+      state.isSuccess = false;
+      state.isError = false;
       state.message = "";
     },
   },
@@ -55,13 +51,13 @@ const authSlice = createSlice({
     [register.fulfilled],
       (state, action) => {
         state.isLoading = false;
-        state.success = true;
+        state.isSuccess = true;
         state.user = action.payload;
       };
     [register.rejected],
       (state, action) => {
         state.isLoading = false;
-        state.error = true;
+        state.isError = true;
         state.message = action.payload;
         state.user = null;
       };

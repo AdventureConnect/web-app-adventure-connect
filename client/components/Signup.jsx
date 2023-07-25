@@ -7,28 +7,70 @@ import { useDispatch, useSelector } from "react-redux";
 import { register, reset } from "../features/auth/authSlice";
 import axios from "axios";
 
-import bg from "../../styles/bg-photo3.jpeg"
+import bg from "../../styles/bg-photo3.jpeg";
 
 import SignupForm from "./SignupForm";
 import { LuBike } from "react-icons/lu";
-import { FaRunning, FaHiking } from "react-icons/fa"
-import { GiCampingTent, GiMountainClimbing, GiCanoe, GiRollerSkate, GiRoad, GiLightBackpack } from "react-icons/gi"
-
+import { FaRunning, FaHiking } from "react-icons/fa";
+import {
+  GiCampingTent,
+  GiMountainClimbing,
+  GiCanoe,
+  GiRollerSkate,
+  GiRoad,
+  GiLightBackpack,
+} from "react-icons/gi";
 
 const list = [
-  { label: "Backpacking", value: "Backpacking", icon: <GiLightBackpack size={20} className="text-blue-500"/> },
-  { label: "Camping", value: "Camping", icon: <GiCampingTent size={20} className="text-orange-500"/>},
-  { label: "Climbing", value: "Climbing", icon: <GiMountainClimbing size={20} className="text-red-500" /> },
-  { label: "Hiking", value: "Hiking", icon: <FaHiking size={20} className="text-green-500" /> },
-  { label: "Mountain Biking", value: "Mountain Biking", icon: <LuBike size={20} className="text-purple-500" /> },
-  { label: "Rafting", value: "Rafting", icon: <GiCanoe size={20} className="text-teal-500" /> },
-  { label: "Road Cycling", value: "Road Cycling", icon: <GiRoad size={20} className="text-indigo-500" /> },
-  { label: "Roller Skating", value: "Roller Skating", icon: <GiRollerSkate size={20} className="text-pink-500" />},
-  { label: "Trail Running", value: "Trail Running", icon: <FaRunning size={20} className="text-sky-500" /> },
+  {
+    label: "Backpacking",
+    value: "Backpacking",
+    icon: <GiLightBackpack size={20} className="text-blue-500" />,
+  },
+  {
+    label: "Camping",
+    value: "Camping",
+    icon: <GiCampingTent size={20} className="text-orange-500" />,
+  },
+  {
+    label: "Climbing",
+    value: "Climbing",
+    icon: <GiMountainClimbing size={20} className="text-red-500" />,
+  },
+  {
+    label: "Hiking",
+    value: "Hiking",
+    icon: <FaHiking size={20} className="text-green-500" />,
+  },
+  {
+    label: "Mountain Biking",
+    value: "Mountain Biking",
+    icon: <LuBike size={20} className="text-purple-500" />,
+  },
+  {
+    label: "Rafting",
+    value: "Rafting",
+    icon: <GiCanoe size={20} className="text-teal-500" />,
+  },
+  {
+    label: "Road Cycling",
+    value: "Road Cycling",
+    icon: <GiRoad size={20} className="text-indigo-500" />,
+  },
+  {
+    label: "Roller Skating",
+    value: "Roller Skating",
+    icon: <GiRollerSkate size={20} className="text-pink-500" />,
+  },
+  {
+    label: "Trail Running",
+    value: "Trail Running",
+    icon: <FaRunning size={20} className="text-sky-500" />,
+  },
 ];
 
 const Signup = () => {
-  const { user, isLoading, success, error, message } = useSelector(
+  const { user, isLoading, isSuccess, isError, message } = useSelector(
     (state) => state.auth
   );
   const dispatch = useDispatch();
@@ -43,27 +85,21 @@ const Signup = () => {
   const [bio, setBio] = useState("");
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    //if there is an error we want to send an error message
-    if (error) alert("message");
-    // if sign up is successful (re: stgate updating) we want to sned them on their way to dashboard
-    if (success || user) {
-      navigate("/dashboard");
-    }
-    dispatch(reset());
-  }, [user, error, success, navigate, dispatch]);
-
-  /**
-   * asyncronous function that initiates a fetch request to the API route when user clicks submit
-   * @param {*} e
-   * @returns status of reponse from server
-   */
+  // useEffect(() => {
+  //   //if there is an error we want to send an error message
+  //   if (isError) alert(message);
+  //   // if sign up is successful (re: stgate updating) we want to send them on their way to dashboard
+  //   if (isSuccess || user) {
+  //     navigate("/dashboard");
+  //   }
+  //   dispatch(reset());
+  // }, [user, isError, isSuccess, navigate, dispatch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const myInterests = Array.from(interests);
-    const info = {
+    const userInfo = {
       name: name,
       email: email,
       password: password,
@@ -78,28 +114,30 @@ const Signup = () => {
       setError("All fields are required");
       return;
     }
-    
+
     if (!zipCodeRegex.test(zipcode)) {
       setError("Invalid zipcode");
       setZipcode("");
       return;
     }
 
-    try {
-      const res = await axios.post("/api/signup", info)
-      navigate("/dashboard")
-      // navigate("/imageupload", { state: { email: email } });
-      return;
-    } catch (err) {
-      setError(err.response.data.err);
-      return err;
-    }
+    return dispatch(register(userInfo)).unwrap();
+    // navigate("/dashboard");
+
+    // try {
+    //   // const res = await axios.post("/api/signup", userInfo);
+    //   // navigate("/imageupload", { state: { email: email } });
+    //   return;
+    // } catch (err) {
+    //   setError(err);
+    //   return;
+    // }
   };
 
   const removeInterest = (e) => {
     e.preventDefault();
 
-    const interest = e.target.parentElement.getAttribute("interest")
+    const interest = e.target.parentElement.getAttribute("interest");
     const tempInt = new Set(interests);
     tempInt.delete(interest);
     setInterests(tempInt);
@@ -110,10 +148,12 @@ const Signup = () => {
       label: interest,
       value: interest,
       icon: removedInterest.icon,
-    }
+    };
 
-    const updatedActivities = activities.concat(interestObject)
-    setActivities(updatedActivities.sort((a, b) => a.label.localeCompare(b.label)));
+    const updatedActivities = activities.concat(interestObject);
+    setActivities(
+      updatedActivities.sort((a, b) => a.label.localeCompare(b.label))
+    );
   };
 
   return (
@@ -165,10 +205,12 @@ const Signup = () => {
               "
               >
                 Adventure Connect
-                <GiLightBackpack className="text-blue-500" size={40}/>
+                <GiLightBackpack className="text-blue-500" size={40} />
               </h1>
             </div>
-            <h2 className="text-zinc-400 text-sm px-8 pointer-events-none">Find Friends Outdoors</h2>
+            <h2 className="text-zinc-400 text-sm px-8 pointer-events-none">
+              Find Friends Outdoors
+            </h2>
           </div>
           <SignupForm
             setActivities={setActivities}
@@ -192,10 +234,8 @@ const Signup = () => {
             setError={setError}
           />
           <div className="flex gap-2 pt-4 pr-28 md:pr-48">
-            <div className="pointer-events-none">
-              Already have an account?
-            </div>
-            <span 
+            <div className="pointer-events-none">Already have an account?</div>
+            <span
               className="
                 text-blue-500 
                 hover:text-blue-600 
@@ -203,7 +243,7 @@ const Signup = () => {
                 hover:transition-all
                 hover:scale-110
                 cursor-pointer"
-              onClick={() => navigate("/")} 
+              onClick={() => navigate("/")}
             >
               Sign in
             </span>
