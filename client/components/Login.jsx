@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
 // import { useContext } from "react";
 // import { RecoveryContext } from "../App";
-import { LuBackpack } from 'react-icons/lu'
+import { GiLightBackpack } from 'react-icons/gi'
 
 import bg from '../../styles/bg-photo.jpeg'
 import logo from '../../styles/logo.png'
@@ -14,7 +14,6 @@ const Login = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [currentUser, setCurrentUser] = useState("");
-  const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [userEmail, setUserEmail] = useState("");
 
@@ -81,43 +80,26 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const credential = {
-    //   email: userEmail,
-    //   password: password,
-    // };
 
-    if (!username || !password) {
+    if (!userEmail || !password) {
       setLoginError("Username and password are required")
-      setTimeout(() => {
-       setLoginError("");
-      }, 2000)
       return;
     }
     try {
-      const res = await axios.post('/api/login', { email: userEmail, password })
+      await axios.post('/api/login', { email: userEmail, password })
       
-      if (res.data.error) {
-        setLoginError(res.data.error);
-        setTimeout(() => {
-          setLoginError("");
-        }, 2000)
-        setUserName("")
-        setPassword("")
-        e.target.reset()
-        return;
-      }
-      console.log(res.data);
-      setAuthenticated(true);
-      // navigate("/dashboard", {
-      //   state: { currentUser: currentUser, authenticated: authenticated },
-      // });
+      navigate("dashboard");
     } catch (err) {
-      console.log("login not successful");
+      console.log(err.response.data.message);
+      setLoginError("Invalid login credentials");
+      setUserEmail("")
+      setPassword("")
+      e.target.reset();
     }
   };
 
   return (
-      <div className="flex justify-center items-center h-screen w-full p-10 bg-black/70">
+      <div className="flex justify-center items-center h-screen w-full bg-black/60 p-10">
         <div 
           className="
             flex
@@ -133,14 +115,15 @@ const Login = () => {
           "
           style={{ backgroundImage: `url(${bg})` }}
         >
-          <div className="md:bg-black/30 bg-black/50 w-full h-full flex flex-col items-center justify-center rounded-xl">
-            <div className="flex flex-col mb-36 absolute top-12 left-12">
+          <div className="md:bg-black/40 bg-black/50 w-full h-full flex flex-col items-center justify-center rounded-xl">
+            <div className="flex flex-col mb-12 ">
               <div className="flex items-center gap-2">
                 <h1 
                   className="
                     flex 
                     gap-2 
                     text-3xl 
+                    md:text-4xl
                     font-bold 
                     text-zinc-300 
                     px-8 
@@ -150,13 +133,12 @@ const Login = () => {
                   "
                 >
                   Adventure Connect 
-                  <LuBackpack className="text-blue-500" size={40}/>
+                  <GiLightBackpack className="text-blue-500" size={40}/>
                 </h1> 
               </div>
               <h2 className="text-zinc-400 px-8 pointer-events-none">Find Friends Outdoors</h2>
             </div>
-            {/* main div container for the form */}
-            <LoginForm handleSubmit={handleSubmit} setUserName={setUserName} setPassword={setPassword} loginError={loginError} />
+            <LoginForm handleSubmit={handleSubmit} email={userEmail} setUserEmail={setUserEmail} password={password} setPassword={setPassword} loginError={loginError} />
             <div className="flex gap-2 p-6">
               <div className="pointer-events-none">
                 Dont have an account?
@@ -169,10 +151,13 @@ const Login = () => {
                   hover:transition-all
                   hover:scale-110
                   cursor-pointer"
-                onClick={() => navigate("signup")} >Sign up</span>
+                onClick={() => navigate("signup")}
+              >
+                Sign up
+              </span>
             </div>
             <a href="https://github.com/CampfireConnect/adventure-connect/tree/dev">
-              <img className="absolute w-38 h-12 right-14 bottom-20 rounded-md bg-blue-600/80" src={logo} />
+              <img className="hover:bg-blue-700/80 hover:transform hover:transition-all hover:scale-110 absolute w-38 h-12 right-14 bottom-20 rounded-md bg-blue-600/80" src={logo} />
             </a>
           </div>
         </div>
