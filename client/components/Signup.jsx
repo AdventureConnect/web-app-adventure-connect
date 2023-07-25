@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 import bg from "../../styles/bg-photo3.jpeg"
 
 import SignupForm from "./SignupForm";
-import { LuBackpack, LuBike } from "react-icons/lu";
+import { LuBike } from "react-icons/lu";
 import { FaRunning, FaHiking } from "react-icons/fa"
 import { GiCampingTent, GiMountainClimbing, GiCanoe, GiRollerSkate, GiRoad, GiLightBackpack } from "react-icons/gi"
 
@@ -23,14 +24,15 @@ const list = [
 
 const Signup = () => {
   const navigate = useNavigate();
-  // const [ interestLabels, setInterestLabels ] = useState([]);
+
   const [interests, setInterests] = useState(new Set());
   const [activities, setActivities] = useState(list);
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [zipcode, setZipcode] = useState();
-  const [bio, setBio] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [zipcode, setZipcode] = useState("");
+  const [bio, setBio] = useState("");
+  const [error, setError] = useState("");
   /**
    * asyncronous function that initiates a fetch request to the API route when user clicks submit
    * @param {*} e
@@ -38,54 +40,60 @@ const Signup = () => {
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const myInterests = Array.from(interests);
     const info = {
       name: name,
       email: email,
       password: password,
       zipCode: zipcode,
-      interests: interests,
+      interests: myInterests,
       bio: bio,
     };
+
+    const zipCodeRegex = /^\d{5}(?:-\d{4})?$/;
+
+    if (!zipcode || !bio) {
+      setError("All fields are required");
+      return;
+    }
+    
+    if (!zipCodeRegex.test(zipcode)) {
+      setError("Invalid zipcode");
+      setZipcode("");
+      return;
+    }
+
     try {
-      fetch("http://localhost:8080/api/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(info),
-      });
-      navigate("/imageupload", { state: { email: email } });
+      const res = await axios.post("/api/signup", info)
+      navigate("/dashboard")
+      // navigate("/imageupload", { state: { email: email } });
       return;
     } catch (err) {
-      alert(`An error has occurred! ${err.message}`);
+      setError(err.response.data.err);
       return err;
     }
   };
 
   const removeInterest = (e) => {
     e.preventDefault();
-    let interest = e.target.parentElement.getAttribute("interest");
-    const tempInt = new Set(interests);
-    const tempAct = activities.slice();
-    tempInt.delete(interest);
-    tempAct.push({ label: interest, value: interest });
-    setInterests(tempInt);
-    setActivities(tempAct.sort((a, b) => a.label.localeCompare(b.label)));
-    console.log(interests);
-  };
 
-  const interestLabels = [];
-  interests.forEach((interest) => {
-    interestLabels.push(
-      <div interest={interest}>
-        {interest}
-        <button className="deleteInterest" onClick={(e) => removeInterest(e)}>
-          x
-        </button>
-      </div>
-    );
-  });
+    const interest = e.target.parentElement.getAttribute("interest")
+    const tempInt = new Set(interests);
+    tempInt.delete(interest);
+    setInterests(tempInt);
+
+    const removedInterest = list.find((item) => item.value === interest);
+
+    const interestObject = {
+      label: interest,
+      value: interest,
+      icon: removedInterest.icon,
+    }
+
+    const updatedActivities = activities.concat(interestObject)
+    setActivities(updatedActivities.sort((a, b) => a.label.localeCompare(b.label)));
+  };
 
   return (
     <div className="flex justify-center items-center h-screen w-full p-10 bg-black/70">
@@ -95,7 +103,8 @@ const Signup = () => {
           flex-col
           items-center
           justify-center
-          rounded-xl 
+          shadow-2xl
+          rounded-xl
           h-full 
           bg-cover 
           bg-center
@@ -111,8 +120,10 @@ const Signup = () => {
             w-full 
             h-full 
             flex 
+            shadow-xl
             flex-col
-            items-end 
+            items-end
+            md:pr-20 
             justify-center 
             rounded-xl
           "
@@ -121,9 +132,10 @@ const Signup = () => {
             <div className="flex items-center gap-2">
               <h1 
                 className="
+                  text-3xl
                   flex
                   gap-2
-                  text-4xl
+                  md:text-4xl
                   font-bold
                   px-8
                   mt-8
@@ -134,34 +146,46 @@ const Signup = () => {
                 <GiLightBackpack className="text-blue-500" size={40}/>
               </h1>
             </div>
-            <h2 className="text-zinc-400 px-8 pointer-events-none">Find Friends Outdoors</h2>
+            <h2 className="text-zinc-400 text-sm px-8 pointer-events-none">Find Friends Outdoors</h2>
           </div>
           <SignupForm 
             setActivities={setActivities}
+            email={email}
             setEmail={setEmail}
+            name={name}
             setName={setName}
+            password={password}
             setPassword={setPassword}
+            zipcode={zipcode}
             setZipcode={setZipcode}
             interests={interests}
             setInterests={setInterests}
+            removeInterest={removeInterest}
             handleSubmit={handleSubmit}
             activities={activities}
             list={list}
+            bio={bio}
+            setBio={setBio}
+            error={error}
+            setError={setError}
           />
-          <div className="flex gap-2 p-6">
-              <div className="pointer-events-none">
-                Already have an account?
-              </div>
-              <span 
-                className="
-                  text-blue-500 
-                  hover:text-blue-600 
-                  hover:transform
-                  hover:transition-all
-                  hover:scale-110
-                  cursor-pointer"
-                onClick={() => navigate("/")} >Sign in</span>
+          <div className="flex gap-2 pt-4 pr-28 md:pr-48">
+            <div className="pointer-events-none">
+              Already have an account?
             </div>
+            <span 
+              className="
+                text-blue-500 
+                hover:text-blue-600 
+                hover:transform
+                hover:transition-all
+                hover:scale-110
+                cursor-pointer"
+              onClick={() => navigate("/")} 
+            >
+              Sign in
+            </span>
+          </div>
         </div>
       </div>
     </div>
