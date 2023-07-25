@@ -195,33 +195,6 @@ function SignupForm({
               value={bio}
               onChange={(e) => setBio(e.target.value)}
             />
-            {/* <label 
-              htmlFor="text-area"
-              className={`
-                absolute 
-                left-0 
-                ml-1 
-                px-1 
-                -translate-y-2 
-                bg-inherit 
-                pointer-events-none 
-                text-sm 
-                duration-100 
-                ease-linear
-                peer-placeholder-shown:translate-y-0 
-                peer-placeholder-shown:text-gray-500 
-                peer-placeholder-shown:text-sm
-                peer-focus:ml-1 
-                peer-focus:-translate-y-11 
-                peer-focus:px-1 
-                peer-focus:z-10 
-                peer-focus:text-sm 
-              peer-focus:text-zinc-200
-                ${ bio ? 'text-transparent' : null}
-              `}
-            >
-              Tell us more about you...   
-            </label> */}
           </div> 
           { error && <span className="text-red-600 font-bold text-sm">{error}</span>}
           <div className="flex gap-2">
