@@ -1,4 +1,3 @@
-const Users = require("../models/userModel");
 const { createErr } = require("../utils/errorCreator");
 const Images = require("../models/imageModel");
 require("dotenv").config();
@@ -9,12 +8,9 @@ const { format } = require("util");
 const multer = require("multer");
 const nodemailer = require("nodemailer");
 
-
 const User = require("../models/userModel");
 
 const userController = {};
-
-
 
 const cloudStorage = new Storage({
   keyFilename: `${__dirname}/../web-app-adventure-connect-39d349a3f0d5.json`,
@@ -22,8 +18,6 @@ const cloudStorage = new Storage({
 });
 const bucketName = "adventure-connect-image-bucket";
 const bucket = cloudStorage.bucket(bucketName);
-
-
 
 //verifying user upon logging in, to be put in route for post to /api/login. if route is successful, redirect to show user page
 
@@ -49,7 +43,7 @@ userController.createNewUser = async (req, res, next) => {
   const { name, email, password, zipCode, interests, bio } = req.body;
 
   try {
-    const newUser = new User({
+    const newUser = await User.create({
       name,
       email,
       password,
@@ -58,15 +52,14 @@ userController.createNewUser = async (req, res, next) => {
       bio,
     });
 
-    await newUser.save();
-
-    console.log('new user saved to database');
-    console.log(newUser);
+    console.log("new user saved to database");
+    // console.log(newUser);
 
     res.locals.user = newUser;
+
     return next();
   } catch (error) {
-    return next(error);
+    return next({ message: { err: "Email is already taken" } });
   }
 };
 
@@ -109,6 +102,5 @@ userController.getProfiles = async (req, res, next) => {
 };
 
 module.exports = userController;
-
 
 module.exports = userController;

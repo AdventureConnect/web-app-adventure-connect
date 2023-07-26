@@ -1,40 +1,41 @@
-/* ul {
-  border-right: blue solid 2px;
-  width: 300px;
-  height: 900px;
-  list-style: none;
-} */
+ul {
+	border-right: blue solid 2px;
+	width: 300px;
+	height: 900px;
+	list-style: none;
+}
 
-/* li, a {
-  color: rgba(228, 26, 60, 0.781);
-  text-decoration: none;
-  padding: 5px;
-  font-size: large;
-} */
+li,
+a {
+	color: rgba(228, 26, 60, 0.781);
+	text-decoration: none;
+	padding: 5px;
+	font-size: large;
+}
 
 #bio {
-  size: 40;
-  /* padding-top: 0;
+	size: 40;
+	/* padding-top: 0;
   padding-left: 0; */
 }
 
 .carousel-container {
-  display:inline-block;
-  justify-content: center;
-  align-items: center;
-  margin-left: 100px;
+	display: inline-block;
+	justify-content: center;
+	align-items: center;
+	margin-left: 100px;
 }
 
 .carousel {
-  display: grid;
-  /* overflow: hidden; */
-  border: blue 5px solid;
-  margin-top: 100px;
-  margin-left: 500px;
-  position: relative;
-  width: 250px;
-  height: 320px;
-  /* background: green; */
+	display: grid;
+	/* overflow: hidden; */
+	border: blue 5px solid;
+	margin-top: 100px;
+	margin-left: 500px;
+	position: relative;
+	width: 250px;
+	height: 320px;
+	/* background: green; */
 }
 
 /* .inner {
@@ -51,109 +52,118 @@
 } */
 
 .carousel-item {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgb(255, 221, 127);
-  color: black;
-  transform-style: all 0.5s ease;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgb(255, 221, 127);
+	color: black;
+	transform-style: all 0.5s ease;
 }
 
 .user-page {
-  transform-style: preserve-3d;
+	transform-style: preserve-3d;
 }
 
 .carousel-item:hover {
-  transform: rotateY(180deg);
+	transform: rotateY(180deg);
 }
 
 .front {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  background: yellow;
-  color: black;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	backface-visibility: hidden;
+	background: yellow;
+	color: black;
 }
 
 .back {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  background: yellow;
-  color: black;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	backface-visibility: hidden;
+	background: yellow;
+	color: black;
 }
 
 .indicators {
-  display: flex;
-  justify-content: center;
-  margin-left: 500px;
+	display: flex;
+	justify-content: center;
+	margin-left: 500px;
 }
 
-.indicators > button {
-  margin: 5px;
+.indicators>button {
+	margin: 5px;
 }
 
 #form-file-upload {
-  height: 16rem;
-  width: 28rem;
-  max-width: 100%;
-  text-align: center;
-  position: relative;
+	height: 16rem;
+	width: 28rem;
+	max-width: 100%;
+	text-align: center;
+	position: relative;
 }
 
 #input-file-upload {
-  display: none;
+	display: none;
 }
 
 #label-file-upload {
-  height: 100%;
-  width: 75%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-width: 2px;
-  border-radius: 1rem;
-  border-style: dashed;
-  border-color: #cbd5e1;
-  background-color: #f8fafc;
-  text-align: center
+	height: 100%;
+	width: 75%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-width: 2px;
+	border-radius: 1rem;
+	border-style: dashed;
+	border-color: #cbd5e1;
+	background-color: #f8fafc;
+	text-align: center
 }
 
 #label-file-upload.drag-active {
-  background-color: #ffffff;
+	background-color: #ffffff;
 }
 
 .upload-button {
-  cursor: pointer;
-  padding: 0.25rem;
-  font-size: 1rem;
-  border: none;
-  font-family: 'Oswald', sans-serif;
-  background-color: transparent;
+	cursor: pointer;
+	padding: 0.25rem;
+	font-size: 1rem;
+	border: none;
+	font-family: 'Oswald', sans-serif;
+	background-color: transparent;
 }
 
 .upload-button:hover {
-  text-decoration-line: underline;
+	text-decoration-line: underline;
 }
 
 #drag-file-element {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 1rem;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	border-radius: 1rem;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
 }
 
 .image_preview {
-  overflow: hidden;
-  width: 300px;
-  height: auto
+	overflow: hidden;
+	width: 300px;
+	height: auto
+}
+
+.profile-container {
+	border: 2px solid;
+	margin: 2px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }

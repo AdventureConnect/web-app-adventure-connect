@@ -47,20 +47,22 @@ router.post(
   }
 );
 
-router.get("/", (req, res) => {
-  res.send("hello world");
-});
+// router.get("/", (req, res) => {
+//   res.send("hello world");
+// });
 
 //login router, verify user then redirect to user profiles page
 //fine that im setting status and sending message in the controller instead of last step?
 router.post("/login", userController.verifyLogin, (req, res) => {
   //end the response, with status and message set in verifyUser middleware
+  // console.log("res.locals.user: ", res.locals.user);
   res.status(200).json({ user: res.locals.user });
 });
 
 //signup route:
 router.post("/signup", userController.createNewUser, (req, res) => {
-  res.sendStatus(200);
+  // console.log("res.locals.user: ", res.locals.user);
+  res.status(200).json([res.locals.user]);
 });
 
 //update profile/settings route:
