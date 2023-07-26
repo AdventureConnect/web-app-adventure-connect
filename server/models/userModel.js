@@ -9,7 +9,7 @@ const usersSchema = new mongoose.Schema({
   zipCode: { type: Number, required: true },
   interests: { type: Array },
   bio: { type: String },
-  matches: [{type: String}]
+  matches: [{ type: String }],
 });
 
 usersSchema.pre('save', async function(next) {
@@ -37,4 +37,4 @@ usersSchema.methods.comparePassword = async function (password) {
 
 const Users = mongoose.model("Users", usersSchema);
 
-module.exports = Users
+module.exports = Users;
