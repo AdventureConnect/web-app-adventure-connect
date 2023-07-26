@@ -7,9 +7,9 @@ import { login, reset } from "../../features/auth/authSlice";
 // import { RecoveryContext } from "../App";
 import { GiLightBackpack } from "react-icons/gi";
 
-import bg from "../../styles/bg-photo.jpeg";
-import logo from "../../styles/logo.png";
-import LoginForm from "../LoginForm";
+import bg from "../../../styles/bg-photo.jpeg";
+import logo from "../../../styles/logo.png";
+import LoginForm from "./LoginForm";
 
 const Login = () => {
   const { user, isLoading, isSuccess, isError, message } = useSelector(

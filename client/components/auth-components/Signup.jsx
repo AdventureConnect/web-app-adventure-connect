@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { register, reset } from "../../features/auth/authSlice";
 // import axios from "axios";
 
-import bg from "../../styles/bg-photo3.jpeg";
+import bg from "../../../styles/bg-photo3.jpeg";
 
 import SignupForm from "./SignupForm";
 import { LuBike } from "react-icons/lu";

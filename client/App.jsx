@@ -31,7 +31,7 @@ const App = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/userprofile" element={<UserProfile />} />
             <Route path="/settings" element={<SettingsContainer />} />
-            <Route path="/account/password" element={<ChangePassword />} />
+            {/* <Route path="/account/password" element={<ChangePassword />} /> */}
             <Route
               path="*"
               element={<div>404 Error. This page was not found</div>}
