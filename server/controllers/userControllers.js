@@ -83,15 +83,12 @@ userController.updateUser = async (req, res, next) => {
 };
 
 userController.getProfiles = async (req, res, next) => {
-
-
-  //grab id from req query params
-  const userId = req.query.id
-  //try to find a user that has the id that's sent on the query 
-  try {
-    const currentUser = await User.findOne({
-      _id
-    });
+   //grab id from req query params
+   const userId = req.query.id;
+   
+   try {
+     // try to find a user that has the id that's sent on the query
+     const currentUser = await User.findById(userId);
     //send 404 if can't find current user in database 
     if (!currentUser) {
       return res.status(404).json({ error: 'User not found' });
