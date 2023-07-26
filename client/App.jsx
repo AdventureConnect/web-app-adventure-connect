@@ -10,9 +10,11 @@ import ChangePassword from "./components/ChangePassword.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 import ImageUpload from "./components/ImageUpload.jsx";
 import OTP from "./components/OTP.jsx";
+import LikedUsers from "./components/LikedUsers.jsx";
 export const RecoveryContext = createContext();
 import Header from "./components/Header.jsx";
 import Matches from "./components/Matches.jsx";
+import NavBar from "./components/NavBar/NavBar.jsx";
 
 const App = () => {
   const [email, setEmail] = useState("");
@@ -35,12 +37,14 @@ const App = () => {
               path="*"
               element={<div>404 Error. This page was not found</div>}
             />
+            <Route path="/likedusers" element={<LikedUsers/>}/>
             <Route path="/userspecific" element={<UserSpecific />} />
             <Route path="/imageupload" element={<ImageUpload />} />
             <Route path="/otp" element={<OTP />} />
           </Routes>
         </BrowserRouter>
       </RecoveryContext.Provider>
+      <NavBar/>
     </div>
   );
 };
