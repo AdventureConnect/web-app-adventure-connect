@@ -121,9 +121,10 @@ const Signup = () => {
       setZipcode("");
       return;
     }
+    // error handling needs to be updated -Chandler
 
     dispatch(register(userInfo));
-    // navigate("/dashboard");
+    navigate("/dashboard");
 
     // try {
     //   // const res = await axios.post("/api/signup", userInfo);

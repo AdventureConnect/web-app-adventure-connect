@@ -97,6 +97,7 @@ const Login = () => {
       return;
     }
     // try {
+    // error handling needs to updated -Chandler
     dispatch(login({ email: userEmail, password }));
     navigate("dashboard");
     // need to prevent navigating to dashboard
