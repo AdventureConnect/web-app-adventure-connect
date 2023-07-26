@@ -85,15 +85,16 @@ const Signup = () => {
   const [bio, setBio] = useState("");
   const [error, setError] = useState("");
 
-  // useEffect(() => {
-  //   //if there is an error we want to send an error message
-  //   if (isError) alert(message);
-  //   // if sign up is successful (re: stgate updating) we want to send them on their way to dashboard
-  //   if (isSuccess || user) {
-  //     navigate("/dashboard");
-  //   }
-  //   dispatch(reset());
-  // }, [user, isError, isSuccess, navigate, dispatch]);
+  useEffect(() => {
+    //if there is an error we want to send an error message
+    if (isError) alert(message);
+		dispatch(reset())
+    // if sign up is successful (re: stgate updating) we want to send them on their way to dashboard
+    if (isSuccess || user) {
+      navigate("/dashboard");
+    }
+    dispatch(reset());
+  }, [user, isError, isSuccess, navigate, dispatch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -122,7 +123,7 @@ const Signup = () => {
     }
 
     dispatch(register(userInfo));
-    navigate("/dashboard");
+    // navigate("/dashboard");
 
     // try {
     //   // const res = await axios.post("/api/signup", userInfo);
