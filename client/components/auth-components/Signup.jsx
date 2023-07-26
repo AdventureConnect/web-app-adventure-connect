@@ -4,10 +4,10 @@ import { useNavigate } from "react-router";
  * imports for redux
  */
 import { useDispatch, useSelector } from "react-redux";
-import { register, reset } from "../features/auth/authSlice";
-import axios from "axios";
+import { register, reset } from "../../features/auth/authSlice";
+// import axios from "axios";
 
-import bg from "../../styles/bg-photo3.jpeg";
+import bg from "../../../styles/bg-photo3.jpeg";
 
 import SignupForm from "./SignupForm";
 import { LuBike } from "react-icons/lu";
@@ -88,7 +88,7 @@ const Signup = () => {
   useEffect(() => {
     //if there is an error we want to send an error message
     if (isError) alert(message);
-		dispatch(reset())
+    dispatch(reset());
     // if sign up is successful (re: stgate updating) we want to send them on their way to dashboard
     if (isSuccess || user) {
       navigate("/dashboard");

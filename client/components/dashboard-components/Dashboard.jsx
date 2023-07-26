@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import Carousel from "./Carousel";
 import CarouselItem from "./CarouselItem";
-import UserPage from "./UserPage";
+import UserPage from "../profile-components/UserPage";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import MatchContainer from "../match-components/MatchContainer";
+// import MatchContainer from "../match-components/MatchContainer";
 
 const Dashboard = () => {
   // const { matchList, total } = useSelector((store) => store.matches);
@@ -21,7 +21,7 @@ const Dashboard = () => {
     <>
       <div>{/* <Carousel /> */}</div>
       {/* <h2>You have {total} matches!</h2> */}
-      <MatchContainer />
+      {/* <MatchContainer /> */}
       {/* <button onClick={handleButtonIncrement}>Increment</button>
       <button>Find Matches</button> */}
     </>
