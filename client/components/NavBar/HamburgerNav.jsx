@@ -1,15 +1,36 @@
-import React from 'react';
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Navigate } from "react-router-dom";
-import NavLinks from "./NavLinks";
-import './NavBar.css';
+import React, { useState } from 'react';
+import { IoMenuOutline, IoClose } from 'react-icons/io5';
+import NavLinks from './NavLinks';
 
 const HamburgerNav = () => {
+    const [open, setOpen] = useState(false);
+
+    const hamburgerIcon = (
+        <IoMenuOutline
+            className="MenuIcon"
+            size="40px"
+            color="black"
+            onClick={() => setOpen(!open)}
+        />
+    );
+
+    const closeIcon = (
+        <IoClose
+            className="MenuIcon"
+            size="40px"
+            color="black"
+            onClick={() => setOpen(!open)}
+        />
+    );
+
     return (
         <nav className="HamburgerNav">
-        <NavLinks/>
+            {open ? closeIcon : hamburgerIcon}
+            <div className={open ? 'menu show' : 'menu hide'}>
+                <NavLinks/>
+            </div>
         </nav>
-    )
-}
+    );
+};
 
 export default HamburgerNav;

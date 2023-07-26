@@ -9,7 +9,7 @@ import './NavBar.css'
 
 const NavBar = () => {
     return (
-        <div className="Navigation">
+        <div className="NavBar">
             <Navigation/>
             <HamburgerNav/>
         </div>

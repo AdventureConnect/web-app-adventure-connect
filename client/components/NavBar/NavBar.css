@@ -5,25 +5,104 @@
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 100;
-    padding: 10px;
-
-    
+    z-index: 999;
+    height: 80px;
 }
-.Navigation nav ul li {
+
+.NavBar nav ul li {
     display: inline-block;
+    margin: 1.5vw;
+    align-self: center;
+}
+
+.NavBar nav ul li a {
+    text-decoration: none;
+    color: black;
+    align-self: center;
+    display: inline-block;
+}
+
+.NavBar .HamburgerNav ul li {
+    display: inline-block;
+    margin: 1.5vw;
+    align-self: center;
+}
+
+.NavBar .HamburgerNav ul li a {
+    text-decoration: none;
+    color: white;
+    align-self: center;
+    display: inline-block;
+}
+
+.NavBar a:hover {
+    border-bottom: 5px solid #014421;
+}
+
+.NavBar .HamburgerNav {
+    display: none;
+}
+
+@media (max-width: 990px) {
+    .NavBar .Navigation {
+        display: none;
+    }
+
+    .NavBar .HamburgerNav {
+        display: flex;
+        position: fixed;
+        align-items: flex-start;
+        top: 0;
+        width: 100%;
+        z-index: 100;
+    }
+
+    .NavBar .HamburgerNav .MenuIcon {
+        position: absolute;
+        right: 2.5%;
+        color: black;
+        cursor: pointer;
+        top: 2.5%;
+    }
+    
+    .NavBar .HamburgerNav .menu ul {
+        display: flex;
+        position: absolute;
+        flex-direction: column;
+        top: 80px;
+        right: 0;
+        width: 100%;
+        background-color: RGBA(34, 139, 34, 0.5);
+        padding-left: 20px;
+        border: 2px solid #014421;
+    }
+
+    .NavBar .HamburgerNav .menu ul li {
+        margin: 1.5vw;
+    }
+}
+
+
+.NavBar .HamburgerNav .menu {
+    align-items: flex-start; 
+    width: 100%;
+    padding-left: 20px;
+}
+
+.NavBar .HamburgerNav .menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.NavBar .HamburgerNav .menu ul li {
     margin: 1.5vw;
 }
 
-.Navigation nav ul li a {
-    text-decoration: none;
-    color: black;
+.hide {
+    visibility: hidden;
 }
 
-.Navigation a:hover {
-    border-bottom: 5 px solid #8c1cd1
-}
-
-.Navigation .HamburgerNav {
-    display: none;
+.show {
+    display: block;
 }

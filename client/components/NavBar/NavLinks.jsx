@@ -6,9 +6,6 @@ const NavLinks = () => {
     return (
         <ul>
         <li>
-            <a href="/">Signout</a>
-        </li>
-        <li>
             <a href="/dashboard">My dashboard</a>
         </li>
         <li>
@@ -16,6 +13,9 @@ const NavLinks = () => {
         </li>
         <li>
             <a href="/settings">Account settings</a>
+        </li>
+        <li>
+            <a href="/">Signout</a>
         </li>
     </ul>
     )

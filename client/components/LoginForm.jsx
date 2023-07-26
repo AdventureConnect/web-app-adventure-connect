@@ -3,7 +3,7 @@ import React from 'react'
 import { HiOutlineIdentification } from 'react-icons/hi'
 import { BsKey } from 'react-icons/bs'
 
-function LoginForm({ handleSubmit, setUserName, setPassword, loginError }) {
+function LoginForm({ handleSubmit, setUserEmail, setPassword, loginError }) {
   return (
     <div className="flex flex-col w-[350px] md:w-[500px] p-8 gap-8 ml-8 bg-black/60 text-zinc-300 rounded-xl">
       <div className="flex flex-col gap-2">
@@ -32,8 +32,8 @@ function LoginForm({ handleSubmit, setUserName, setPassword, loginError }) {
               font-bold
             " 
             type="text" 
-            placeholder="Username" 
-            onChange={(e) => setUserName(e.target.value)} 
+            placeholder="Email" 
+            onChange={(e) => setUserEmail(e.target.value)} 
           />
         </div>
         <div className="relative focus-within:text-gray-600 text-gray-400 block">

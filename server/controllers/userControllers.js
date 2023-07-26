@@ -40,7 +40,6 @@ userController.verifyLogin = async (req, res, next) => {
     } else {
       res.status(401).json({ message: "Invalid login credentials!" });
     }
-    return next()
   } catch (error) {
     return next(error);
   }

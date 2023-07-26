@@ -13,7 +13,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [authenticated, setAuthenticated] = useState(false);
   const [loginError, setLoginError] = useState("");
-  const [currentUser, setCurrentUser] = useState("");
+  // const [currentUser, setCurrentUser] = useState("");
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [userEmail, setUserEmail] = useState("");
@@ -81,38 +81,21 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const credential = {
-    //   email: userEmail,
-    //   password: password,
-    // };
 
-    if (!username || !password) {
+    if (!userEmail || !password) {
       setLoginError("Username and password are required")
-      setTimeout(() => {
-       setLoginError("");
-      }, 2000)
       return;
     }
     try {
-      const res = await axios.post('/api/login', { email: userEmail, password })
+      await axios.post('/api/login', { email: userEmail, password })
       
-      if (res.data.error) {
-        setLoginError(res.data.error);
-        setTimeout(() => {
-          setLoginError("");
-        }, 2000)
-        setUserName("")
-        setPassword("")
-        e.target.reset()
-        return;
-      }
-      console.log(res.data);
-      setAuthenticated(true);
-      // navigate("/dashboard", {
-      //   state: { currentUser: currentUser, authenticated: authenticated },
-      // });
+      navigate("dashboard");
     } catch (err) {
-      console.log("login not successful");
+      console.log(err.response.data.message);
+      setLoginError("Invalid login credentials");
+      setUserEmail("")
+      setPassword("")
+      e.target.reset();
     }
   };
 
@@ -156,7 +139,7 @@ const Login = () => {
               <h2 className="text-zinc-400 px-8 pointer-events-none">Find Friends Outdoors</h2>
             </div>
             {/* main div container for the form */}
-            <LoginForm handleSubmit={handleSubmit} setUserName={setUserName} setPassword={setPassword} loginError={loginError} />
+            <LoginForm handleSubmit={handleSubmit} setUserEmail={setUserEmail} setPassword={setPassword} loginError={loginError} />
             <div className="flex gap-2 p-6">
               <div className="pointer-events-none">
                 Dont have an account?
