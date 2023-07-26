@@ -1,19 +1,18 @@
 import React, { useState, createContext } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "./components/Login.jsx";
-import Signup from "./components/Signup.jsx";
-import PasswordReset from "./components/PasswordReset.jsx";
-import UserProfile from "./components/UserProfile.jsx";
-import UserSpecific from "./components/UserSpecific.jsx";
-import SettingsContainer from "./components/Settings.jsx";
-import ChangePassword from "./components/ChangePassword.jsx";
-import Dashboard from "./components/Dashboard.jsx";
-import ImageUpload from "./components/ImageUpload.jsx";
-import OTP from "./components/OTP.jsx";
-import LikedUsers from "./components/LikedUsers.jsx";
+import Login from "./components/auth-components/Login.jsx";
+import Signup from "./components/auth-components/Signup.jsx";
+import PasswordReset from "./components/auth-components/PasswordReset.jsx";
+import UserProfile from "./components/profile-components/UserProfile.jsx";
+import UserSpecific from "./components/profile-components/UserSpecific.jsx";
+import SettingsContainer from "./components/NavBar/Settings.jsx";
+import Dashboard from "./components/dashboard-components/Dashboard.jsx";
+import ImageUpload from "./components/dashboard-components/ImageUpload.jsx";
+import OTP from "./components/auth-components/OTP.jsx";
+import LikedUsers from "./components/dashboard-components/LikedUsers.jsx";
 export const RecoveryContext = createContext();
-import Header from "./components/Header.jsx";
-import Matches from "./components/Matches.jsx";
+// import Header from "./components/Header.jsx";
+// import Matches from "./components/Matches.jsx";
 import NavBar from "./components/NavBar/NavBar.jsx";
 
 const App = () => {
@@ -37,14 +36,14 @@ const App = () => {
               path="*"
               element={<div>404 Error. This page was not found</div>}
             />
-            <Route path="/likedusers" element={<LikedUsers/>}/>
+            <Route path="/likedusers" element={<LikedUsers />} />
             <Route path="/userspecific" element={<UserSpecific />} />
             <Route path="/imageupload" element={<ImageUpload />} />
             <Route path="/otp" element={<OTP />} />
           </Routes>
         </BrowserRouter>
       </RecoveryContext.Provider>
-      <NavBar/>
+      <NavBar />
     </div>
   );
 };
