@@ -14,6 +14,11 @@ function ImageUpload() {
 
   // console.log(cookies.currentEmail);
 
+  console.log(JSON.parse(localStorage.getItem("user"))[0]);
+
+  //current saved in an array on local storage > look at how is it saved in action -CC
+  const currentUser = JSON.parse(localStorage.getItem("user"))[0];
+
   const showImg = async () => {
     try {
       const data = await fetch(`/api/images/getImages`, {
@@ -21,6 +26,7 @@ function ImageUpload() {
         headers: {
           "Content-Type": "application/json",
         },
+        params: currentUser.email,
       });
       const json = await data.json();
       const images = [];
@@ -92,7 +98,7 @@ function ImageUpload() {
     // }
     try {
       await fetch(
-        `/api/images/upload-file-to-cloud-storage/${location.state.email}`,
+        `/api/images/upload-file-to-cloud-storage/${currentUser.email}`,
         {
           method: "POST",
           // headers: {

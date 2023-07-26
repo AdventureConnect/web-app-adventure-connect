@@ -4,6 +4,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const apiRouter = require("./routes/api");
+const imageRouter = require("./routes/imageRouter");
 const connectDB = require("./connectDB");
 const Users = require("./models/userModel");
 
@@ -49,8 +50,8 @@ app.get("/", (req, res) => {
 });
 
 //I think once we have general routes done we will want to change this to just app.use(apiRouter?)
-app.use("/api/images", imageRouter);
 app.use("/api/", apiRouter);
+app.use("/api/images", imageRouter);
 
 // catch-all route handler for any requests to an unknown route
 app.use((req, res) =>
