@@ -4,12 +4,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "./authService";
 
-// // get user from local storage > need to implement saving user info to local storage @Chandler
+// // persist user ID in local storage > need to implement saving user info to local storage @Chandler
 
-const user = JSON.parse(localStorage.getItem("user"));
+const user_id = JSON.parse(localStorage.getItem("user_id"));
 
 const initialState = {
-  user: user ? user : null, // for user object
+  // user: user ? user : null, // for user object
+  user_id: user_id ? user_id : null,
   isError: null,
   isSuccess: false, // for monitoring the registration process.
   isLoading: false,

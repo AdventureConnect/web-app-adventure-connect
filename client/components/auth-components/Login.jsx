@@ -98,7 +98,7 @@ const Login = () => {
     }
     // try {
     // error handling needs to updated -Chandler
-    dispatch(login({ email: userEmail, password }));
+    dispatch(login({ email: userEmail.toLowerCase(), password }));
     navigate("dashboard");
     // need to prevent navigating to dashboard
   };

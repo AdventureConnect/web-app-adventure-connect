@@ -82,6 +82,26 @@ userController.updateUser = async (req, res, next) => {
   return next();
 };
 
+// verify user route to give information to state in the redux store
+userController.verifyUser = async (req, res, next) => {
+  const { user_id } = req.body;
+  const _id = user_id;
+
+  try {
+    const user = await User.findOne({ _id });
+
+    if (user) {
+      // res.locals.loginStatus = true;
+      res.locals.user = user;
+      return next();
+    } else {
+      res.status(401).json({ message: "User not found!" });
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
+
 userController.getProfiles = async (req, res, next) => {
   try {
     const zipCode = Number(req.cookies.zipCode);

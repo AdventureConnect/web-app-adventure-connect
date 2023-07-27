@@ -50,6 +50,11 @@ router.put("/user", userController.updateUser, (req, res) => {
   res.sendStatus(200);
 });
 
+// retrieve user info for state
+router.get("/user", userController.verifyUser, (req, res) => {
+  res.status(200).json({ user: res.locals.user });
+});
+
 router.post(
   "/checkEmail",
   // userController.checkEmail,
