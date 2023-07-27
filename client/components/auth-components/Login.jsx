@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { login, reset } from "../features/auth/authSlice";
+import { login, reset } from "../../features/auth/authSlice";
 // import { useContext } from "react";
 // import { RecoveryContext } from "../App";
 import { GiLightBackpack } from "react-icons/gi";
 
-import bg from "../../styles/bg-photo.jpeg";
-import logo from "../../styles/logo.png";
+import bg from "../../../styles/bg-photo.jpeg";
+import logo from "../../../styles/logo.png";
 import LoginForm from "./LoginForm";
 
 const Login = () => {

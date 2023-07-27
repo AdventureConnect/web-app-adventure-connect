@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { RecoveryContext } from "../App";
+import { RecoveryContext } from "../../App";
 import { useNavigate } from "react-router";
 
 const PasswordReset = () => {
