@@ -26,7 +26,13 @@ const login = async (userData) => {
   console.log("response.data: ", response.data.user);
   if (response.data) {
     localStorage.setItem("user_id", JSON.stringify(response.data.user._id));
-    sessionStorage.setItem("userInfo", JSON.stringify(response.data.user));
+    const userInfo = {
+      name: response.data.user.name,
+      bio: response.data.user.bio,
+      interests: response.data.user.interests,
+      matches: response.data.user.matches,
+    };
+    sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
   }
   return response.data;
 };
@@ -34,6 +40,7 @@ const login = async (userData) => {
 // user logout
 const logout = () => {
   localStorage.removeItem("user_id");
+  sessionStorage.removeItem("userInfo");
 };
 
 const authService = {
