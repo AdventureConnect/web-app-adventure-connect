@@ -103,22 +103,33 @@ userController.verifyUser = async (req, res, next) => {
 };
 
 userController.getProfiles = async (req, res, next) => {
-  try {
-    const zipCode = Number(req.cookies.zipCode);
-    const interests = JSON.parse(req.cookies.currentInterests);
+  //grab id from req query params
+  const userId = req.query.id;
 
+  try {
+    // try to find a user that has the id that's sent on the query
+    const currentUser = await User.findById(userId);
+    //send 404 if can't find current user in database
+    if (!currentUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    //grab that user's zipcode and interests and save them in variables
+    const zipCode = currentUser.zipCode;
+    const interests = currentUser.interests;
+    //grab all other user's with a different id, the same zipcode, and at least one activity in common
     const users = await User.find({
+      //how to make sure different
+      _id: { $ne: userId },
       zipCode,
       interests: { $in: interests },
     });
-
-    console.log(users);
-    res.locals.matchingUsers = users;
+    //put similar users on res.locals
+    res.locals.users = users;
+    next();
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error!" });
+    console.error("Error finding similar users:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
-  return next();
 };
 
 userController.checkemail = async (req, res) => {
