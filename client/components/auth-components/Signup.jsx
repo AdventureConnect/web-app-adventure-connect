@@ -121,9 +121,16 @@ const Signup = () => {
       setZipcode("");
       return;
     }
+    // error handling needs to be updated -Chandler
 
-    dispatch(register(userInfo));
-    navigate("/dashboard");
+    dispatch(register(userInfo))
+      .unwrap()
+      .then(() => navigate("/dashboard"))
+      .catch(() =>
+        setLoginError(
+          "There was an issue creating your account. Plase try again later."
+        )
+      );
 
     // try {
     //   // const res = await axios.post("/api/signup", userInfo);
