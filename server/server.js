@@ -6,6 +6,9 @@ const cookieParser = require("cookie-parser");
 const apiRouter = require("./routes/api");
 const connectDB = require("./connectDB");
 const Users = require("./models/userModel");
+const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
+require('dotenv').config;
 
 const app = express();
 
@@ -14,7 +17,6 @@ const allowedOrigins = ["http://localhost:8080", "http://localhost:3000"];
 app.use(
   cors({
     origin: allowedOrigins,
-    // credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type"],
   })
@@ -27,6 +29,13 @@ app.use(cookieParser());
 const PORT = 3000;
 
 connectDB();
+
+// const authenticateJWT = expressJwt({
+//   secret: JWT_SECRET,
+//   algorithms: ['HS256'],
+//   getToken: (req) => req.headers.authorization?.split(' ')[1],
+// });
+
 
 /**
  * handle parsing request body

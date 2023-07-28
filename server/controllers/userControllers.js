@@ -2,6 +2,8 @@ const { createErr } = require("../utils/errorCreator");
 const Images = require("../models/imageModel");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
+require('dotenv').config;
 
 const { Storage } = require("@google-cloud/storage");
 const { format } = require("util");
@@ -28,8 +30,19 @@ userController.verifyLogin = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (user && (await user.comparePassword(password))) {
-      // res.locals.loginStatus = true;
+  
       res.locals.user = user;
+      //add something that adds the JWT here
+      const currentUser = { user: user._id};
+      const accessToken = jwt.sign(currentUser, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1800s'});
+      res.locals.accessToken = accessToken;
+      res.cookie('access_token', accessToken, {
+        httpOnly: true, 
+        maxAge: 1800000, 
+        // sameSite: 'none',
+        domain: 'localhost',
+        path: '/'
+      });
       return next();
     } else {
       res.status(401).json({ message: "Invalid login credentials!" });
@@ -57,6 +70,17 @@ userController.createNewUser = async (req, res, next) => {
 
     res.locals.user = newUser;
 
+    const currentUser = { user: newUser._id};
+    const accessToken = jwt.sign(currentUser, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1800s'});
+    res.locals.accessToken = accessToken;
+    res.cookie('access_token', accessToken, {
+      httpOnly: true, 
+      maxAge: 1800000, 
+      // sameSite: 'none',
+      domain: 'localhost',
+      path: '/'
+    });
+
     return next();
   } catch (error) {
     return next({ message: { err: "Email is already taken" } });
@@ -83,24 +107,56 @@ userController.updateUser = async (req, res, next) => {
 };
 
 userController.getProfiles = async (req, res, next) => {
-  try {
-    const zipCode = Number(req.cookies.zipCode);
-    const interests = JSON.parse(req.cookies.currentInterests);
+//grab id from req query params
+console.log('get profiles middleware ran, token authenticated');
+const userId = req.params.id;
+console.log('user id is', userId);
 
-    const users = await User.find({
-      zipCode,
-      interests: { $in: interests },
-    });
-
-    console.log(users);
-    res.locals.matchingUsers = users;
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error!" });
-  }
-  return next();
+try {
+  // try to find a user that has the id that's sent on the query
+  const currentUser = await User.findById(userId);
+  console.log('current user is', currentUser);
+ //send 404 if can't find current user in database 
+ if (!currentUser) {
+   return res.status(404).json({ error: 'User not found' });
+ }
+//grab that user's zipcode and interests and save them in variables 
+const zipCode = currentUser.zipCode;
+const interests = currentUser.interests;
+//grab all other user's with a different id, the same zipcode, and at least one activity in common 
+const users = await User.find({
+ //how to make sure different 
+ _id: { $ne: userId },
+ zipCode,
+ interests: { $in: interests },
+})
+//put similar users on res.locals
+res.locals.users = users;
+console.log(users);
+next();
+} catch (error) {
+console.error('Error finding similar users:', error);
+res.status(500).json({ error: 'Internal Server Error' });
+}
 };
 
-module.exports = userController;
+//then put this into every api route
+userController.authenticateToken = (req, res, next) => {
+  console.log('authenticate token middleware ran');
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  console.log('Authorization Header:', authHeader);
+  console.log('token is', token)
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  })
+
+}
 
 module.exports = userController;
+
+
