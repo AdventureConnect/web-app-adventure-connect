@@ -123,7 +123,7 @@ const Signup = () => {
     }
 
     dispatch(register(userInfo));
-    // navigate("/dashboard");
+    navigate("/dashboard");
 
     // try {
     //   // const res = await axios.post("/api/signup", userInfo);
