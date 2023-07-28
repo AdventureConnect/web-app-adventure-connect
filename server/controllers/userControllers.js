@@ -83,7 +83,7 @@ userController.createNewUser = async (req, res, next) => {
 
     return next();
   } catch (error) {
-    return next({ message: { err: "Email is already taken" } });
+    return next({ message: { err: "error" } });
   }
 };
 
