@@ -55,7 +55,7 @@ router.post(
 //fine that im setting status and sending message in the controller instead of last step?
 router.post("/login", userController.verifyLogin, (req, res) => {
   //end the response, with status and message set in verifyUser middleware
-  // console.log("res.locals.user: ", res.locals.user);
+  console.log("res.locals.user: ", res.locals.user);
   res.status(200).json({ user: res.locals.user });
 });
 
@@ -82,8 +82,9 @@ router.post(
 );
 
 //route to grab similar users to populate UserProfiles, based on zipcode and interest
-router.get("/getUsers/:id", userController.getProfiles, (req, res) => {
-  res.status(200).json(res.locals.matchingUsers);
+router.get("/getUsers", userController.getProfiles, (req, res) => {
+  console.log(res.locals.users);
+  res.status(200).json(res.locals.users);
 });
 
 router.get(

@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 const LikedUsers = () => {
     return (
         <div>
-            Here are the users that have liked you:
+            Here are the users that you have liked:
         </div>
     )
 }

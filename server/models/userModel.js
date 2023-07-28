@@ -9,6 +9,8 @@ const usersSchema = new mongoose.Schema({
   zipCode: { type: Number, required: true },
   interests: { type: Array },
   bio: { type: String },
+  iLiked: [{ type: String}], //list of users that the current user has liked 
+  likedBy: [{ type: String}], //list of users that have liked the current user 
   matches: [{ type: String }],
 });
 
