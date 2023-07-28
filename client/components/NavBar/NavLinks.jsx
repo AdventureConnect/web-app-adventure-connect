@@ -13,13 +13,13 @@ const NavLinks = () => {
   return (
     <ul>
       <li>
-        <a href="/dashboard">My dashboard</a>
+        <a href="/app/dashboard">My dashboard</a>
       </li>
       <li>
-        <a href="/likedusers">Liked users</a>
+        <a href="/app/likedusers">Liked users</a>
       </li>
       <li>
-        <a href="/settings">Account settings</a>
+        <a href="/app/settings">Account settings</a>
       </li>
       <li onClick={handleLogout}>
         <a href="/">Signout</a>

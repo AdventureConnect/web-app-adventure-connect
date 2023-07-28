@@ -64,6 +64,10 @@ router.post("/signup", userController.createNewUser, (req, res) => {
   res.status(200).json([res.locals.user]);
 });
 
+router.get('/auth', userController.authenticateToken, (req, res) => {
+  res.sendStatus(200); 
+});
+
 //update profile/settings route:
 router.put("/user", userController.authenticateToken, userController.updateUser, (req, res) => {
   res.sendStatus(200);

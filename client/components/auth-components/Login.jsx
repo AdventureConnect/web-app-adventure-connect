@@ -99,7 +99,7 @@ const Login = () => {
     dispatch(login({ email: userEmail.toLowerCase(), password }))
       .unwrap()
       .then((user) => {
-        navigate("dashboard");
+        navigate("/app/dashboard");
       })
       .catch(() => setLoginError("Invalid username or password"));
     // need to prevent navigating to dashboard
@@ -165,7 +165,7 @@ const Login = () => {
                   hover:transition-all
                   hover:scale-110
                   cursor-pointer"
-              onClick={() => navigate("signup")}
+              onClick={() => navigate("/signup")}
             >
               Sign up
             </span>

@@ -9,6 +9,7 @@ require('dotenv').config;
 const { format } = require("util");
 const multer = require("multer");
 const nodemailer = require("nodemailer");
+const cookieParser = require('cookie-parser');
 
 const User = require("../models/userModel");
 
@@ -39,9 +40,9 @@ userController.verifyLogin = async (req, res, next) => {
       res.cookie('access_token', accessToken, {
         httpOnly: true, 
         maxAge: 1800000, 
-        // sameSite: 'none',
-        domain: 'localhost',
-        path: '/'
+        sameSite: 'lax',
+        path: '/',
+        secure: false,
       });
       return next();
     } else {
@@ -72,13 +73,14 @@ userController.createNewUser = async (req, res, next) => {
 
     const currentUser = { user: newUser._id};
     const accessToken = jwt.sign(currentUser, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1800s'});
+    console.log(accessToken);
     res.locals.accessToken = accessToken;
     res.cookie('access_token', accessToken, {
       httpOnly: true, 
       maxAge: 1800000, 
-      // sameSite: 'none',
-      domain: 'localhost',
-      path: '/'
+      sameSite: 'lax',
+      path: '/',
+      secure: false,
     });
 
     return next();
@@ -163,9 +165,8 @@ res.status(500).json({ error: 'Internal Server Error' });
 //then put this into every api route
 userController.authenticateToken = (req, res, next) => {
   console.log('authenticate token middleware ran');
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  console.log('Authorization Header:', authHeader);
+  const token = req.cookies.access_token; // extract the token from cookies
+  console.log('token is', token)
   console.log('token is', token)
   if (token == null) return res.sendStatus(401);
 

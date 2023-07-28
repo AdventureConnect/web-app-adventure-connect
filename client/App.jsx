@@ -11,6 +11,7 @@ import ImageUpload from "./components/dashboard-components/ImageUpload.jsx";
 import OTP from "./components/auth-components/OTP.jsx";
 import LikedUsers from "./components/dashboard-components/LikedUsers.jsx";
 import NavBar from "./components/NavBar/NavBar.jsx";
+import PrivateRoute from "./components/NavBar/PrivateRoute.jsx";
 
 
 export const RecoveryContext = createContext();
@@ -26,22 +27,23 @@ const App = () => {
       {/* <RecoveryContext.Provider value={{ otp, setOTP, email, setEmail }}> */}
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Login />} />
-            <Route index element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/passwordreset" element={<PasswordReset />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/userprofile" element={<UserProfile />} />
-            <Route path="/settings" element={<SettingsContainer />} />
-            {/* <Route path="/account/password" element={<ChangePassword />} /> */}
-            <Route
+          <Route path="/" element={<Login />} />
+         <Route path="/signup" element={<Signup />} />
+          <Route path="/passwordreset" element={<PasswordReset />} />
+             <Route path="/app" element={<PrivateRoute />}>
+               <Route path="dashboard" element={<Dashboard />} />
+                <Route path="userprofile" element={<UserProfile />} />
+               <Route path="settings" element={<SettingsContainer />} />
+              <Route path="likedusers" element={<LikedUsers />} />
+               <Route path="userspecific" element={<UserSpecific />} />
+              <Route path="imageupload" element={<ImageUpload />} />
+              <Route path="otp" element={<OTP />} />
+    </Route>
+           {/* <Route path="/account/password" element={<ChangePassword />} /> */}
+           <Route
               path="*"
               element={<div>404 Error. This page was not found</div>}
             />
-            <Route path="/likedusers" element={<LikedUsers />} />
-            <Route path="/userspecific" element={<UserSpecific />} />
-            <Route path="/imageupload" element={<ImageUpload />} />
-            <Route path="/otp" element={<OTP />} />
           </Routes>
         </BrowserRouter>
       {/* </RecoveryContext.Provider> */}
