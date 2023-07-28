@@ -11,7 +11,7 @@ import Dashboard from "./components/Dashboard.jsx";
 import ImageUpload from "./components/ImageUpload.jsx";
 import OTP from "./components/OTP.jsx";
 import LikedUsers from "./components/LikedUsers.jsx";
-export const RecoveryContext = createContext();
+// export const RecoveryContext = createContext();
 import Header from "./components/Header.jsx";
 import Matches from "./components/Matches.jsx";
 import NavBar from "./components/NavBar/NavBar.jsx";
@@ -21,14 +21,14 @@ const App = () => {
   const [otp, setOTP] = useState("");
 
   return (
-    <div>
-      <RecoveryContext.Provider value={{ otp, setOTP, email, setEmail }}>
+    <>
+      {/* <RecoveryContext.Provider value={{ otp, setOTP, email, setEmail }}> */}
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Login />} />
             <Route index element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/passwordreset" element={<PasswordReset />} />
+            {/* <Route path="/passwordreset" element={<PasswordReset />} /> */}
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/userprofile" element={<UserProfile />} />
             <Route path="/settings" element={<SettingsContainer />} />
@@ -36,16 +36,15 @@ const App = () => {
             <Route
               path="*"
               element={<div>404 Error. This page was not found</div>}
-            />
+              />
             <Route path="/likedusers" element={<LikedUsers/>}/>
             <Route path="/userspecific" element={<UserSpecific />} />
             <Route path="/imageupload" element={<ImageUpload />} />
-            <Route path="/otp" element={<OTP />} />
+            {/* <Route path="/otp" element={<OTP />} /> */}
           </Routes>
         </BrowserRouter>
-      </RecoveryContext.Provider>
-      <NavBar/>
-    </div>
+      {/* </RecoveryContext.Provider> */}
+    </>
   );
 };
 

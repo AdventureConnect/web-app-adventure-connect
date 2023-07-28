@@ -171,6 +171,7 @@ function SignupForm({
                 onChange={(opt) => {
                   const tempInt = new Set(interests);
                   let tempAct = activities.slice();
+                  console.log('Signup Form console log: ', opt)
                   tempInt.add(opt.value);
                   tempAct = tempAct.filter((act) => act.label !== opt.value);
                   setInterests(tempInt);

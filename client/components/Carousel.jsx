@@ -1,17 +1,30 @@
 import React, { useState } from "react";
+import { GrPrevious, GrNext } from 'react-icons/gr'
 // import { motion, AnimatePresence } from "framer-motion";
 
-const Carousel = ({ images }) => {
+const images = [
+  "https://cdn.pixabay.com/photo/2021/09/28/11/48/squirrel-6664212_1280.png",
+  "https://cdn.pixabay.com/photo/2023/04/12/21/52/mountain-7921253_1280.png",
+  "https://cdn.pixabay.com/photo/2023/02/07/18/56/rocket-7774875_1280.png",
+  "https://cdn.pixabay.com/photo/2022/04/12/04/43/kiwi-7127148_1280.png",
+  "https://cdn.pixabay.com/photo/2021/02/18/05/02/frog-6026117_1280.png",
+  "https://images.pexels.com/photos/3225517/pexels-photo-3225517.jpeg?auto=compress&cs=tinysrgb&w=1600",
+  "https://images.pexels.com/photos/15286/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1600",
+  "https://images.pexels.com/photos/2832034/pexels-photo-2832034.jpeg?auto=compress&cs=tinysrgb&w=1600"
+
+]
+
+const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex + 1 === images.length ? 0 : prevIndex + 1
+      prevIndex + 3 >= images.length ? 0 : prevIndex + 3
     );
   };
   const handlePrevious = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex - 1 < 0 ? images.length - 1 : prevIndex - 1
+      prevIndex - 3 < 0 ? images.length - (images.length % 3) : prevIndex - 3
     );
   };
   const handleDotClick = (index) => {
@@ -19,10 +32,41 @@ const Carousel = ({ images }) => {
   };
 
   return (
-    <div>
-      This is the carousel
+    <div className="flex flex-col justify-center items-center w-full h-full">
+      <div>
+        <div className="text-white ml-16 text-3xl font-semibold">
+          Top picks
+        </div>
+        <div className="ml-16 text-white/50">
+          People with most in common
+        </div>
+        <div className="flex gap-8 items-center">
+          <div className="cursor-pointer bg-white/30 hover:bg-white/40 rounded-md" onClick={handlePrevious}>
+            <GrPrevious size={30}/>
+          </div>
+          {/* profile cards */}
+          <div className="flex gap-8 w-[1000px] overflow-x-hidden p-3 border border-x-0 border-b-0 border-slate-700/70">
+            {
+              images.slice(currentIndex, currentIndex + 3).map((image, index) => {
+                return (
+                  <div key={index} className="max-w-[300px] max-h-[300px] hover:transform hover:transition-all hover:scale-105">
+                    <img
+                      className="rounded-md w-full h-full object-cover object-bottom outline-none"
+                      key={index}
+                      src={image}
+                    />
+                  </div>
+                )
+              })
+            }
+          </div>
+          <div className="cursor-pointer bg-white/30 hover:bg-white/40 rounded-md" onClick={handleNext}>
+            <GrNext size={30}/>
+          </div>
+        </div>
+      </div>
     </div>
-  )
+  );
 };
 
 //   return (

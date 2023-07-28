@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useEffect } from "react";
 import Select from "react-select";
+
 const activities = [
   { label: "Backpacking", value: "Backpacking" },
   { label: "Camping", value: "Camping" },

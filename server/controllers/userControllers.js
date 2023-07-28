@@ -83,6 +83,7 @@ userController.updateUser = async (req, res, next) => {
 };
 
 userController.getProfiles = async (req, res, next) => {
+
   try {
     const zipCode = Number(req.cookies.zipCode);
     const interests = JSON.parse(req.cookies.currentInterests);

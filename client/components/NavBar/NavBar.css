@@ -17,7 +17,7 @@
 
 .NavBar nav ul li a {
     text-decoration: none;
-    color: black;
+    color: white;
     align-self: center;
     display: inline-block;
 }
@@ -60,7 +60,7 @@
     .NavBar .HamburgerNav .MenuIcon {
         position: absolute;
         right: 2.5%;
-        color: black;
+        color: white;
         cursor: pointer;
         top: 2.5%;
     }
@@ -70,7 +70,6 @@
         position: absolute;
         flex-direction: column;
         top: 80px;
-        right: 0;
         width: 100%;
         background-color: RGBA(34, 139, 34, 0.5);
         padding-left: 20px;

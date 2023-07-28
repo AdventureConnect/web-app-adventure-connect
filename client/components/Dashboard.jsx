@@ -5,6 +5,7 @@ import UserPage from "./UserPage";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import MatchContainer from "../match-components/MatchContainer";
+import NavBar from "./NavBar/NavBar";
 
 const Dashboard = () => {
   // const { matchList, total } = useSelector((store) => store.matches);
@@ -18,13 +19,11 @@ const Dashboard = () => {
   };
 
   return (
-    <>
-      <div>{/* <Carousel /> */}</div>
-      {/* <h2>You have {total} matches!</h2> */}
-      <MatchContainer />
-      {/* <button onClick={handleButtonIncrement}>Increment</button>
-      <button>Find Matches</button> */}
-    </>
+    <div className="flex flex-col h-screen w-full bg-black text-white">
+      <NavBar />
+      <Carousel />
+      {/* <MatchContainer /> */}
+    </div>
   );
 };
 

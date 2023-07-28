@@ -6,7 +6,8 @@ import authService from "./authService";
 
 // // get user from local storage > need to implement saving user info to local storage @Chandler
 
-const user = JSON.parse(localStorage.getItem("user"));
+const user = localStorage.getItem("user");
+
 
 const initialState = {
   user: user ? user : null, // for user object

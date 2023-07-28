@@ -82,7 +82,7 @@ router.post(
 );
 
 //route to grab similar users to populate UserProfiles, based on zipcode and interest
-router.get("/getUsers", userController.getProfiles, (req, res) => {
+router.get("/getUsers/:id", userController.getProfiles, (req, res) => {
   res.status(200).json(res.locals.matchingUsers);
 });
 
