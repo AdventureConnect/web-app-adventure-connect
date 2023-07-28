@@ -10,10 +10,12 @@ import Dashboard from "./components/dashboard-components/Dashboard.jsx";
 import ImageUpload from "./components/dashboard-components/ImageUpload.jsx";
 import OTP from "./components/auth-components/OTP.jsx";
 import LikedUsers from "./components/dashboard-components/LikedUsers.jsx";
+import NavBar from "./components/NavBar/NavBar.jsx";
+
+
 export const RecoveryContext = createContext();
 // import Header from "./components/Header.jsx";
 // import Matches from "./components/Matches.jsx";
-import NavBar from "./components/NavBar/NavBar.jsx";
 
 const App = () => {
   const [email, setEmail] = useState("");
@@ -21,7 +23,7 @@ const App = () => {
 
   return (
     <div>
-      <RecoveryContext.Provider value={{ otp, setOTP, email, setEmail }}>
+      {/* <RecoveryContext.Provider value={{ otp, setOTP, email, setEmail }}> */}
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Login />} />
@@ -42,7 +44,7 @@ const App = () => {
             <Route path="/otp" element={<OTP />} />
           </Routes>
         </BrowserRouter>
-      </RecoveryContext.Provider>
+      {/* </RecoveryContext.Provider> */}
       <NavBar />
     </div>
   );

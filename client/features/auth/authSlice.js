@@ -4,16 +4,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "./authService";
 
-// // get user from local storage > need to implement saving user info to local storage @Chandler
+// // persist user ID in local storage > need to implement saving user info to local storage @Chandler
 
-const user = JSON.parse(localStorage.getItem("user"));
+const user_id = JSON.parse(localStorage.getItem("user_id"));
+const user = JSON.parse(sessionStorage.getItem("userInfo"));
 
 const initialState = {
   user: user ? user : null, // for user object
+  user_id: user_id ? user_id : null,
+  userToken: null, // for storing the JWT in cookies
   isError: null,
   isSuccess: false, // for monitoring the registration process.
   isLoading: false,
-  userToken: null, // for storing the JWT
   message: "",
 };
 
@@ -88,6 +90,8 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.user = action.payload;
+        sessionStorage.setItem("success", state.isSuccess);
+        // sessionStorage.setItem("error", isError)
       };
     [login.rejected],
       (state, action) => {

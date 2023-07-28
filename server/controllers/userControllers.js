@@ -1,11 +1,11 @@
 const { createErr } = require("../utils/errorCreator");
-const Images = require("../models/imageModel");
+// const Images = require("../models/imageModel");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 require('dotenv').config;
 
-const { Storage } = require("@google-cloud/storage");
+// const { Storage } = require("@google-cloud/storage");
 const { format } = require("util");
 const multer = require("multer");
 const nodemailer = require("nodemailer");
@@ -14,12 +14,12 @@ const User = require("../models/userModel");
 
 const userController = {};
 
-const cloudStorage = new Storage({
-  keyFilename: `${__dirname}/../web-app-adventure-connect-39d349a3f0d5.json`,
-  projectId: "web-app-adventure-connect",
-});
-const bucketName = "adventure-connect-image-bucket";
-const bucket = cloudStorage.bucket(bucketName);
+// const cloudStorage = new Storage({
+//   keyFilename: `${__dirname}/../web-app-adventure-connect-39d349a3f0d5.json`,
+//   projectId: "web-app-adventure-connect",
+// });
+// const bucketName = "adventure-connect-image-bucket";
+// const bucket = cloudStorage.bucket(bucketName);
 
 //verifying user upon logging in, to be put in route for post to /api/login. if route is successful, redirect to show user page
 
@@ -104,6 +104,26 @@ userController.updateUser = async (req, res, next) => {
     console.error(error);
   }
   return next();
+};
+
+// verify user route to give information to state in the redux store
+userController.verifyUser = async (req, res, next) => {
+  const { user_id } = req.body;
+  const _id = user_id;
+
+  try {
+    const user = await User.findOne({ _id });
+
+    if (user) {
+      // res.locals.loginStatus = true;
+      res.locals.user = user;
+      return next();
+    } else {
+      res.status(401).json({ message: "User not found!" });
+    }
+  } catch (error) {
+    return next(error);
+  }
 };
 
 userController.getProfiles = async (req, res, next) => {
