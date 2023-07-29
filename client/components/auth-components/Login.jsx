@@ -12,9 +12,7 @@ import logo from "../../../styles/logo.png";
 import LoginForm from "./LoginForm";
 
 const Login = () => {
-  const { user, isLoading, isSuccess, isError, message } = useSelector(
-    (state) => state.auth
-  );
+  const { user, user_id } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -86,19 +84,18 @@ const Login = () => {
       setLoginError("Username and password are required");
       return;
     }
-
+    // try {
+    // error handling needs to updated -Chandler
     dispatch(login({ email: userEmail.toLowerCase(), password }))
       .unwrap()
-      .then((data) => {
-        console.log(data)
-        navigate('/dashboard')
+      .then((user) => {
+        navigate("/app/dashboard");
       })
       .catch((error) => {
         setLoginError(error)
         setUserEmail("")
         setPassword("")
       })
-
     // need to prevent navigating to dashboard
   };
 
@@ -179,7 +176,7 @@ const Login = () => {
                   hover:transition-all
                   hover:scale-110
                   cursor-pointer"
-              onClick={() => navigate("signup")}
+              onClick={() => navigate("/signup")}
             >
               Sign up
             </span>

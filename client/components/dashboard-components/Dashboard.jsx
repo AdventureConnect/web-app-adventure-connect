@@ -9,7 +9,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const userId = JSON.parse(localStorage.getItem("user")).user._id
+    const userId = JSON.parse(localStorage.getItem("user_id"))
     
     const getUsers = async () => {
       try {

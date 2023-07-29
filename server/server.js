@@ -4,8 +4,12 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const apiRouter = require("./routes/api");
+const imageRouter = require("./routes/imageRouter");
 const connectDB = require("./connectDB");
 const Users = require("./models/userModel");
+const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
+require('dotenv').config;
 
 const app = express();
 
@@ -14,15 +18,15 @@ const allowedOrigins = ["http://localhost:8080", "http://localhost:3000"];
 app.use(
   cors({
     origin: allowedOrigins,
-    // credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type"],
+    credentials: true,
   })
 );
 
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 
 const PORT = 3000;
 
@@ -39,10 +43,9 @@ app.use(express.urlencoded({ extended: true }));
  */
 app.use(express.static(path.resolve(__dirname, "../dist")));
 
-
 /**
  * define route handlers
-*/
+ */
 app.get("/", (req, res) => {
   return res
     .status(200)
@@ -50,7 +53,8 @@ app.get("/", (req, res) => {
 });
 
 //I think once we have general routes done we will want to change this to just app.use(apiRouter?)
-app.use("/api", apiRouter);
+app.use("/api/", apiRouter);
+app.use("/api/images", imageRouter);
 
 // catch-all route handler for any requests to an unknown route
 app.use((req, res) =>
