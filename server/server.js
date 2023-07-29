@@ -7,6 +7,9 @@ const apiRouter = require("./routes/api");
 const imageRouter = require("./routes/imageRouter");
 const connectDB = require("./connectDB");
 const Users = require("./models/userModel");
+const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
+require('dotenv').config;
 
 const app = express();
 
@@ -15,15 +18,15 @@ const allowedOrigins = ["http://localhost:8080", "http://localhost:3000"];
 app.use(
   cors({
     origin: allowedOrigins,
-    // credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type"],
+    credentials: true,
   })
 );
 
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 
 const PORT = 3000;
 

@@ -91,7 +91,7 @@ const Signup = () => {
     dispatch(reset());
     // if sign up is successful (re: stgate updating) we want to send them on their way to dashboard
     if (isSuccess || user) {
-      navigate("/dashboard");
+      navigate("/app/dashboard");
     }
     dispatch(reset());
   }, [user, isError, isSuccess, navigate, dispatch]);
@@ -121,16 +121,15 @@ const Signup = () => {
       setZipcode("");
       return;
     }
-    // error handling needs to be updated -Chandler
 
+    //updated by Julia
     dispatch(register(userInfo))
-      .unwrap()
-      .then(() => navigate("/dashboard"))
-      .catch(() =>
-        setLoginError(
-          "There was an issue creating your account. Plase try again later."
-        )
-      );
+    .then(() => {
+      navigate("/app/dashboard");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 
     // try {
     //   // const res = await axios.post("/api/signup", userInfo);
