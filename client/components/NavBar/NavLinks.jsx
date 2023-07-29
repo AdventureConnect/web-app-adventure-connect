@@ -4,10 +4,6 @@ import { Navigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout, reset } from "../../features/auth/authSlice";
 
-const handleLogout = () => {
-    localStorage.clear();
-}
-
 const NavLinks = () => {
   // hooks muct be called inside the component
   const dispatch = useDispatch();
