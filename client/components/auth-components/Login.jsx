@@ -77,16 +77,6 @@ const Login = () => {
   //     } catch {}
   //   }
 
-  // useEffect(() => {
-  //   //if there is an error we want to send an error message
-  //   if (isError) alert(message);
-  //   // if sign up is successful (re: stgate updating) we want to send them on their way to dashboard
-  //   if (isSuccess) {
-  //     navigate("/dashboard");
-  //   }
-  //   dispatch(reset());
-  // }, [user, isError, isSuccess, navigate, dispatch]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -101,9 +91,30 @@ const Login = () => {
       .then((user) => {
         navigate("/app/dashboard");
       })
-      .catch(() => setLoginError("Invalid username or password"));
+      .catch((error) => {
+        setLoginError(error)
+        setUserEmail("")
+        setPassword("")
+      })
     // need to prevent navigating to dashboard
   };
+
+  // useEffect(() => {
+  //   //if there is an error we want to send an error message
+  //   console.log(user, isError, isSuccess, message)
+  //   if (isError) alert(message);
+  //   // if sign up is successful (re: stgate updating) we want to send them on their way to dashboard
+  //   if (isSuccess) {
+  //     navigate("/dashboard");
+  //   }
+  //   dispatch(reset());
+  // }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      navigate('/dashboard')
+    }
+  }, [])
 
   return (
     <div className="flex justify-center items-center h-screen w-full bg-black/60 p-10">

@@ -6,10 +6,6 @@ import { Provider } from "react-redux";
 
 import "../styles/tailwind.css";
 
-// const domNode = document.getElementById("root");
-// const root = createRoot(domNode);
-// root.render(<App />);
-
 createRoot(document.querySelector("#root")).render(
   <Provider store={store}>
     <App />

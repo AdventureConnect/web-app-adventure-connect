@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./components/auth-components/Login.jsx";
 import Signup from "./components/auth-components/Signup.jsx";
@@ -13,14 +13,9 @@ import LikedUsers from "./components/dashboard-components/LikedUsers.jsx";
 import NavBar from "./components/NavBar/NavBar.jsx";
 import PrivateRoute from "./components/NavBar/PrivateRoute.jsx";
 
-
-export const RecoveryContext = createContext();
-// import Header from "./components/Header.jsx";
-// import Matches from "./components/Matches.jsx";
-
 const App = () => {
-  const [email, setEmail] = useState("");
-  const [otp, setOTP] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [otp, setOTP] = useState("");
 
   return (
     <div>

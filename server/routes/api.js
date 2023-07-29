@@ -73,6 +73,14 @@ router.put("/user", userController.authenticateToken, userController.updateUser,
   res.sendStatus(200);
 });
 
+router.put("/user/like", userController.addLikedUser, (req, res) => {
+  res.status(200).json(res.locals.updatedUser)
+})
+
+router.put("/user/unlike", userController.removeLikedUser, (req, res) => {
+  res.status(200).json(res.locals.updatedUser)
+})
+
 // retrieve user info for state
 router.get("/user", userController.verifyUser, (req, res) => {
   res.status(200).json({ user: res.locals.user });
@@ -90,8 +98,9 @@ router.post(
 );
 
 //route to grab similar users to populate UserProfiles, based on zipcode and interest
-router.get("/getUsers/:id", userController.authenticateToken, userController.getProfiles, (req, res) => {
-  res.status(200).json(res.locals.matchingUsers);
+router.get("/getUsers/:id", userController.getProfiles, (req, res) => {
+  console.log(res.locals.users);
+  res.status(200).json({ users: res.locals.users, currentUser: res.locals.currentUser });
 });
 
 router.get("/logout", (req, res) => {

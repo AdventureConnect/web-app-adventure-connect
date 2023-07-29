@@ -1,4 +1,4 @@
-iconst { createErr } = require("../utils/errorCreator");
+const { createErr } = require("../utils/errorCreator");
 // const Images = require("../models/imageModel");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
@@ -91,7 +91,7 @@ userController.createNewUser = async (req, res, next) => {
 
 userController.updateUser = async (req, res, next) => {
   try {
-    const { email } = req.cookies.currentEmail;
+    const { email } = req.body;
     const updatedUser = await User.findOneAndUpdate({ email }, req.body, {
       new: true,
     });
@@ -106,6 +106,40 @@ userController.updateUser = async (req, res, next) => {
     console.error(error);
   }
   return next();
+};
+
+userController.addLikedUser = async (req, res, next) => {
+  try {
+    const { email, userId } = req.body;
+    const updatedUser = await User.findOneAndUpdate({ email }, 
+      {
+        $push: { iLiked: userId }
+      },
+      { new: true },
+    )
+    res.locals.updatedUser = updatedUser
+    return next();
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+userController.removeLikedUser = async (req, res, next) => {
+  try {
+    const { email, userId } = req.body;
+    const updatedUser = await User.findOneAndUpdate(
+      { email },
+      {
+        $pull: { iLiked: userId } // Use $pull to remove the userId from the iLiked array
+      },
+      { new: true }
+    );
+    res.locals.updatedUser = updatedUser;
+    return next();
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 // verify user route to give information to state in the redux store
@@ -154,6 +188,7 @@ const users = await User.find({
 })
 //put similar users on res.locals
 res.locals.users = users;
+res.locals.currentUser = currentUser;
 console.log(users);
 return next();
 } catch (error) {

@@ -1,8 +1,8 @@
 .Navigation {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
-    position: fixed;
+    position: sticky;
     top: 0;
     width: 100%;
     z-index: 999;
@@ -17,7 +17,7 @@
 
 .NavBar nav ul li a {
     text-decoration: none;
-    color: black;
+    color: white;
     align-self: center;
     display: inline-block;
 }
@@ -36,23 +36,25 @@
 }
 
 .NavBar a:hover {
-    border-bottom: 5px solid #014421;
+    border-bottom: 2px solid #014421;
 }
 
 .NavBar .HamburgerNav {
     display: none;
+    color: white;
 }
 
-@media (max-width: 990px) {
+@media (max-width: 1024px) {
     .NavBar .Navigation {
         display: none;
     }
 
     .NavBar .HamburgerNav {
         display: flex;
-        position: fixed;
         align-items: flex-start;
+        position: sticky;
         top: 0;
+        height: 80px;
         width: 100%;
         z-index: 100;
     }
@@ -60,7 +62,7 @@
     .NavBar .HamburgerNav .MenuIcon {
         position: absolute;
         right: 2.5%;
-        color: black;
+        color: white;
         cursor: pointer;
         top: 2.5%;
     }
@@ -70,7 +72,6 @@
         position: absolute;
         flex-direction: column;
         top: 80px;
-        right: 0;
         width: 100%;
         background-color: RGBA(34, 139, 34, 0.5);
         padding-left: 20px;

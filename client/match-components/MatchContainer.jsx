@@ -17,23 +17,20 @@ const MatchContainer = () => {
     // console.log(<MatchProfile key={(match.name, i)} {...match} />);
     return <UserProfile key={(user.name, user.id)} {...user} />;
   });
+  
   if (total < 1) {
     return (
-      <>
-        <section>
+        <div>
           <h1>This is the Match Container</h1>
           <div>{potentialMatches}</div>
-        </section>
-      </>
+        </div>
     );
   } else {
     return (
-      <>
-        <section>
+      <div>
           <h1>This is the Match Container</h1>
           <div>{matches}</div>
-        </section>
-      </>
+      </div>
     );
   }
 };
