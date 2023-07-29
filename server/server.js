@@ -32,13 +32,6 @@ const PORT = 3000;
 
 connectDB();
 
-// const authenticateJWT = expressJwt({
-//   secret: JWT_SECRET,
-//   algorithms: ['HS256'],
-//   getToken: (req) => req.headers.authorization?.split(' ')[1],
-// });
-
-
 /**
  * handle parsing request body
  */
