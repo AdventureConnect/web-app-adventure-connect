@@ -70,6 +70,14 @@ router.put("/user", userController.updateUser, (req, res) => {
   res.sendStatus(200);
 });
 
+router.put("/user/like", userController.addLikedUser, (req, res) => {
+  res.status(200).json(res.locals.updatedUser)
+})
+
+router.put("/user/unlike", userController.removeLikedUser, (req, res) => {
+  res.status(200).json(res.locals.updatedUser)
+})
+
 router.post(
   "/checkEmail",
   // userController.checkEmail,
@@ -82,9 +90,9 @@ router.post(
 );
 
 //route to grab similar users to populate UserProfiles, based on zipcode and interest
-router.get("/getUsers", userController.getProfiles, (req, res) => {
+router.get("/getUsers/:id", userController.getProfiles, (req, res) => {
   console.log(res.locals.users);
-  res.status(200).json(res.locals.users);
+  res.status(200).json({ users: res.locals.users, currentUser: res.locals.currentUser });
 });
 
 router.get(

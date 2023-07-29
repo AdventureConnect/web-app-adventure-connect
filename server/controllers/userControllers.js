@@ -65,7 +65,7 @@ userController.createNewUser = async (req, res, next) => {
 
 userController.updateUser = async (req, res, next) => {
   try {
-    const { email } = req.cookies.currentEmail;
+    const { email } = req.body;
     const updatedUser = await User.findOneAndUpdate({ email }, req.body, {
       new: true,
     });
@@ -82,9 +82,43 @@ userController.updateUser = async (req, res, next) => {
   return next();
 };
 
+userController.addLikedUser = async (req, res, next) => {
+  try {
+    const { email, userId } = req.body;
+    const updatedUser = await User.findOneAndUpdate({ email }, 
+      {
+        $push: { iLiked: userId }
+      },
+      { new: true },
+    )
+    res.locals.updatedUser = updatedUser
+    return next();
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+userController.removeLikedUser = async (req, res, next) => {
+  try {
+    const { email, userId } = req.body;
+    const updatedUser = await User.findOneAndUpdate(
+      { email },
+      {
+        $pull: { iLiked: userId } // Use $pull to remove the userId from the iLiked array
+      },
+      { new: true }
+    );
+    res.locals.updatedUser = updatedUser;
+    return next();
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 userController.getProfiles = async (req, res, next) => {
    //grab id from req query params
-   const userId = req.query.id;
+   const userId = req.params.id;
    
    try {
      // try to find a user that has the id that's sent on the query
@@ -104,6 +138,7 @@ userController.getProfiles = async (req, res, next) => {
     interests: { $in: interests },
   })
   //put similar users on res.locals
+  res.locals.currentUser = currentUser;
   res.locals.users = users;
   next();
 } catch (error) {
@@ -114,6 +149,4 @@ userController.getProfiles = async (req, res, next) => {
 
 //zipcode and interests in local storage 
 //frontend request should grab the user object from local storage and include it in the get request to the backend 
-module.exports = userController;
-
 module.exports = userController;

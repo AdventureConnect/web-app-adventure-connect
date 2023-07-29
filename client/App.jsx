@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./components/auth-components/Login.jsx";
 import Signup from "./components/auth-components/Signup.jsx";
@@ -10,7 +10,7 @@ import Dashboard from "./components/dashboard-components/Dashboard.jsx";
 import ImageUpload from "./components/dashboard-components/ImageUpload.jsx";
 import OTP from "./components/auth-components/OTP.jsx";
 import LikedUsers from "./components/dashboard-components/LikedUsers.jsx";
-export const RecoveryContext = createContext();
+// export const RecoveryContext = createContext();
 // import Header from "./components/Header.jsx";
 // import Matches from "./components/Matches.jsx";
 import NavBar from "./components/NavBar/NavBar.jsx";
@@ -20,8 +20,8 @@ const App = () => {
   const [otp, setOTP] = useState("");
 
   return (
-    <div>
-      <RecoveryContext.Provider value={{ otp, setOTP, email, setEmail }}>
+    <>
+      {/* <RecoveryContext.Provider value={{ otp, setOTP, email, setEmail }}> */}
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Login />} />
@@ -42,9 +42,9 @@ const App = () => {
             {/* <Route path="/otp" element={<OTP />} /> */}
           </Routes>
         </BrowserRouter>
-      </RecoveryContext.Provider>
-      <NavBar/>
-    </div>
+      {/* </RecoveryContext.Provider> */}
+      {/* <NavBar/> */}
+    </>
   );
 };
 

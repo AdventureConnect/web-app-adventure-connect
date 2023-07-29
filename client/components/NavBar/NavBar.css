@@ -1,8 +1,8 @@
 .Navigation {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
-    position: fixed;
+    position: sticky;
     top: 0;
     width: 100%;
     z-index: 999;
@@ -36,23 +36,25 @@
 }
 
 .NavBar a:hover {
-    border-bottom: 5px solid #014421;
+    border-bottom: 2px solid #014421;
 }
 
 .NavBar .HamburgerNav {
     display: none;
+    color: white;
 }
 
-@media (max-width: 990px) {
+@media (max-width: 1024px) {
     .NavBar .Navigation {
         display: none;
     }
 
     .NavBar .HamburgerNav {
         display: flex;
-        position: fixed;
         align-items: flex-start;
+        position: sticky;
         top: 0;
+        height: 80px;
         width: 100%;
         z-index: 100;
     }

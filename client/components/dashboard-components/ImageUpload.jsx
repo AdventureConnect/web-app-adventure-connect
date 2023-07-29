@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useCookies } from 'react-cookie';
+// import { useCookies } from 'react-cookie';
 import { useNavigate, useLocation } from 'react-router';
 
 function ImageUpload() {

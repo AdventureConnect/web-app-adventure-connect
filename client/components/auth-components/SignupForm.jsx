@@ -81,7 +81,7 @@ function SignupForm({
         {!nextPage && (
           <>
             <div className="relative flex items-center mt-6 text-sm font-bold text-gray-400 focus-within:text-gray-500">
-              <Input handler={setName} val={name} type={"text"} text={"Name"} />
+              <Input handler={setName} val={name} type={"text"} text={"Full Name"} />
               <HiOutlineIdentification className="pointer-events-none w-6 h-6 absolute top-1/2 transform -translate-y-1/2 right-3" />
             </div>
             <div className="relative flex items-center mt-6 text-sm font-bold text-gray-400 focus-within:text-gray-500">

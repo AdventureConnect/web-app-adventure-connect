@@ -5,24 +5,23 @@ import './NavBar.css';
 
 const Navigation = () => {
     return (
-      <nav className="Navigation border border-x-0 border-t-0 border-gray-600/40">
-        <div className="flex flex-col absolute -top-2 left-0">
-            <div className="flex items-center gap-2">
+      <nav className="Navigation flex justify-between border border-x-0 border-t-0 border-gray-600/40">
+        <div className="flex flex-col">
+            <div className="flex items-center justify-center gap-2">
               <h1
                 className="
-                  text-xl
+                  text-md
                   flex
                   gap-2
-                  md:text-2xl
+                  md:text-lg
                   font-bold
                   px-8
-                  mt-8
-                  rounded-full
+                  
                   pointer-events-none
               "
               >
                 Adventure Connect
-                <GiLightBackpack className="text-blue-500" size={30} />
+                <GiLightBackpack className="text-blue-500 translate-y-1" size={20} />
               </h1>
             </div>
           </div>
