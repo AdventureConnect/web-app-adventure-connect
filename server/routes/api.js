@@ -95,32 +95,8 @@ router.get("/getUsers/:id", userController.authenticateToken, userController.get
 });
 
 router.get("/logout", (req, res) => {
-  
+  res.clearCookie("access_token", { httpOnly: true });
+  res.sendStatus(200);
 })
-// router.get(
-//   "/findMatches",
-//   // userController.findMatches,
-//   (req, res) => {
-//     // console.log(res.locals.foundMatch, '\n-----------------------', '\nsending res.locals.foundMatch as json');
-//     console.log(
-//       res.locals.foundMatch.length,
-//       "this is the length of what we send as json"
-//     );
-//     res.status(250).json(res.locals.foundMatch);
-//   }
-// );
-
-// router.get("/findInterests", userController.authenticateToken, userController.getProfiles, (req, res) => {
-//   res.status(250).json(res.locals.getProfiles);
-// });
-
-// router.get(
-//   "/cookie",
-//   // userController.createCookie,
-//   (req, res) => {
-//     res.sendStatus(200);
-//   }
-// );
-
 
 module.exports = router;
