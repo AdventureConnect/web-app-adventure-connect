@@ -1,4 +1,4 @@
-const { createErr } = require("../utils/errorCreator");
+iconst { createErr } = require("../utils/errorCreator");
 // const Images = require("../models/imageModel");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
@@ -85,7 +85,7 @@ userController.createNewUser = async (req, res, next) => {
 
     return next();
   } catch (error) {
-    return next({ message: { err: "error" } });
+    return next({ message: { err: "Email is already in use" } });
   }
 };
 
