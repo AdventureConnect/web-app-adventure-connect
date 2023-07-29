@@ -155,7 +155,7 @@ const users = await User.find({
 //put similar users on res.locals
 res.locals.users = users;
 console.log(users);
-next();
+return next();
 } catch (error) {
 console.error('Error finding similar users:', error);
 res.status(500).json({ error: 'Internal Server Error' });
