@@ -39,9 +39,10 @@ const login = async (userData) => {
 
 // user logout
 const logout = async () => {
-  const response = await axios.post("/api/logout");
   localStorage.clear();
   sessionStorage.clear();
+  const response = await axios.post("/api/logout");
+  return response.data;
 };
 
 const authService = {
